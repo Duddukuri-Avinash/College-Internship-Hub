@@ -52,8 +52,8 @@ pages.profile=()=>{const u=getUser();if(!u){location.hash='login';return ''}
  const extra=u.role==='student'
     ?`Branch<select name="branch">${opt(['CSE','ECE','EEE','MECH','CIVIL','IT'],u.branch)}</select>Year<select name="year">${opt(['1st Year','2nd Year','3rd Year','4th Year'],u.year)}</select>`
     :`Department<input name="dept" value="${u.dept||''}" placeholder="e.g. CSE">`;
- return `<h1>My Profile</h1><div class="grid prof"><div class="card c"><label class="upl">${av(u,1)}<span class="cam">📷</span><input type="file" id="photoIn" accept="image/*" hidden></label>${u.photo?'<button class="btn out full" id="rmPhoto" style="margin:0 0 8px">Remove Photo</button>':''}<h2>${u.name||'Add your name'}</h2><span class="tag b">${u.role.toUpperCase()}</span><p class="mut">${u.id}</p><a class="btn out full" href="#${dash[u.role]}">My Dashboard</a><button class="btn full" style="background:#dc2626" onclick="logout()">🚪 Log Out</button></div>
- <div class="card"><h2>Edit Profile</h2><form id="profForm">Full Name<input name="name" value="${u.name||''}" required>${L[0]}<input name="id" value="${u.id}" required>${L[1]}<input name="contact" value="${u.contact}" required>${extra}About me<textarea name="about" rows="3" placeholder="Skills, interests, goals...">${u.about||''}</textarea><button class="btn">Save Changes</button></form></div></div>${u.role==='student'?subs():''}`};
+ return `<h1>My Profile</h1><div class="grid prof"><div class="card c"><label class="upl">${av(u,1)}<span class="cam">📷</span><input type="file" id="photoIn" accept="image/*" hidden></label>${u.photo?'<button class="btn out full" id="rmPhoto" style="margin:0 0 8px">Remove Photo</button>':''}<h2>${u.name||'Add your name'}</h2><span class="tag b">${u.role.toUpperCase()}</span><p class="mut">${u.id}</p>${u.about?`<p class="mut" style="text-align:left">${u.about.replace(/</g,'&lt;')}</p>`:''}${u.skills?`<div class="skills">${u.skills.split(',').map(s=>s.trim()).filter(Boolean).map(s=>`<span class="tag b">${s.replace(/</g,'&lt;')}</span>`).join('')}</div>`:''}<a class="btn out full" href="#${dash[u.role]}">My Dashboard</a><button class="btn full" style="background:#dc2626" onclick="logout()">🚪 Log Out</button></div>
+ <div class="card"><h2>Edit Profile</h2><form id="profForm">Full Name<input name="name" value="${u.name||''}" required>${L[0]}<input name="id" value="${u.id}" required>${L[1]}<input name="contact" value="${u.contact}" required>${extra}About me<textarea name="about" rows="3" placeholder="Skills, interests, goals...">${u.about||''}</textarea>Skills (separate with commas)<input name="skills" value="${u.skills||''}" placeholder="Python, SQL, Excel, Communication"><button class="btn">Save Changes</button></form></div></div>${u.role==='student'?subs():''}`};
 
 function logout(){sessionStorage.removeItem('user');renderNav();location.hash='home';route()}
 function renderNav(){const u=getUser(),a=document.getElementById('authArea');
@@ -61,7 +61,7 @@ function renderNav(){const u=getUser(),a=document.getElementById('authArea');
  if(u){document.getElementById('pBtn').onclick=e=>{e.stopPropagation();document.getElementById('pDrop').classList.toggle('open')};
     document.getElementById('loBtn').onclick=e=>{e.preventDefault();logout()}}}
 document.addEventListener('click',()=>{const d=document.getElementById('pDrop');d&&d.classList.remove('open')});
-document.addEventListener('submit',e=>{if(e.target.id!=='profForm')return;e.preventDefault();
+document.addEventListener('submit',e=>{if(!e.target.matches('#profForm'))return;e.preventDefault();
  sessionStorage.setItem('user',JSON.stringify({...getUser(),...Object.fromEntries(new FormData(e.target))}));
  renderNav();alert('Profile updated');route()});
 
