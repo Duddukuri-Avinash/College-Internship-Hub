@@ -1,0 +1,24 @@
+from __future__ import annotations
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    app_name: str = "InternHub"
+    app_env: str = "development"
+    app_debug: bool = True
+    database_url: str = "mssql+pyodbc://username:password@localhost:1433/internhub?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+    jwt_secret_key: str = "change-this-secret-key"
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 60
+    max_upload_size_mb: int = 5
+    allowed_upload_types: str = ".pdf,.doc,.docx,.png,.jpg,.jpeg"
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
+    cors_origins: str = "http://localhost:3000"
+    upload_dir: str = "uploads"
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", case_sensitive=False)
+
+
+settings = Settings()
