@@ -13,6 +13,7 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
 
 3. Install the backend dependencies in `backend` with Python 3.11+ and install Microsoft ODBC Driver 18 for SQL Server on the host.
 4. Copy `.env.example` to `.env` in `backend` and set `DATABASE_URL`, `JWT_SECRET_KEY`, `CORS_ORIGINS`, and `BACKEND_API_URL`. The SQLAlchemy URL must use `mssql+pyodbc` and an installed SQL Server ODBC driver.
+   For automated skill verification also set `GEMINI_API_KEY` and `GEMINI_MODEL` (default `gemini-2.5-flash`), plus `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_OAUTH_REDIRECT_URI`, `GITHUB_API_TOKEN` (optional fallback), and `FRONTEND_URL`. Register the GitHub OAuth callback URL exactly as configured.
 5. Create the SQL Server schema from the existing SQLAlchemy models:
 
    ```powershell
@@ -31,6 +32,15 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
    ```
 
    Visit <http://localhost:3000>.
+
+Skill verification is server-authoritative. Resume extraction only updates the student's claimed skill list. Quiz answers and question keys remain on the API, and GitHub repository checks run with the server-held OAuth token. Apply migration `003_skill_verification` before using the roadmap:
+
+```powershell
+cd backend
+alembic upgrade head
+```
+
+The student roadmap reads `GET /students/verifications`, starts quizzes with `POST /students/quiz/start`, submits them with `POST /students/quiz/submit`, and uses the GitHub OAuth and repository endpoints under `/students/github`.
 
 Do not run old mock/demo SQL seed data. `supabase/seed.sql` is for local/development setup only; it must not be run in production.
 

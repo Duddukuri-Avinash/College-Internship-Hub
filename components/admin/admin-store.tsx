@@ -1,6 +1,7 @@
 'use client'
 
-import { createContext, useContext, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { createContext, useContext, useEffect, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { toast } from 'sonner'
 import {
   academicYearsSeed,
   announcementsSeed,
@@ -104,7 +105,7 @@ function nowStamp() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`
 }
 
-export function AdminStoreProvider({ children }: { children: ReactNode }) {
+export function AdminStoreProvider({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) {
   const [students, setStudents] = useState(studentsSeed)
   const [faculty, setFaculty] = useState(facultySeed)
   const [approvals, setApprovals] = useState(approvalsSeed)
@@ -137,6 +138,33 @@ export function AdminStoreProvider({ children }: { children: ReactNode }) {
     aiRoadmap: true,
     aiRecommendations: true,
   })
+
+  useEffect(() => {
+    if (!enabled) return
+    let active = true
+    void fetch('/api/admin/data')
+      .then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? 'Could not load admin data.')
+        return result as {
+          students: AdminStudent[]
+          faculty: AdminFaculty[]
+          approvals: FacultyApproval[]
+        }
+      })
+      .then((result) => {
+        if (!active) return
+        setStudents(result.students)
+        setFaculty(result.faculty)
+        setApprovals(result.approvals)
+      })
+      .catch((error: unknown) => {
+        if (active) toast.error(error instanceof Error ? error.message : 'Could not load admin data.')
+      })
+    return () => {
+      active = false
+    }
+  }, [enabled])
 
   const log: Store['log'] = (action, category, target, before, after) =>
     setAudit((a) => [{ id: `l${Date.now()}${Math.random().toString(36).slice(2, 5)}`, actor: 'Admin session', action, category, target, time: nowStamp(), before, after }, ...a])

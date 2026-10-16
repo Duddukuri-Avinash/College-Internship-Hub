@@ -1,6 +1,7 @@
 'use client'
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { toast } from 'sonner'
 import type { VerifyStatus } from '@/lib/data'
 import {
   TODAY,
@@ -36,16 +37,37 @@ type Store = {
 
 const FacultyStoreContext = createContext<Store | null>(null)
 
-export function FacultyStoreProvider({ children }: { children: ReactNode }) {
+export function FacultyStoreProvider({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) {
+  const [students, setStudents] = useState(deptStudents)
   const [reminders, setReminders] = useState<Record<string, string>>({})
   const [opportunities, setOpportunities] = useState(opportunitiesSeed)
   const [requests, setRequests] = useState(requestsSeed)
   const [announcements, setAnnouncements] = useState(announcementsSeed)
   const [verifications, setVerifications] = useState(verificationItems)
 
+  useEffect(() => {
+    if (!enabled) return
+    let active = true
+    void fetch('/api/faculty/students')
+      .then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? 'Could not load faculty students.')
+        return result as { students: typeof deptStudents }
+      })
+      .then((result) => {
+        if (active) setStudents(result.students)
+      })
+      .catch((error: unknown) => {
+        if (active) toast.error(error instanceof Error ? error.message : 'Could not load faculty students.')
+      })
+    return () => {
+      active = false
+    }
+  }, [enabled])
+
   const value = useMemo<Store>(
     () => ({
-      students: deptStudents,
+      students,
       reminders,
       remind: (ids) => setReminders((r) => ({ ...r, ...Object.fromEntries(ids.map((id) => [id, TODAY])) })),
       opportunities,
@@ -97,7 +119,7 @@ export function FacultyStoreProvider({ children }: { children: ReactNode }) {
           ),
         ),
     }),
-    [reminders, opportunities, requests, announcements, verifications],
+    [students, reminders, opportunities, requests, announcements, verifications],
   )
 
   return <FacultyStoreContext.Provider value={value}>{children}</FacultyStoreContext.Provider>

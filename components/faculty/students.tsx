@@ -65,7 +65,7 @@ export function FacultyStudents({ navigate, quick }: { navigate: (v: View) => vo
     <>
       <PageHeader
         title="Students"
-        description="Department of CSE · Years 3 and 4. Search students and track their internship progress."
+        description="Search students and track their internship progress."
         actions={
           <Button variant={onlyWithout ? 'default' : 'outline'} onClick={() => { setOnlyWithout((v) => !v); setSelected([]) }} aria-pressed={onlyWithout}>
             <UserX /> Students without internships
@@ -218,7 +218,7 @@ export function FacultyStudentDetail({ id, navigate }: { id: string; navigate: (
     <>
       <PageHeader
         title={s.name}
-        description={`${s.regNo} · Year ${s.year} · Section ${s.section} · Department of CSE`}
+        description={`${s.regNo} · Year ${s.year} · Section ${s.section} · ${s.branch}`}
         actions={
           <>
             {back}

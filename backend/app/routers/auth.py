@@ -13,11 +13,25 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
-from app.models import Admin, Faculty, Student, User, UserRole
+from app.models import Admin, Department, Faculty, Student, User, UserRole
 
 router = APIRouter()
 bearer = HTTPBearer(auto_error=False)
 passwords = CryptContext(schemes=["bcrypt"], deprecated="auto")
+DEPARTMENTS = {
+    "CSE": "Computer Science and Engineering (CSE)",
+    "CSE-AIML": "Computer Science and Engineering (AI & ML)",
+    "CSE-DS": "Computer Science and Engineering (Data Science)",
+    "AI": "Artificial Intelligence (AI)",
+    "AI-DS": "Artificial Intelligence & Data Science (AI & DS)",
+    "QC": "Quantum Computing",
+    "IT": "Information Technology (IT)",
+    "ECE": "Electronics and Communication Engineering (ECE)",
+    "EEE": "Electrical and Electronics Engineering (EEE)",
+    "MECH": "Mechanical Engineering (MECH)",
+    "CIV": "Civil Engineering (CIV)",
+    "CHEM": "Chemical Engineering (CHEM)",
+}
 
 
 class LoginRequest(BaseModel):
@@ -130,13 +144,22 @@ def register_student(input: StudentRegistration, db: Session = Depends(get_db)) 
 def register_faculty(input: FacultyRegistration, db: Session = Depends(get_db)) -> dict[str, object]:
     email = str(input.email).lower()
     employee_id = input.employeeId.strip().upper()
+    department_code = input.dept.strip().upper()
+    department_name = DEPARTMENTS.get(department_code)
+    if department_name is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Select a valid department.")
     if db.scalar(select(User).where(User.email == email)) or db.scalar(select(Faculty).where(Faculty.employee_id == employee_id)):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account already exists for this faculty member.")
+    department = db.scalar(select(Department).where(Department.code == department_code))
+    if department is None:
+        department = Department(code=department_code, name=department_name)
+        db.add(department)
+        db.flush()
     first_name, last_name = _name_parts(input.name)
     user = User(email=email, password_hash=passwords.hash(input.password), first_name=first_name, last_name=last_name, role=UserRole.FACULTY)
     db.add(user)
     db.flush()
-    db.add(Faculty(user_id=user.id, employee_id=employee_id, designation=input.designation))
+    db.add(Faculty(user_id=user.id, department_id=department.id, employee_id=employee_id, designation=input.designation))
     db.commit()
     return {"profile": _profile(user)}
 

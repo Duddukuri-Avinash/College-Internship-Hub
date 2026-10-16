@@ -10,6 +10,7 @@ import { Field } from '@/components/student/form-bits'
 import { Heading, PasswordInput, Shell, passwordStrength } from '@/components/auth/auth-bits'
 import type { AuthScreen } from '@/components/auth/auth-flow'
 import { registerFaculty, type AuthProfile } from '@/lib/supabase/auth'
+import { branches as departments } from '@/lib/branches'
 
 export type RegisteredFaculty = {
   name: string
@@ -23,16 +24,6 @@ export type RegisteredFaculty = {
 
 const COLLEGE_DOMAIN = '@rvrjc.ac.in'
 const EMP_ID = /^RVR\d{4}$/i
-const departments = [
-  { code: 'CSE', name: 'Computer Science & Engineering' },
-  { code: 'IT', name: 'Information Technology' },
-  { code: 'ECE', name: 'Electronics & Communication' },
-  { code: 'EEE', name: 'Electrical & Electronics' },
-  { code: 'Mech', name: 'Mechanical Engineering' },
-  { code: 'Civil', name: 'Civil Engineering' },
-  { code: 'CSBS', name: 'CSBS' },
-  { code: 'AI&ML', name: 'AI & ML' },
-]
 const designations = ['Assistant Professor', 'Associate Professor', 'Professor', 'Head of Department', 'Internship Coordinator']
 
 export function FacultyLogin({ setScreen, onLoggedIn, onStudentLogin, onAdminLogin }: { setScreen: (s: AuthScreen) => void; onLoggedIn: (profile: AuthProfile) => void; onStudentLogin: () => void; onAdminLogin: () => void }) {

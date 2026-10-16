@@ -53,7 +53,11 @@ export function Segmented<T extends string>({ options, value, onChange, label, c
   )
 }
 
-export const fmtDate = (d: string) => new Date(`${d}T00:00:00`).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+export const fmtDate = (d: string) => {
+  const value = d.includes('T') ? d : `${d}T00:00:00`
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 export const daysUntil = (d: string) => Math.round((new Date(`${d}T00:00:00`).getTime() - new Date(`${TODAY}T00:00:00`).getTime()) / 86_400_000)
 

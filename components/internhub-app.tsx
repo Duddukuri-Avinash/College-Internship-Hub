@@ -178,8 +178,8 @@ export function InternHubApp() {
   }
 
   return (
-    <FacultyStoreProvider>
-      <AdminStoreProvider>
+    <FacultyStoreProvider enabled={profile.role === 'faculty'}>
+      <AdminStoreProvider enabled={profile.role === 'admin'}>
         <StudentAccountProvider profile={profile}>
           <AppShell
             role={profile.role}

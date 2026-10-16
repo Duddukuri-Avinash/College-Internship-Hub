@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, Check, Flag, Sparkles, Target } from 'lucide-react'
+import { ArrowRight, Check, Code2, Sparkles, Target } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Bar, MatchRing, PageHeader, Panel, selectClass } from '@/components/shared'
@@ -11,6 +11,13 @@ import { cn } from '@/lib/utils'
 import { useStudentAccount } from '@/components/student/student-account-provider'
 
 export type Roadmap = { id: string; role: string; summary: string; steps: { skill: string; why: string }[]; keywords: string[] }
+const NON_TECHNICAL_SKILLS = new Set([
+  'Negotiation', 'Typography', 'Surveying', 'Communication', 'Stakeholder Management',
+  'Presentation Skills', 'Recruitment', 'Candidate Screening', 'Interview Coordination',
+  'HR Policies', 'Onboarding', 'Confidentiality', 'Vendor Coordination', 'Lead Generation',
+  'Cold Outreach', 'Market Research', 'Email Etiquette', 'Teamwork', 'Time Management',
+  'Writing and Editing', 'Tone Adaptation',
+])
 
 const coreRoadmaps: Roadmap[] = [
   {
@@ -205,12 +212,18 @@ const additionalRoadmaps: Roadmap[] = [
 ]
 export const roadmaps: Roadmap[] = [...coreRoadmaps, ...additionalRoadmaps]
 
-type Status = 'completed' | 'current' | 'next' | 'upcoming'
+type Verification = { skill: string; method: 'quiz' | 'github'; detail: string | null }
+type Status = 'verified' | 'claimed' | 'current' | 'next' | 'upcoming'
 
 export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const { account, loading, resume, syncResumeSkills } = useStudentAccount()
   const [roleId, setRoleId] = useState(roadmaps[0].id)
-  const [manual, setManual] = useState<Record<string, string[]>>({})
+  const [verifications, setVerifications] = useState<Verification[]>([])
+  const [quiz, setQuiz] = useState<{ id: string; skill: string; questions: { q: string; o: string[] }[]; answers: number[]; expiresAt: string } | null>(null)
+  const [quizResult, setQuizResult] = useState<{ score: number; total: number; passed: boolean } | null>(null)
+  const [repoUrl, setRepoUrl] = useState('')
+  const [githubConnected, setGithubConnected] = useState(false)
+  const [verifyingGithub, setVerifyingGithub] = useState(false)
   const [syncingResume, setSyncingResume] = useState(false)
   const syncedResumeId = useRef<string | null>(null)
   const rm = roadmaps.find((r) => r.id === roleId) ?? roadmaps[0]
@@ -225,6 +238,30 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   }, [account])
 
   useEffect(() => {
+    void Promise.all([
+      fetch('/api/student/verifications', { cache: 'no-store' }).then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load skill verifications.')
+        setVerifications(result.verifications)
+      }),
+      fetch('/api/student/github/status', { cache: 'no-store' }).then(async (response) => {
+        if (response.ok) setGithubConnected(Boolean((await response.json()).connected))
+      }),
+    ]).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to load skill verification status.'))
+  }, [])
+
+  useEffect(() => {
+    if (!quiz) return
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        void fetch(`/api/student/quiz/tab-leave?attempt_id=${encodeURIComponent(quiz.id)}`, { method: 'POST' })
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange)
+  }, [quiz])
+
+  useEffect(() => {
     if (!resume || syncedResumeId.current === resume.id) return
     syncedResumeId.current = resume.id
     setSyncingResume(true)
@@ -237,12 +274,17 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   }, [resume, syncResumeSkills])
 
   const steps = useMemo(() => {
-    const doneSet = new Set(manual[rm.id] ?? [])
-    const base = rm.steps.map((s) => ({ ...s, done: known.has(s.skill.toLowerCase()) || doneSet.has(s.skill) }))
+    const verified = new Map(verifications.map((item) => [item.skill.toLowerCase(), item.method]))
+    const base = rm.steps.map((s) => ({
+      ...s,
+      method: verified.get(s.skill.toLowerCase()),
+      claimed: known.has(s.skill.toLowerCase()),
+    }))
     let seenCurrent = false
     let seenNext = false
     return base.map((s): typeof s & { status: Status } => {
-      if (s.done) return { ...s, status: 'completed' }
+      if (s.method) return { ...s, status: 'verified' }
+      if (s.claimed) return { ...s, status: 'claimed' }
       if (!seenCurrent) {
         seenCurrent = true
         return { ...s, status: 'current' }
@@ -253,9 +295,9 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
       }
       return { ...s, status: 'upcoming' }
     })
-  }, [rm, manual])
+  }, [rm, known, verifications])
 
-  const completed = steps.filter((s) => s.status === 'completed')
+  const completed = steps.filter((s) => s.status === 'verified')
   const current = steps.find((s) => s.status === 'current')
   const next = steps.find((s) => s.status === 'next')
   const pct = Math.round((completed.length / steps.length) * 100)
@@ -274,9 +316,60 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
       .slice(0, 3)
   }, [rm])
 
-  function complete(skill: string) {
-    setManual((m) => ({ ...m, [rm.id]: [...(m[rm.id] ?? []), skill] }))
-    toast.success(`${skill} marked as complete`)
+  async function startQuiz(skill: string) {
+    const response = await fetch('/api/student/quiz/start', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ skill }),
+    })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to start the quiz.')
+    setQuiz({ ...result, skill, answers: Array(result.questions.length).fill(-1) })
+    setQuizResult(null)
+  }
+
+  async function submitQuiz() {
+    if (!quiz || quiz.answers.some((answer) => answer < 0)) return
+    const response = await fetch('/api/student/quiz/submit', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: quiz.id, answers: quiz.answers }),
+    })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to submit the quiz.')
+    setQuizResult(result)
+    if (result.passed) {
+      setVerifications((current) => [...current.filter((item) => item.skill !== quiz.skill), { skill: quiz.skill, method: 'quiz', detail: String(result.score) }])
+      toast.success(`${quiz.skill} verified by quiz`)
+    }
+  }
+
+  async function connectGithub() {
+    const response = await fetch('/api/student/github/oauth/start', { method: 'GET' })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to connect GitHub.')
+    window.location.assign(result.url)
+  }
+
+  async function verifyGithub(skill: string) {
+    setVerifyingGithub(true)
+    try {
+      const response = await fetch('/api/student/github/verify', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ skill, repo_url: repoUrl }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error ?? result.detail ?? 'GitHub verification failed.')
+      if (result.passed) {
+        setVerifications((current) => [...current.filter((item) => item.skill !== skill), { skill, method: 'github', detail: repoUrl }])
+        toast.success(`${skill} verified by GitHub project`)
+      } else {
+        toast.error('The repository did not pass all required checks.')
+      }
+    } finally {
+      setVerifyingGithub(false)
+    }
   }
 
   return (
@@ -349,18 +442,18 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
             <ol className="flex flex-col">
               {steps.map((s, idx) => (
                 <li key={s.skill} className="relative flex gap-4 pb-6 last:pb-0">
-                  {idx < steps.length - 1 && <span className={cn('absolute left-4 top-8 h-[calc(100%-2rem)] w-0.5 -translate-x-1/2', s.status === 'completed' ? 'bg-success' : 'bg-border')} aria-hidden="true" />}
+                  {idx < steps.length - 1 && <span className={cn('absolute left-4 top-8 h-[calc(100%-2rem)] w-0.5 -translate-x-1/2', s.status === 'verified' ? 'bg-success' : 'bg-border')} aria-hidden="true" />}
                   <span
                     className={cn(
                       'relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold',
-                      s.status === 'completed' && 'border-success bg-success text-success-foreground',
+                      s.status === 'verified' && 'border-success bg-success text-success-foreground',
                       s.status === 'current' && 'border-primary bg-accent text-primary',
                       s.status === 'next' && 'border-warning bg-warning/15 text-warning-foreground',
                       s.status === 'upcoming' && 'border-border bg-card text-muted-foreground',
                     )}
                     aria-current={s.status === 'current' ? 'step' : undefined}
                   >
-                    {s.status === 'completed' ? <Check className="size-4" aria-hidden="true" /> : idx + 1}
+                    {s.status === 'verified' ? <Check className="size-4" aria-hidden="true" /> : idx + 1}
                   </span>
                   <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -368,20 +461,91 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
                         {s.skill}
                         {s.status === 'current' && <span className="rounded-full border border-primary/20 bg-accent px-2 py-0.5 text-xs text-primary">Current</span>}
                         {s.status === 'next' && <span className="rounded-full border border-warning/30 bg-warning/15 px-2 py-0.5 text-xs text-warning-foreground">Recommended next</span>}
-                        {s.status === 'completed' && <span className="text-xs font-normal text-success">Completed</span>}
+                        {s.status === 'verified' && <span className="text-xs font-normal text-success">Verified by {s.method === 'github' ? 'GitHub project' : 'quiz'}</span>}
+                        {s.status === 'claimed' && <span className="text-xs font-normal text-warning-foreground">In resume, not verified</span>}
                       </p>
                       <p className="text-xs text-muted-foreground">{s.why}</p>
                     </div>
-                    {s.status === 'current' && (
-                      <Button size="sm" onClick={() => complete(s.skill)}>
-                        <Flag /> Mark complete
-                      </Button>
+                    {s.status !== 'verified' && (
+                      <div className="flex flex-wrap justify-end gap-2">
+                        <Button size="sm" variant="outline" onClick={() => void startQuiz(s.skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to start the quiz.'))}>
+                          Take quiz
+                        </Button>
+                        {githubConnected && (
+                          !NON_TECHNICAL_SKILLS.has(s.skill) && (
+                          <Button size="sm" variant="outline" onClick={() => {
+                            setRepoUrl('')
+                            void verifyGithub(s.skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'GitHub verification failed.'))
+                          }}>
+                            <Code2 /> Verify project
+                          </Button>
+                          )
+                        )}
+                      </div>
                     )}
                   </div>
                 </li>
               ))}
             </ol>
           </Panel>
+
+          <Panel title="GitHub project verification">
+            <p className="text-sm text-muted-foreground">
+              Connect GitHub to verify technical skills automatically. The repository must belong to you and pass the required project checks.
+            </p>
+            {!githubConnected ? (
+              <Button className="mt-4" onClick={() => void connectGithub().catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to connect GitHub.'))}>
+                <Code2 /> Sign in with GitHub
+              </Button>
+            ) : (
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <input
+                  className={selectClass}
+                  value={repoUrl}
+                  onChange={(event) => setRepoUrl(event.target.value)}
+                  placeholder="https://github.com/you/project"
+                  aria-label="GitHub repository URL"
+                />
+                <Button disabled={!repoUrl || verifyingGithub} onClick={() => {
+                  const skill = steps.find((step) => step.status !== 'verified')?.skill
+                  if (skill) void verifyGithub(skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'GitHub verification failed.'))
+                }}>
+                  Verify selected skill
+                </Button>
+              </div>
+            )}
+          </Panel>
+
+          {quiz && (
+            <Panel title={`Quiz: ${quiz.skill}`}>
+              <p className="text-sm text-muted-foreground">Answer every question. You need 70% to pass; this attempt expires after 16 minutes.</p>
+              <ol className="mt-4 flex flex-col gap-5">
+                {quiz.questions.map((question, questionIndex) => (
+                  <li key={`${quiz.id}-${questionIndex}`}>
+                    <p className="text-sm font-medium">{questionIndex + 1}. {question.q}</p>
+                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                      {question.o.map((option, optionIndex) => (
+                        <label key={option} className={cn('rounded-lg border p-3 text-sm', quiz.answers[questionIndex] === optionIndex && 'border-primary bg-accent')}>
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name={`${quiz.id}-${questionIndex}`}
+                            checked={quiz.answers[questionIndex] === optionIndex}
+                            onChange={() => setQuiz((current) => current ? { ...current, answers: current.answers.map((answer, index) => index === questionIndex ? optionIndex : answer) } : current)}
+                          />
+                          {option}
+                        </label>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-5 flex items-center gap-3">
+                <Button disabled={quiz.answers.some((answer) => answer < 0)} onClick={() => void submitQuiz().catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to submit the quiz.'))}>Submit quiz</Button>
+                {quizResult && <span className={cn('text-sm font-medium', quizResult.passed ? 'text-success' : 'text-destructive')}>{quizResult.score}/{quizResult.total} — {quizResult.passed ? 'Passed' : 'Failed'}</span>}
+              </div>
+            </Panel>
+          )}
 
           <Panel title="Related internships" action={<Button variant="ghost" size="sm" onClick={() => navigate({ name: 'discover' })}>Browse all <ArrowRight /></Button>}>
             {related.length === 0 ? (

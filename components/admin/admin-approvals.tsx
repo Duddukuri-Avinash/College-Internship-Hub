@@ -41,17 +41,24 @@ export function Approvals() {
     setApprovals((list) => list.map((a) => (a.id === id ? { ...a, status, note } : a)))
   }
 
-  function confirmApprove() {
+  async function confirmApprove() {
     if (!approving) return
     const a = approving
-    update(a.id, 'Approved')
-    setFaculty((f) => [
-      ...f,
-      { id: `f${Date.now()}`, name: a.name, empId: a.empId, dept: a.dept, designation: a.designation, email: a.email, roles: [role], groups: [], status: 'Active', verified: 0, turnaround: 0, pending: { verifications: 0, requests: 0, reviews: 0 } },
-    ])
-    log('Approved faculty registration', 'User management', `${a.name} · ${a.empId}`, { status: a.status }, { status: 'Approved', role })
-    toast.success(`${a.name} approved and added to Faculty`)
-    setApproving(null)
+    try {
+      const response = await fetch(`/api/admin/faculty/${encodeURIComponent(a.empId)}/approve`, { method: 'POST' })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(result.error ?? 'Could not approve faculty registration.')
+      update(a.id, 'Approved')
+      setFaculty((f) => f.some((member) => member.empId === a.empId) ? f : [
+        ...f,
+        { id: `f${Date.now()}`, name: a.name, empId: a.empId, dept: a.dept, designation: a.designation, email: a.email, roles: [role], groups: [], status: 'Active', verified: 0, turnaround: 0, pending: { verifications: 0, requests: 0, reviews: 0 } },
+      ])
+      log('Approved faculty registration', 'User management', `${a.name} · ${a.empId}`, { status: a.status }, { status: 'Approved', role })
+      toast.success(`${a.name} approved and added to Faculty`)
+      setApproving(null)
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Could not approve faculty registration.')
+    }
   }
 
   return (

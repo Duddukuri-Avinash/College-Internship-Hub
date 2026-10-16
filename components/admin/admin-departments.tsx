@@ -30,13 +30,14 @@ export function Departments() {
 }
 
 function Branches() {
-  const { branches, setBranches, faculty, log } = useAdmin()
+  const { branches, setBranches, students, faculty, log } = useAdmin()
   const [editing, setEditing] = useState<Branch | 'new' | null>(null)
   const [archiving, setArchiving] = useState<Branch | null>(null)
   const [form, setForm] = useState({ code: '', name: '' })
   const [errors, setErrors] = useState<{ code?: string; name?: string }>({})
 
   const facultyCount = (code: string) => Math.max(facultyPerBranch[code] ?? 0, faculty.filter((f) => f.dept === code && f.status === 'Active').length)
+  const studentCount = (code: string) => students.filter((student) => student.branch === code && student.status === 'Active').length
 
   function open(b: Branch | 'new') {
     setEditing(b)
@@ -71,7 +72,7 @@ function Branches() {
         rows={branches.map((b) => [
           <span key="c" className="font-mono text-xs font-medium">{b.code}</span>,
           <span key="n" className="font-medium">{b.name}</span>,
-          <span key="s" className="tabular-nums">{b.students.toLocaleString('en-IN')}</span>,
+          <span key="s" className="tabular-nums">{studentCount(b.code).toLocaleString('en-IN')}</span>,
           <span key="f" className="tabular-nums">{b.archived ? 0 : facultyCount(b.code)}</span>,
           b.archived ? <Pill key="st">Archived</Pill> : <Pill key="st" tone="success">Active</Pill>,
           <div key="x" className="flex justify-end gap-1">

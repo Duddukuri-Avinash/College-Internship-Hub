@@ -19,8 +19,9 @@ export type DeptStudent = {
   id: string
   name: string
   regNo: string
-  year: 3 | 4
-  section: 'A' | 'B' | 'C'
+  branch: string
+  year: number
+  section: string
   cgpa: number
   readiness: number
   status: InternshipStatus

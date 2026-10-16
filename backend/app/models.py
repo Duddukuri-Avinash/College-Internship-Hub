@@ -240,11 +240,58 @@ class Verification(Base):
     reviewer_id: Mapped[int | None] = mapped_column(ForeignKey("faculty.id"), nullable=True)
     decision: Mapped[str] = mapped_column(String(40), default=VerificationDecision.PENDING.value, nullable=False)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    skill: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    method: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    detail: Mapped[str | None] = mapped_column(Text, nullable=True)
+    verified_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     student: Mapped[Student | None] = relationship(back_populates="verifications")
     reviewer: Mapped["Faculty | None"] = relationship(back_populates="verifications")
     document: Mapped[Document | None] = relationship(back_populates="verifications")
+
+
+class SkillQuestionBank(Base):
+    __tablename__ = "skill_question_banks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill: Mapped[str] = mapped_column(String(120), unique=True, nullable=False, index=True)
+    questions: Mapped[list[dict[str, object]]] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class SkillQuizAttempt(Base):
+    __tablename__ = "skill_quiz_attempts"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    skill: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
+    answer_key: Mapped[list[int]] = mapped_column(JSON, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    tab_leaves: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class SkillQuizCooldown(Base):
+    __tablename__ = "skill_quiz_cooldowns"
+    __table_args__ = (UniqueConstraint("user_id", "skill", name="uq_quiz_cooldown_user_skill"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    skill: Mapped[str] = mapped_column(String(120), nullable=False)
+    failed_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
+class GithubIdentity(Base):
+    __tablename__ = "github_identities"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    github_id: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
+    login: Mapped[str] = mapped_column(String(120), nullable=False)
+    access_token: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
 
 class Experience(Base):
