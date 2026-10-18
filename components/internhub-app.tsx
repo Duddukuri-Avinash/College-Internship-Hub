@@ -14,6 +14,7 @@ import { StudentProfile } from '@/components/student/profile'
 import { Onboarding } from '@/components/student/onboarding'
 import { ResumeAnalysis } from '@/components/student/resume-analysis'
 import { SkillRoadmap } from '@/components/student/roadmap'
+import { QuizPage } from '@/components/student/quiz-page'
 import { SubmitInternship } from '@/components/student/submit-internship'
 import { StudentSettings } from '@/components/student/settings'
 import { FacultyDashboard } from '@/components/faculty/dashboard'
@@ -201,6 +202,7 @@ export function InternHubApp() {
           {view.name === 'onboarding' && <Onboarding navigate={(nextView) => { setFirstLogin(false); navigate(nextView) }} firstLogin={firstLogin} name={profile.full_name} />}
           {view.name === 'resume-analysis' && <ResumeAnalysis />}
           {view.name === 'roadmap' && <SkillRoadmap navigate={navigate} />}
+          {view.name === 'quiz' && <QuizPage skill={view.skill} navigate={navigate} />}
           {view.name === 'submit-internship' && <SubmitInternship navigate={navigate} />}
           {view.name === 'settings' && <StudentSettings />}
           {view.name === 'faculty-dashboard' && <FacultyDashboard navigate={navigate} />}

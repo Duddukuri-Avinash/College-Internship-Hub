@@ -257,6 +257,7 @@ class SkillQuestionBank(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     skill: Mapped[str] = mapped_column(String(120), unique=True, nullable=False, index=True)
     questions: Mapped[list[dict[str, object]]] = mapped_column(JSON, nullable=False)
+    source: Mapped[str] = mapped_column(String(20), default="curated", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 
@@ -289,7 +290,6 @@ class GithubIdentity(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     github_id: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     login: Mapped[str] = mapped_column(String(120), nullable=False)
-    access_token: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 

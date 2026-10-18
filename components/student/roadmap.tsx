@@ -213,16 +213,22 @@ const additionalRoadmaps: Roadmap[] = [
 export const roadmaps: Roadmap[] = [...coreRoadmaps, ...additionalRoadmaps]
 
 type Verification = { skill: string; method: 'quiz' | 'github'; detail: string | null }
+type GithubAnalysisSkill = { skill: string; detected: boolean; strength: 'strong' | 'weak' | null; evidence: string[] }
+type GithubAnalysis = { repo_url: string; skills: GithubAnalysisSkill[]; commits: { count: number; days: number; first_date: string | null; last_date: string | null }; commit_requirement_met: boolean; verified: string[] }
 type Status = 'verified' | 'claimed' | 'current' | 'next' | 'upcoming'
 
 export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const { account, loading, resume, syncResumeSkills } = useStudentAccount()
   const [roleId, setRoleId] = useState(roadmaps[0].id)
   const [verifications, setVerifications] = useState<Verification[]>([])
-  const [quiz, setQuiz] = useState<{ id: string; skill: string; questions: { q: string; o: string[] }[]; answers: number[]; expiresAt: string } | null>(null)
-  const [quizResult, setQuizResult] = useState<{ score: number; total: number; passed: boolean } | null>(null)
+  const [startingQuizSkill, setStartingQuizSkill] = useState<string | null>(null)
   const [repoUrl, setRepoUrl] = useState('')
   const [githubConnected, setGithubConnected] = useState(false)
+  const [githubLogin, setGithubLogin] = useState<string | null>(null)
+  const [githubMessage, setGithubMessage] = useState<string | null>(null)
+  const [githubError, setGithubError] = useState<string | null>(null)
+  const [githubAnalysis, setGithubAnalysis] = useState<GithubAnalysis | null>(null)
+  const [analyzingGithub, setAnalyzingGithub] = useState(false)
   const [verifyingGithub, setVerifyingGithub] = useState(false)
   const [syncingResume, setSyncingResume] = useState(false)
   const syncedResumeId = useRef<string | null>(null)
@@ -238,28 +244,24 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   }, [account])
 
   useEffect(() => {
+    const githubResult = new URLSearchParams(window.location.search).get('github')
+    if (githubResult === 'connected') setGithubMessage('GitHub account connected successfully.')
+    if (githubResult === 'already-linked') setGithubError('That GitHub account is already linked to another website account.')
+    if (githubResult) window.history.replaceState({}, '', window.location.pathname)
     void Promise.all([
       fetch('/api/student/verifications', { cache: 'no-store' }).then(async (response) => {
         const result = await response.json()
         if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load skill verifications.')
         setVerifications(result.verifications)
       }),
-      fetch('/api/student/github/status', { cache: 'no-store' }).then(async (response) => {
-        if (response.ok) setGithubConnected(Boolean((await response.json()).connected))
+      fetch('/api/github/status', { cache: 'no-store' }).then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load GitHub status.')
+        setGithubConnected(Boolean(result.connected))
+        setGithubLogin(typeof result.login === 'string' ? result.login : null)
       }),
     ]).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to load skill verification status.'))
   }, [])
-
-  useEffect(() => {
-    if (!quiz) return
-    const onVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        void fetch(`/api/student/quiz/tab-leave?attempt_id=${encodeURIComponent(quiz.id)}`, { method: 'POST' })
-      }
-    }
-    document.addEventListener('visibilitychange', onVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', onVisibilityChange)
-  }, [quiz])
 
   useEffect(() => {
     if (!resume || syncedResumeId.current === resume.id) return
@@ -317,44 +319,24 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   }, [rm])
 
   async function startQuiz(skill: string) {
-    const response = await fetch('/api/student/quiz/start', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ skill }),
-    })
-    const result = await response.json()
-    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to start the quiz.')
-    setQuiz({ ...result, skill, answers: Array(result.questions.length).fill(-1) })
-    setQuizResult(null)
-  }
-
-  async function submitQuiz() {
-    if (!quiz || quiz.answers.some((answer) => answer < 0)) return
-    const response = await fetch('/api/student/quiz/submit', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id: quiz.id, answers: quiz.answers }),
-    })
-    const result = await response.json()
-    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to submit the quiz.')
-    setQuizResult(result)
-    if (result.passed) {
-      setVerifications((current) => [...current.filter((item) => item.skill !== quiz.skill), { skill: quiz.skill, method: 'quiz', detail: String(result.score) }])
-      toast.success(`${quiz.skill} verified by quiz`)
+    if (startingQuizSkill) return
+    setStartingQuizSkill(skill)
+    try {
+      navigate({ name: 'quiz', skill })
+    } finally {
+      setStartingQuizSkill(null)
     }
   }
 
-  async function connectGithub() {
-    const response = await fetch('/api/student/github/oauth/start', { method: 'GET' })
-    const result = await response.json()
-    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to connect GitHub.')
-    window.location.assign(result.url)
+  function connectGithub() {
+    window.location.assign('/api/github/login')
   }
 
   async function verifyGithub(skill: string) {
+    setGithubError(null)
     setVerifyingGithub(true)
     try {
-      const response = await fetch('/api/student/github/verify', {
+      const response = await fetch('/api/github/verify', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ skill, repo_url: repoUrl }),
@@ -363,13 +345,44 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
       if (!response.ok) throw new Error(result.error ?? result.detail ?? 'GitHub verification failed.')
       if (result.passed) {
         setVerifications((current) => [...current.filter((item) => item.skill !== skill), { skill, method: 'github', detail: repoUrl }])
+        setGithubAnalysis((current) => current ? { ...current, verified: [...new Set([...current.verified, skill])] } : current)
         toast.success(`${skill} verified by GitHub project`)
       } else {
-        toast.error('The repository did not pass all required checks.')
+        setGithubError(result.strength !== 'strong' ? `${skill} has no strong file or dependency evidence.` : 'The repository needs at least 5 commits by you spread over 2 or more days.')
       }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'GitHub verification failed.'
+      setGithubError(message)
+      throw error
     } finally {
       setVerifyingGithub(false)
     }
+  }
+
+  async function analyzeGithub() {
+    setGithubError(null)
+    setGithubAnalysis(null)
+    setAnalyzingGithub(true)
+    try {
+      const response = await fetch('/api/github/analyze', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ repo_url: repoUrl }) })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error ?? result.detail ?? 'GitHub analysis failed.')
+      setGithubAnalysis(result as GithubAnalysis)
+    } catch (error: unknown) {
+      setGithubError(error instanceof Error ? error.message : 'GitHub analysis failed.')
+    } finally {
+      setAnalyzingGithub(false)
+    }
+  }
+
+  async function disconnectGithub() {
+    setGithubError(null)
+    const response = await fetch('/api/github/disconnect', { method: 'DELETE' })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to disconnect GitHub.')
+    setGithubConnected(false)
+    setGithubLogin(null)
+    setGithubMessage('GitHub account disconnected.')
   }
 
   return (
@@ -468,19 +481,9 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
                     </div>
                     {s.status !== 'verified' && (
                       <div className="flex flex-wrap justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => void startQuiz(s.skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to start the quiz.'))}>
-                          Take quiz
+                        <Button size="sm" variant="outline" disabled={startingQuizSkill !== null} onClick={() => void startQuiz(s.skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to start the quiz.'))}>
+                          {startingQuizSkill === s.skill ? 'Opening quiz…' : 'Take quiz'}
                         </Button>
-                        {githubConnected && (
-                          !NON_TECHNICAL_SKILLS.has(s.skill) && (
-                          <Button size="sm" variant="outline" onClick={() => {
-                            setRepoUrl('')
-                            void verifyGithub(s.skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'GitHub verification failed.'))
-                          }}>
-                            <Code2 /> Verify project
-                          </Button>
-                          )
-                        )}
                       </div>
                     )}
                   </div>
@@ -494,58 +497,39 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
               Connect GitHub to verify technical skills automatically. The repository must belong to you and pass the required project checks.
             </p>
             {!githubConnected ? (
-              <Button className="mt-4" onClick={() => void connectGithub().catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to connect GitHub.'))}>
+              <Button className="mt-4" onClick={connectGithub}>
                 <Code2 /> Sign in with GitHub
               </Button>
             ) : (
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <input
-                  className={selectClass}
-                  value={repoUrl}
-                  onChange={(event) => setRepoUrl(event.target.value)}
-                  placeholder="https://github.com/you/project"
-                  aria-label="GitHub repository URL"
-                />
-                <Button disabled={!repoUrl || verifyingGithub} onClick={() => {
-                  const skill = steps.find((step) => step.status !== 'verified')?.skill
-                  if (skill) void verifyGithub(skill).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'GitHub verification failed.'))
-                }}>
-                  Verify selected skill
-                </Button>
+              <div className="mt-4 flex flex-col gap-3">
+                <p className="text-sm text-success">Connected as {githubLogin ?? 'your GitHub account'}</p>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <input className={selectClass} value={repoUrl} onChange={(event) => setRepoUrl(event.target.value)} placeholder="https://github.com/you/project" aria-label="GitHub repository URL" />
+                  <Button disabled={!repoUrl || analyzingGithub || verifyingGithub} onClick={() => void analyzeGithub()}>{analyzingGithub ? 'Analyzing…' : 'Analyze repository'}</Button>
+                </div>
+                {githubAnalysis && (
+                  <div className="rounded-lg border p-4">
+                    <p className="text-sm font-medium">We found these skills in your project</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Your commits: {githubAnalysis.commits.count} across {githubAnalysis.commits.days} day{githubAnalysis.commits.days === 1 ? '' : 's'}.</p>
+                    <ul className="mt-3 flex flex-col gap-3">
+                      {githubAnalysis.skills.filter((item) => item.detected).map((item) => (
+                        <li key={item.skill} className="rounded-md bg-muted/40 p-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="text-sm font-medium">{item.skill} <span className="text-xs font-normal text-muted-foreground">({item.strength ?? 'weak'} evidence)</span></span>
+                            {item.strength === 'strong' && <Button size="sm" variant="outline" disabled={verifyingGithub} onClick={() => void verifyGithub(item.skill).catch(() => undefined)}>{githubAnalysis.verified.includes(item.skill) ? 'Verified' : 'Verify'}</Button>}
+                          </div>
+                          <ul className="mt-2 flex flex-col gap-1 text-xs text-muted-foreground">{item.evidence.map((evidence) => <li key={evidence}>• {evidence}</li>)}</ul>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <Button type="button" variant="outline" className="self-start" onClick={() => void disconnectGithub().catch((error: unknown) => setGithubError(error instanceof Error ? error.message : 'Unable to disconnect GitHub.'))}>Disconnect</Button>
               </div>
             )}
+            {githubMessage && <p className="mt-3 text-sm text-success">{githubMessage}</p>}
+            {githubError && <p role="alert" className="mt-3 text-sm text-destructive">{githubError}</p>}
           </Panel>
-
-          {quiz && (
-            <Panel title={`Quiz: ${quiz.skill}`}>
-              <p className="text-sm text-muted-foreground">Answer every question. You need 70% to pass; this attempt expires after 16 minutes.</p>
-              <ol className="mt-4 flex flex-col gap-5">
-                {quiz.questions.map((question, questionIndex) => (
-                  <li key={`${quiz.id}-${questionIndex}`}>
-                    <p className="text-sm font-medium">{questionIndex + 1}. {question.q}</p>
-                    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                      {question.o.map((option, optionIndex) => (
-                        <label key={option} className={cn('rounded-lg border p-3 text-sm', quiz.answers[questionIndex] === optionIndex && 'border-primary bg-accent')}>
-                          <input
-                            className="mr-2"
-                            type="radio"
-                            name={`${quiz.id}-${questionIndex}`}
-                            checked={quiz.answers[questionIndex] === optionIndex}
-                            onChange={() => setQuiz((current) => current ? { ...current, answers: current.answers.map((answer, index) => index === questionIndex ? optionIndex : answer) } : current)}
-                          />
-                          {option}
-                        </label>
-                      ))}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-5 flex items-center gap-3">
-                <Button disabled={quiz.answers.some((answer) => answer < 0)} onClick={() => void submitQuiz().catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to submit the quiz.'))}>Submit quiz</Button>
-                {quizResult && <span className={cn('text-sm font-medium', quizResult.passed ? 'text-success' : 'text-destructive')}>{quizResult.score}/{quizResult.total} — {quizResult.passed ? 'Passed' : 'Failed'}</span>}
-              </div>
-            </Panel>
-          )}
 
           <Panel title="Related internships" action={<Button variant="ghost" size="sm" onClick={() => navigate({ name: 'discover' })}>Browse all <ArrowRight /></Button>}>
             {related.length === 0 ? (

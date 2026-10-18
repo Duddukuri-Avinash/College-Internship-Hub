@@ -12,7 +12,7 @@ SKILLS = frozenset(
         "Authentication", "Deployment", "Data Structures", "Algorithms", "OOP", "Flask",
         "FastAPI", "Databases", "ORMs", "Testing", "Debugging", "Automation Scripting",
         "Linear Algebra", "Calculus", "TensorFlow", "PyTorch", "NLP", "Computer Vision",
-        "Docker", "MLOps", "LLMs", "Linux", "Networking", "AWS", "Azure", "GCP",
+        "Docker", "MLOps", "LLMs", "Linux", "Networking", "Wireshark", "AWS", "Azure", "GCP",
         "IAM", "Bash", "Kubernetes", "Terraform", "CI/CD", "Security Basics",
         "OWASP Top 10", "Java", "C++", "System Design", "DBMS", "Operating Systems",
         "Unit Testing", "Kotlin", "Swift", "Flutter", "React Native", "JSON", "SQLite",

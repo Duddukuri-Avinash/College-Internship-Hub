@@ -16,10 +16,10 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     openai_model: str = "gpt-4o-mini"
     gemini_api_key: str | None = None
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-3.8-flash"
     github_client_id: str | None = None
     github_client_secret: str | None = None
-    github_oauth_redirect_uri: str = "http://localhost:8000/students/github/oauth/callback"
+    github_redirect_uri: str = "http://localhost:8000/api/github/callback"
     github_api_token: str | None = None
     frontend_url: str = "http://localhost:3000"
     cors_origins: str = "http://localhost:3000"
