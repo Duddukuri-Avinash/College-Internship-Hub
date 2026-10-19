@@ -104,6 +104,7 @@ export function StudentProfile({ navigate }: { navigate: (v: View) => void }) {
           branch: account.branch,
           year: account.year,
           section: account.section,
+          cgpa: account.cgpa,
           skills: [...new Set([...account.skills, ...detectedSkills])],
           languages: account.languages,
           tools: account.tools,
@@ -185,7 +186,7 @@ export function StudentProfile({ navigate }: { navigate: (v: View) => void }) {
           <Fact label="Branch" value={account?.branch === 'Unassigned' ? 'Not set' : account?.branch ?? '—'} />
           <Fact label="Year" value={account?.year ?? '—'} />
           <Fact label="Section" value={account?.section === 'Unassigned' ? 'Not set' : account?.section ?? '—'} />
-          <Fact label="CGPA" value="Not provided" />
+          <Fact label="CGPA" value={account?.cgpa == null ? 'Not provided' : account.cgpa.toFixed(2)} />
           <Fact label="Internship activity" value={myInternships.length ? myInternships.length : 'None recorded'} />
           <Fact label="Account status" value={loading ? 'Loading…' : 'Active'} />
         </div>
@@ -252,7 +253,7 @@ export function StudentProfile({ navigate }: { navigate: (v: View) => void }) {
             <p className="text-pretty text-sm leading-relaxed text-muted-foreground">{student.about || 'No profile summary provided.'}</p>
           </Panel>
 
-          <Panel title="Academic Performance" action={<span className="text-sm text-muted-foreground">CGPA <strong className="text-foreground">Not provided</strong></span>}>
+          <Panel title="Academic Performance" action={<span className="text-sm text-muted-foreground">CGPA <strong className="text-foreground">{account?.cgpa == null ? 'Not provided' : account.cgpa.toFixed(2)}</strong></span>}>
             <div className="flex h-36 items-end gap-3" role="list" aria-label="Semester SGPA">
               {student.semesters.map((s) => (
                 <div key={s.sem} role="listitem" className="flex flex-1 flex-col items-center gap-1.5">

@@ -287,13 +287,13 @@ export function ResumeAnalysis() {
             </div>
             <div className="flex flex-col gap-3">{analysis.matches.map((match) => <div key={match.role} className="flex items-center gap-3"><span className="min-w-0 flex-1 truncate text-sm font-medium">{match.role}</span><div className="w-1/3"><Bar value={match.score} /></div><span className="w-10 text-right text-sm font-semibold">{match.score}%</span></div>)}</div>
           </Panel>
-          <div className="columns-1 gap-6 lg:columns-2">
-            <div className="mb-6 break-inside-avoid"><Panel title="Detected skills"><div className="flex flex-wrap gap-2">{analysis.skills.length ? analysis.skills.map((skill) => <Chip key={skill}>{skill}</Chip>) : <p className="text-sm text-muted-foreground">No supported skills were detected.</p>}</div></Panel></div>
-            <div className="mb-6 break-inside-avoid"><Panel title={`Missing skills for ${selectedRole.role}`}><List items={analysis.missing} empty="Your detected skills cover this roadmap." /></Panel></div>
-            <div className="mb-6 break-inside-avoid"><Panel title="Strengths"><List items={analysis.strengths} empty="Add more structured content to reveal strengths." /></Panel></div>
-            <div className="mb-6 break-inside-avoid"><Panel title="Areas to improve"><FeedbackList items={analysis.weaknesses} empty="No major rule-based weaknesses detected." /></Panel></div>
-            <div className="mb-6 break-inside-avoid"><Panel title="Formatting feedback"><FeedbackList items={analysis.formatting} empty="No formatting feedback available." /></Panel></div>
-            <div className="mb-6 break-inside-avoid"><Panel title="Recommendations"><FeedbackList items={analysis.recommendations} empty="No recommendations available." /></Panel></div>
+          <div className="grid items-start gap-6 lg:grid-cols-2">
+            <Panel title="Detected skills"><div className="flex flex-wrap gap-2">{analysis.skills.length ? analysis.skills.map((skill) => <Chip key={skill}>{skill}</Chip>) : <p className="text-sm text-muted-foreground">No supported skills were detected.</p>}</div></Panel>
+            <Panel title={`Missing skills for ${selectedRole.role}`}><List items={analysis.missing} empty="Your detected skills cover this roadmap." /></Panel>
+            <Panel title="Strengths"><List items={analysis.strengths} empty="Add more structured content to reveal strengths." /></Panel>
+            <Panel title="Areas to improve"><FeedbackList items={analysis.weaknesses} empty="No major rule-based weaknesses detected." /></Panel>
+            <Panel title="Formatting feedback"><FeedbackList items={analysis.formatting} empty="No formatting feedback available." /></Panel>
+            <Panel title="Recommendations"><FeedbackList items={analysis.recommendations} empty="No recommendations available." /></Panel>
           </div>
           <p className="flex items-center gap-2 text-xs text-muted-foreground"><Lightbulb className="size-4" />Scores are guidance, not a hiring guarantee. Text extraction cannot evaluate visual design perfectly.</p>
         </>

@@ -24,6 +24,7 @@ class StudentDetailsUpdate(BaseModel):
     branch: str = Field(min_length=1, max_length=120)
     year: int = Field(ge=1, le=10)
     section: str = Field(min_length=1, max_length=10)
+    cgpa: float | None = Field(default=None, ge=0, le=10)
     phone: str = Field(default="", max_length=30)
     skills: list[str] = Field(default_factory=list)
     languages: list[str] = Field(default_factory=list)
@@ -62,6 +63,7 @@ def _account(student: Student, user: User, resume: Document | None) -> dict[str,
         "branch": student.branch,
         "year": student.year,
         "section": student.section or "Unassigned",
+        "cgpa": student.cgpa,
         "skills": student.skills or [],
         "languages": student.programming_languages or [],
         "tools": student.tools or [],
@@ -96,6 +98,7 @@ def update_student_account(
     student.branch = input.branch.strip()
     student.year = input.year
     student.section = input.section.strip()
+    student.cgpa = input.cgpa
     student.phone = input.phone.strip() or None
     student.skills = input.skills
     student.programming_languages = input.languages

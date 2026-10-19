@@ -1,2202 +1,3352 @@
 {
- "Python": [
-  {
-   "difficulty": "easy",
-   "question": "A student runs this code:\n```\nprices = [10, 20, 30]\ntotal = prices\ntotal.append(40)\nprint(len(prices))\n```\nWhat is printed?",
-   "options": [
-    "3",
-    "4",
-    "Error",
-    "None"
-   ],
-   "answer_index": 1,
-   "explanation": "total = prices does not copy the list. Both names point to the same list, so appending through total also changes prices."
-  },
-  {
-   "difficulty": "easy",
-   "question": "A program reads a number with age = input('Age: ') and then runs print(age + 1). The user types 20. What happens?",
-   "options": [
-    "It prints 21",
-    "It raises a TypeError because age is a string",
-    "It prints 201",
-    "It prints 20 1"
-   ],
-   "answer_index": 1,
-   "explanation": "input() always returns a string. Adding an int to a str raises TypeError. Use int(age) + 1."
-  },
-  {
-   "difficulty": "easy",
-   "question": "You have names = ['Asha', 'Ravi', 'Meena'] and want to print each name with its position starting from 1. Which loop does that?",
-   "options": [
-    "for i in range(names): print(i, names[i])",
-    "for i, n in names: print(i, n)",
-    "for i, n in enumerate(names, start=1): print(i, n)",
-    "for i in names: print(i, names[i])"
-   ],
-   "answer_index": 2,
-   "explanation": "enumerate(names, start=1) yields (position, item) pairs. The other loops raise TypeError or ValueError."
-  },
-  {
-   "difficulty": "easy",
-   "question": "What does this code print?\n```\ndef add(a, b=2):\n    return a + b\n\nprint(add(5), add(5, 1))\n```",
-   "options": [
-    "7 7",
-    "5 6",
-    "7 6",
-    "Error, because b has no value in the first call"
-   ],
-   "answer_index": 2,
-   "explanation": "b defaults to 2 when it is not passed, so add(5) is 7. add(5, 1) overrides the default and gives 6."
-  },
-  {
-   "difficulty": "easy",
-   "question": "scores = {'Asha': 82, 'Ravi': 74}. Which expression returns 0 for 'Meena', who is not in the dictionary, without raising an error?",
-   "options": [
-    "scores['Meena']",
-    "scores.get('Meena')",
-    "scores.find('Meena', 0)",
-    "scores.get('Meena', 0)"
-   ],
-   "answer_index": 3,
-   "explanation": "dict.get(key, default) returns the default when the key is missing. scores['Meena'] raises KeyError and get without a default returns None."
-  },
-  {
-   "difficulty": "medium",
-   "question": "What does this code print?\n```\nnums = [1, 2, 3, 4, 5, 6]\nprint([n * n for n in nums if n % 2 == 0])\n```",
-   "options": [
-    "[1, 9, 25]",
-    "[4, 16, 36]",
-    "[4, 8, 12]",
-    "[2, 4, 6]"
-   ],
-   "answer_index": 1,
-   "explanation": "The condition keeps only even numbers (2, 4, 6) and the expression squares each one, giving [4, 16, 36]."
-  },
-  {
-   "difficulty": "medium",
-   "question": "A teammate wrote this helper and is surprised by the output:\n```\ndef add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item('a'))\nprint(add_item('b'))\n```\nWhat is printed?",
-   "options": [
-    "['a'] then ['b']",
-    "['a'] then ['a', 'b']",
-    "['a', 'b'] twice",
-    "An error on the second call"
-   ],
-   "answer_index": 1,
-   "explanation": "A default list is created once when the function is defined and reused on every call. The usual fix is items=None and then items = [] inside the function."
-  },
-  {
-   "difficulty": "medium",
-   "question": "A script must always close a file, even if an exception happens while processing its contents. Which approach is best?",
-   "options": [
-    "Call f.close() on the last line of the script",
-    "Wrap the code in try/except and ignore the error",
-    "Use with open('data.csv') as f: and process the file inside the block",
-    "Delete the variable with del f when done"
-   ],
-   "answer_index": 2,
-   "explanation": "A with block closes the file automatically when the block ends, including when an exception is raised. A close() on the last line is skipped if an error happens earlier."
-  },
-  {
-   "difficulty": "medium",
-   "question": "What is the output of this code?\n```\ntry:\n    value = int('12a')\nexcept ValueError:\n    print('bad number')\nelse:\n    print('ok')\nfinally:\n    print('done')\n```",
-   "options": [
-    "bad number, then done",
-    "ok, then done",
-    "bad number only",
-    "done only"
-   ],
-   "answer_index": 0,
-   "explanation": "int('12a') raises ValueError, so the except block runs and the else block is skipped. The finally block always runs."
-  },
-  {
-   "difficulty": "medium",
-   "question": "You have names = ['A', 'B', 'C'] and marks = [90, 75, 60]. Which expression builds {'A': 90, 'B': 75, 'C': 60}?",
-   "options": [
-    "dict(names, marks)",
-    "{names: marks}",
-    "zip(names, marks)",
-    "dict(zip(names, marks))"
-   ],
-   "answer_index": 3,
-   "explanation": "zip pairs the items up and dict turns the pairs into key-value entries. zip alone returns a zip object, and a list cannot be a dictionary key."
-  },
-  {
-   "difficulty": "medium",
-   "question": "A function is meant to return a sorted list but returns None:\n```\ndef sort_scores(scores):\n    return scores.sort()\n```\nWhat is the bug?",
-   "options": [
-    "list.sort() sorts in place and returns None; use sorted(scores)",
-    "sort() needs a key argument to return a value",
-    "scores must be converted to a tuple first",
-    "return cannot be used with a list method"
-   ],
-   "answer_index": 0,
-   "explanation": "sort() changes the list in place and returns None. sorted(scores) returns a new sorted list."
-  },
-  {
-   "difficulty": "medium",
-   "question": "What does this print?\n```\na = [1, 2, 3]\nb = a[:]\nb.append(4)\nprint(a, b)\n```",
-   "options": [
-    "[1, 2, 3] [1, 2, 3, 4]",
-    "[1, 2, 3, 4] [1, 2, 3, 4]",
-    "[1, 2, 3] [4]",
-    "Error"
-   ],
-   "answer_index": 0,
-   "explanation": "a[:] makes a shallow copy, so b is a separate list and appending to b does not change a."
-  },
-  {
-   "difficulty": "hard",
-   "question": "What does this code print?\n```\nfuncs = [lambda: i for i in range(3)]\nprint([f() for f in funcs])\n```",
-   "options": [
-    "[0, 1, 2]",
-    "[2, 2, 2]",
-    "[3, 3, 3]",
-    "An error"
-   ],
-   "answer_index": 1,
-   "explanation": "Each lambda looks up i when it is called, not when it is created. By then the loop has finished and i is 2, so every call returns 2."
-  },
-  {
-   "difficulty": "hard",
-   "question": "What is printed?\n```\ndef count():\n    for i in range(3):\n        yield i\n\ng = count()\nprint(list(g), list(g))\n```",
-   "options": [
-    "[0, 1, 2] [0, 1, 2]",
-    "[0, 1, 2] []",
-    "[] []",
-    "[0, 1, 2] None"
-   ],
-   "answer_index": 1,
-   "explanation": "A generator can be consumed only once. The first list() exhausts it, so the second list() has nothing left and returns an empty list."
-  },
-  {
-   "difficulty": "hard",
-   "question": "You must count how often each word appears in a list of one million words, as efficiently as possible. Which approach is best?",
-   "options": [
-    "For every word, call words.count(word) on the whole list",
-    "Use collections.Counter(words)",
-    "Put the words in a set and take its length",
-    "Join the words into one string and split it again"
-   ],
-   "answer_index": 1,
-   "explanation": "Counter makes one pass over the data. Calling count() for each word scans the whole list every time, which is far slower. A set loses the counts."
-  }
- ],
- "SQL": [
-  {
-   "difficulty": "easy",
-   "question": "A table employees has 6 rows. Three employees have NULL in the bonus column. What does SELECT COUNT(bonus) FROM employees return?",
-   "options": [
-    "6",
-    "3",
-    "0",
-    "NULL"
-   ],
-   "answer_index": 1,
-   "explanation": "COUNT(column) counts only non-NULL values. COUNT(*) would return 6."
-  },
-  {
-   "difficulty": "easy",
-   "question": "You want each department's average salary, but only departments whose average is above 50000. Which query is correct?",
-   "options": [
-    "SELECT dept_id, AVG(salary) FROM employees WHERE AVG(salary) > 50000 GROUP BY dept_id;",
-    "SELECT dept_id, AVG(salary) FROM employees GROUP BY dept_id HAVING AVG(salary) > 50000;",
-    "SELECT dept_id, AVG(salary) FROM employees WHERE salary > 50000 GROUP BY dept_id;",
-    "SELECT dept_id, AVG(salary) FROM employees HAVING salary > 50000;"
-   ],
-   "answer_index": 1,
-   "explanation": "HAVING filters groups after aggregation. WHERE cannot use aggregate functions, and WHERE salary > 50000 filters individual rows before averaging, which gives different averages."
-  },
-  {
-   "difficulty": "easy",
-   "question": "Which query lists the three highest-paid employees in MySQL or PostgreSQL?",
-   "options": [
-    "SELECT name FROM employees ORDER BY salary LIMIT 3;",
-    "SELECT name FROM employees WHERE salary = MAX(salary);",
-    "SELECT name FROM employees ORDER BY salary DESC LIMIT 3;",
-    "SELECT TOP name FROM employees LIMIT 3;"
-   ],
-   "answer_index": 2,
-   "explanation": "ORDER BY salary DESC puts the highest salaries first and LIMIT 3 keeps three rows. Without DESC you get the lowest three."
-  },
-  {
-   "difficulty": "easy",
-   "question": "customers has 100 rows and orders has 300 rows. Every order has a valid customer_id and 20 customers have no orders. How many rows does this return?\n```\nSELECT c.id\nFROM customers c\nINNER JOIN orders o ON o.customer_id = c.id;\n```",
-   "options": [
-    "100",
-    "80",
-    "320",
-    "300"
-   ],
-   "answer_index": 3,
-   "explanation": "Each of the 300 orders matches exactly one customer, so there are 300 rows. An INNER JOIN drops the 20 customers with no orders. A LEFT JOIN would return 320."
-  },
-  {
-   "difficulty": "easy",
-   "question": "Which query returns each city only once from the customers table?",
-   "options": [
-    "SELECT UNIQUE city FROM customers;",
-    "SELECT city FROM customers REMOVE DUPLICATES;",
-    "SELECT DISTINCT city FROM customers;",
-    "SELECT city FROM customers WHERE DISTINCT;"
-   ],
-   "answer_index": 2,
-   "explanation": "SELECT DISTINCT removes duplicate rows from the result. The other forms are not valid standard SQL."
-  },
-  {
-   "difficulty": "medium",
-   "question": "A report uses customers LEFT JOIN orders, then adds WHERE o.amount > 100. Customers with no orders disappear from the result. Why?",
-   "options": [
-    "LEFT JOIN only returns rows that match",
-    "The WHERE condition removes the NULL rows created by the LEFT JOIN, so the filter should move into the ON clause",
-    "amount must be cast to a number before it is compared",
-    "WHERE cannot be used after a join"
-   ],
-   "answer_index": 1,
-   "explanation": "For customers without orders, o.amount is NULL and NULL > 100 is not true, so those rows are filtered out. Putting the condition in the ON clause keeps them."
-  },
-  {
-   "difficulty": "medium",
-   "question": "Which query finds customers who have never placed an order?",
-   "options": [
-    "SELECT c.name FROM customers c INNER JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL;",
-    "SELECT name FROM customers WHERE id = NULL;",
-    "SELECT c.name FROM customers c, orders o WHERE c.id = o.customer_id;",
-    "SELECT c.name FROM customers c LEFT JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL;"
-   ],
-   "answer_index": 3,
-   "explanation": "The LEFT JOIN keeps every customer, and o.id is NULL only when no order matched. The INNER JOIN version returns nothing, and = NULL is never true."
-  },
-  {
-   "difficulty": "medium",
-   "question": "This query fails in most databases:\n```\nSELECT dept_id, COUNT(*) FROM employees;\n```\nWhat is the correct fix?",
-   "options": [
-    "Add GROUP BY dept_id",
-    "Replace COUNT(*) with COUNT(dept_id)",
-    "Add DISTINCT before dept_id",
-    "Add ORDER BY dept_id"
-   ],
-   "answer_index": 0,
-   "explanation": "Mixing a plain column with an aggregate requires GROUP BY on that column so the database knows how to form the groups."
-  },
-  {
-   "difficulty": "medium",
-   "question": "Which query shows each employee's salary rank within their own department, with the highest salary ranked 1?",
-   "options": [
-    "SELECT name, RANK() OVER (ORDER BY salary DESC) AS rnk FROM employees;",
-    "SELECT name, RANK() OVER (PARTITION BY dept_id ORDER BY salary ASC) AS rnk FROM employees;",
-    "SELECT name, RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rnk FROM employees;",
-    "SELECT name, RANK() FROM employees GROUP BY dept_id;"
-   ],
-   "answer_index": 2,
-   "explanation": "PARTITION BY dept_id restarts the ranking for each department and ORDER BY salary DESC gives rank 1 to the highest salary. The first option ranks across the whole company."
-  },
-  {
-   "difficulty": "medium",
-   "question": "SELECT * FROM orders WHERE customer_id = 42 is slow on a table of 5 million rows, and there is no index. What is the most appropriate first fix?",
-   "options": [
-    "Replace * with COUNT(*)",
-    "Add DISTINCT to the query",
-    "Create an index on orders(customer_id)",
-    "Turn the table into a view"
-   ],
-   "answer_index": 2,
-   "explanation": "Without an index the database scans every row. An index on the filtered column lets it jump straight to the matching rows."
-  },
-  {
-   "difficulty": "medium",
-   "question": "The salaries in a table are 40000, 50000, 60000 and 60000. What does this return?\n```\nSELECT salary FROM employees\nORDER BY salary DESC\nLIMIT 1 OFFSET 1;\n```",
-   "options": [
-    "60000",
-    "50000",
-    "40000",
-    "Two rows"
-   ],
-   "answer_index": 0,
-   "explanation": "Sorted descending the rows are 60000, 60000, 50000, 40000. OFFSET 1 skips only the first row, so the second 60000 is returned. For the second-highest distinct salary use DISTINCT or DENSE_RANK."
-  },
-  {
-   "difficulty": "medium",
-   "question": "You must move 500 from account 1 to account 2 so that a failure between the two updates cannot lose money. Which is correct?",
-   "options": [
-    "Run the two UPDATE statements separately, because each statement is safe on its own",
-    "BEGIN; UPDATE accounts SET balance = balance - 500 WHERE id = 1; UPDATE accounts SET balance = balance + 500 WHERE id = 2; COMMIT;",
-    "Run the credit UPDATE first and the debit UPDATE later in a separate session",
-    "TRUNCATE the table and insert the new balances"
-   ],
-   "answer_index": 1,
-   "explanation": "A transaction makes both updates succeed together or not at all. If something fails before COMMIT, ROLLBACK undoes the first update."
-  },
-  {
-   "difficulty": "hard",
-   "question": "A logins table has one row per login with columns (user_id, login_date). Which query returns users who logged in on at least 3 different days?",
-   "options": [
-    "SELECT user_id FROM logins GROUP BY user_id HAVING COUNT(*) >= 3;",
-    "SELECT user_id FROM logins WHERE COUNT(DISTINCT login_date) >= 3;",
-    "SELECT DISTINCT user_id FROM logins HAVING login_date >= 3;",
-    "SELECT user_id FROM logins GROUP BY user_id HAVING COUNT(DISTINCT login_date) >= 3;"
-   ],
-   "answer_index": 3,
-   "explanation": "COUNT(DISTINCT login_date) counts different days. COUNT(*) would also count several logins on the same day, and WHERE cannot use aggregates."
-  },
-  {
-   "difficulty": "hard",
-   "question": "This query returns no rows, even though some customers have no orders. The orders table contains one row where customer_id is NULL.\n```\nSELECT name FROM customers\nWHERE id NOT IN (SELECT customer_id FROM orders);\n```\nWhy?",
-   "options": [
-    "NOT IN only works with numbers",
-    "The subquery runs once per customer and times out",
-    "NULL is treated as zero, so every customer matches",
-    "NOT IN with a NULL in the list is never true for any row; use NOT EXISTS or filter out NULLs"
-   ],
-   "answer_index": 3,
-   "explanation": "id NOT IN (..., NULL) evaluates to unknown for every row that is not otherwise matched, so nothing is returned. NOT EXISTS or WHERE customer_id IS NOT NULL in the subquery avoids this."
-  },
-  {
-   "difficulty": "hard",
-   "question": "Monthly revenue looks about three times too high for orders that contain three items. The query is:\n```\nSELECT SUM(o.amount)\nFROM orders o\nJOIN order_items i ON i.order_id = o.id;\n```\nWhat is the most likely cause?",
-   "options": [
-    "SUM treats NULL values as 3",
-    "GROUP BY must include item_id",
-    "The join repeats each order row once per item, so o.amount is added several times",
-    "DISTINCT is missing from the SELECT list"
-   ],
-   "answer_index": 2,
-   "explanation": "Joining a one-to-many table duplicates the order row for every item. Sum item totals from order_items, or aggregate the items first, instead of summing the order-level amount after the join."
-  }
- ],
- "Excel": [
-  {
-   "question": "Which function looks up a value in the first column of a table and returns a value from another column?",
-   "options": [
-    "VLOOKUP",
-    "COUNTIF",
-    "CONCAT",
-    "ROUND"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does =SUMIF(A1:A5,\">10\") do?",
-   "options": [
-    "Adds the cells greater than 10",
-    "Counts cells over 10",
-    "Averages cells over 10",
-    "Finds the maximum over 10"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which feature summarizes large data by dragging fields?",
-   "options": [
-    "Pivot Table",
-    "Goal Seek",
-    "Data Validation",
-    "Flash Fill"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does $A$1 mean?",
-   "options": [
-    "Absolute reference",
-    "Relative reference",
-    "Named range",
-    "Table reference"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which function joins text from cells?",
-   "options": [
-    "CONCAT",
-    "COUNT",
-    "MATCH",
-    "LEN"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which function returns today's date?",
-   "options": [
-    "TODAY()",
-    "DAYS()",
-    "WEEKDAY()",
-    "DATEVALUE()"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does =IF(B2>=50,\"Pass\",\"Fail\") return when B2 is 40?",
-   "options": [
-    "Fail",
-    "Pass",
-    "40",
-    "Error"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tool restricts what can be typed in a cell?",
-   "options": [
-    "Data Validation",
-    "Conditional Formatting",
-    "Freeze Panes",
-    "Text to Columns"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is one advantage of XLOOKUP over VLOOKUP?",
-   "options": [
-    "It can look left and defaults to exact match",
-    "It only works on text",
-    "It needs sorted data",
-    "It works on one sheet only"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which function counts non-empty cells?",
-   "options": [
-    "COUNTA",
-    "COUNT",
-    "COUNTBLANK",
-    "SUMPRODUCT"
-   ],
-   "answer_index": 0
-  }
- ],
- "Statistics": [
-  {
-   "question": "Which measure is least affected by outliers?",
-   "options": [
-    "Median",
-    "Mean",
-    "Range",
-    "Variance"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does standard deviation measure?",
-   "options": [
-    "Spread of the data",
-    "Central value",
-    "Sample size",
-    "Correlation"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "A p-value below 0.05 usually means you...",
-   "options": [
-    "Reject the null hypothesis at the 5% level",
-    "Accept the null hypothesis",
-    "Have a large effect",
-    "Have normal data"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "A correlation of -0.9 indicates...",
-   "options": [
-    "A strong negative relationship",
-    "A weak positive relationship",
-    "No relationship",
-    "A strong positive relationship"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "In a normal distribution, about what share lies within 1 standard deviation of the mean?",
-   "options": [
-    "68%",
-    "50%",
-    "95%",
-    "99.7%"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which is a categorical variable?",
-   "options": [
-    "Blood group",
-    "Height",
-    "Temperature",
-    "Income"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the mode?",
-   "options": [
-    "The most frequent value",
-    "The middle value",
-    "The average",
-    "The largest value"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "A Type I error is...",
-   "options": [
-    "Rejecting a true null hypothesis",
-    "Failing to reject a false null hypothesis",
-    "Using the wrong sample size",
-    "A measurement error"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "The Central Limit Theorem says sample means tend toward...",
-   "options": [
-    "A normal distribution",
-    "A uniform distribution",
-    "A skewed distribution",
-    "A binomial distribution"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Does correlation prove causation?",
-   "options": [
-    "No, it does not on its own",
-    "Yes, always",
-    "Only above 0.5",
-    "Only for large samples"
-   ],
-   "answer_index": 0
-  }
- ],
- "Power BI": [
-  {
-   "question": "Which language writes custom measures in Power BI?",
-   "options": [
-    "DAX",
-    "SQL",
-    "HTML",
-    "Java"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tool cleans and shapes data before loading?",
-   "options": [
-    "Power Query",
-    "Power Automate",
-    "Power Apps",
-    "Power Pages"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a measure?",
-   "options": [
-    "A calculation evaluated at query time",
-    "A stored column",
-    "A data source",
-    "A page filter"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which file extension is a Power BI Desktop report?",
-   "options": [
-    ".pbix",
-    ".xlsx",
-    ".docx",
-    ".csv"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which relationship usually links a dimension table to a fact table?",
-   "options": [
-    "One-to-many",
-    "Many-to-many only",
-    "One-to-one only",
-    "None"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service lets you share reports online?",
-   "options": [
-    "Power BI Service",
-    "Power BI Desktop",
-    "Notepad",
-    "SSMS"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does a slicer do?",
-   "options": [
-    "Filters visuals interactively",
-    "Adds a data source",
-    "Creates relationships",
-    "Exports data"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which DAX function adds up a column?",
-   "options": [
-    "SUM",
-    "ADDALL",
-    "TOTALCOL",
-    "PLUS"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Row-level security is used to...",
-   "options": [
-    "Restrict data by user",
-    "Speed up refresh",
-    "Compress data",
-    "Design visuals"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which model design is recommended for Power BI?",
-   "options": [
-    "Star schema",
-    "One huge flat file",
-    "Circular relationships",
-    "No relationships"
-   ],
-   "answer_index": 0
-  }
- ],
- "Machine Learning": [
-  {
-   "question": "Which task is supervised learning?",
-   "options": [
-    "Regression",
-    "Clustering",
-    "Dimensionality reduction",
-    "Association rules"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is overfitting?",
-   "options": [
-    "A model fits training data too closely and generalizes poorly",
-    "A model that is too simple",
-    "Having too little data only",
-    "Slow training"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which metric suits imbalanced classification better than accuracy?",
-   "options": [
-    "F1-score",
-    "Row count",
-    "Mean",
-    "Variance"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does a train/test split prevent?",
-   "options": [
-    "Judging the model on data it has already seen",
-    "Missing values",
-    "Outliers",
-    "Scaling issues"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which algorithm groups unlabeled data?",
-   "options": [
-    "K-means",
-    "Linear regression",
-    "Logistic regression",
-    "Naive Bayes"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does regularization do?",
-   "options": [
-    "Penalizes model complexity",
-    "Adds more features",
-    "Removes labels",
-    "Raises the learning rate"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does cross-validation give you?",
-   "options": [
-    "A more reliable performance estimate",
-    "Faster training",
-    "More data",
-    "Feature names"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Logistic regression is mainly used for...",
-   "options": [
-    "Classification",
-    "Clustering",
-    "Image generation",
-    "Sorting"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a feature?",
-   "options": [
-    "An input variable",
-    "The target value",
-    "A loss value",
-    "A model file"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which scikit-learn method trains a model?",
-   "options": [
-    "fit()",
-    "train_all()",
-    "learn()",
-    "build()"
-   ],
-   "answer_index": 0
-  }
- ],
- "HTML": [
-  {
-   "question": "Which tag creates a hyperlink?",
-   "options": [
-    "<a>",
-    "<link>",
-    "<href>",
-    "<url>"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tag holds the visible page content?",
-   "options": [
-    "<body>",
-    "<head>",
-    "<meta>",
-    "<title>"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which attribute gives an image alternative text?",
-   "options": [
-    "alt",
-    "title",
-    "src",
-    "text"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which element is the semantic choice for navigation links?",
-   "options": [
-    "<nav>",
-    "<div>",
-    "<span>",
-    "<section>"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which input type is for email addresses?",
-   "options": [
-    "type=\"email\"",
-    "type=\"mail\"",
-    "type=\"text-email\"",
-    "type=\"at\""
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tag makes the largest heading?",
-   "options": [
-    "<h1>",
-    "<h6>",
-    "<head>",
-    "<header>"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does <!DOCTYPE html> do?",
-   "options": [
-    "Declares the HTML5 document type",
-    "Adds a comment",
-    "Links a stylesheet",
-    "Starts a script"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tag makes an ordered list?",
-   "options": [
-    "<ol>",
-    "<ul>",
-    "<li>",
-    "<dl>"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which attribute makes a form field required?",
-   "options": [
-    "required",
-    "mandatory",
-    "must",
-    "validate"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tag defines a table row?",
-   "options": [
-    "<tr>",
-    "<td>",
-    "<th>",
-    "<row>"
-   ],
-   "answer_index": 0
-  }
- ],
- "CSS": [
-  {
-   "question": "Which property changes text color?",
-   "options": [
-    "color",
-    "font-color",
-    "text-color",
-    "foreground"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which selector targets class box?",
-   "options": [
-    ".box",
-    "#box",
-    "box",
-    "*box"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which display value enables flexbox?",
-   "options": [
-    "flex",
-    "block-flex",
-    "flexbox",
-    "inline"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the box model order from inside to outside?",
-   "options": [
-    "Content, padding, border, margin",
-    "Margin, border, padding, content",
-    "Content, margin, border, padding",
-    "Padding, content, margin, border"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which unit is relative to the root font size?",
-   "options": [
-    "rem",
-    "px",
-    "pt",
-    "cm"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which property controls stacking order?",
-   "options": [
-    "z-index",
-    "order-z",
-    "layer",
-    "stack"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which rule applies styles at specific screen widths?",
-   "options": [
-    "@media",
-    "@screen-size",
-    "@responsive",
-    "@query"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which property adds space inside an element's border?",
-   "options": [
-    "padding",
-    "margin",
-    "gap",
-    "spacing"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which position value fixes an element relative to the viewport?",
-   "options": [
-    "fixed",
-    "relative",
-    "static",
-    "inherit"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which property defines CSS Grid columns?",
-   "options": [
-    "grid-template-columns",
-    "grid-cols",
-    "columns-grid",
-    "grid-column-set"
-   ],
-   "answer_index": 0
-  }
- ],
- "JavaScript": [
-  {
-   "question": "What does typeof null return?",
-   "options": [
-    "object",
-    "null",
-    "undefined",
-    "number"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which keyword declares a block-scoped variable that can be reassigned?",
-   "options": [
-    "let",
-    "var",
-    "const",
-    "def"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the result of '5' + 3?",
-   "options": [
-    "53",
-    "8",
-    "Error",
-    "NaN"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which array method returns a new array by transforming each item?",
-   "options": [
-    "map()",
-    "forEach()",
-    "push()",
-    "splice()"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does === check?",
-   "options": [
-    "Value and type",
-    "Value only",
-    "Type only",
-    "Reference only"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does a Promise represent?",
-   "options": [
-    "A future result of async work",
-    "A loop",
-    "A class",
-    "A DOM node"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which keyword waits for a promise inside an async function?",
-   "options": [
-    "await",
-    "pause",
-    "wait",
-    "hold"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does JSON.parse do?",
-   "options": [
-    "Converts a JSON string to an object",
-    "Converts an object to a string",
-    "Sends data",
-    "Sorts keys"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a closure?",
-   "options": [
-    "A function that remembers its outer scope",
-    "A closed file",
-    "A loop type",
-    "An error type"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which method attaches an event listener?",
-   "options": [
-    "addEventListener",
-    "onEvent",
-    "listen",
-    "attachClick"
-   ],
-   "answer_index": 0
-  }
- ],
- "Git": [
-  {
-   "question": "Which command copies a remote repository to your machine?",
-   "options": [
-    "git clone",
-    "git copy",
-    "git fork",
-    "git get"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command stages changes?",
-   "options": [
-    "git add",
-    "git stage-all",
-    "git commit",
-    "git push"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command records staged changes?",
-   "options": [
-    "git commit",
-    "git save",
-    "git store",
-    "git log"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command shows commit history?",
-   "options": [
-    "git log",
-    "git history",
-    "git show-all",
-    "git list"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command creates and switches to a new branch?",
-   "options": [
-    "git checkout -b name",
-    "git branch -d name",
-    "git new name",
-    "git merge name"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does git pull do?",
-   "options": [
-    "Fetches and merges remote changes",
-    "Uploads commits",
-    "Deletes a branch",
-    "Stages files"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a merge conflict?",
-   "options": [
-    "Two changes to the same lines that Git cannot combine",
-    "A network error",
-    "A deleted repository",
-    "A wrong password"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which file lists files Git should ignore?",
-   "options": [
-    ".gitignore",
-    ".gitskip",
-    "ignore.txt",
-    ".gitconfig"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command uploads local commits to a remote?",
-   "options": [
-    "git push",
-    "git send",
-    "git upload",
-    "git sync"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command shelves uncommitted changes temporarily?",
-   "options": [
-    "git stash",
-    "git hide",
-    "git shelve",
-    "git reset --hard"
-   ],
-   "answer_index": 0
-  }
- ],
- "React": [
-  {
-   "question": "What do hooks like useState let function components do?",
-   "options": [
-    "Hold state",
-    "Fetch data automatically",
-    "Compile JSX",
-    "Style elements"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is JSX?",
-   "options": [
-    "A JavaScript syntax extension that looks like HTML",
-    "A CSS framework",
-    "A database",
-    "A bundler"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "How is data passed from a parent to a child component?",
-   "options": [
-    "Props",
-    "Cookies",
-    "Imports",
-    "Globals"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which hook runs side effects after render?",
-   "options": [
-    "useEffect",
-    "useMemo",
-    "useRef",
-    "useId"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Why do list items need a key prop?",
-   "options": [
-    "It helps React track items between renders",
-    "It styles items",
-    "It sorts items",
-    "HTML requires it"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What happens when state is updated?",
-   "options": [
-    "The component re-renders",
-    "Props change",
-    "The page reloads",
-    "The server restarts"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "How must component names start?",
-   "options": [
-    "With a capital letter",
-    "In lowercase",
-    "With an underscore",
-    "With a number"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does useRef commonly store?",
-   "options": [
-    "A value that persists without causing a re-render",
-    "State that re-renders",
-    "Props",
-    "CSS"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which attribute handles clicks in JSX?",
-   "options": [
-    "onClick",
-    "onclick-handler",
-    "click",
-    "handleClick"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the virtual DOM?",
-   "options": [
-    "An in-memory copy React compares to update the real DOM",
-    "A browser plugin",
-    "A database",
-    "A server"
-   ],
-   "answer_index": 0
-  }
- ],
- "Django": [
-  {
-   "question": "Which file defines URL routes in an app?",
-   "options": [
-    "urls.py",
-    "routes.py",
-    "paths.py",
-    "links.py"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command creates a new project?",
-   "options": [
-    "django-admin startproject",
-    "django new",
-    "python makeproject",
-    "manage.py create"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which Django component defines database tables?",
-   "options": [
-    "Models",
-    "Views",
-    "Templates",
-    "Middleware"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command applies database changes?",
-   "options": [
-    "python manage.py migrate",
-    "python manage.py sync",
-    "python manage.py apply",
-    "python manage.py db"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does makemigrations do?",
-   "options": [
-    "Creates migration files from model changes",
-    "Runs the server",
-    "Creates users",
-    "Deletes tables"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which URL serves the built-in admin by default?",
-   "options": [
-    "/admin/",
-    "/dashboard/",
-    "/manage/",
-    "/root/"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the Django ORM?",
-   "options": [
-    "A layer that maps Python classes to database tables",
-    "A template engine",
-    "A web server",
-    "A CSS tool"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which template syntax outputs a variable?",
-   "options": [
-    "{{ variable }}",
-    "{% variable %}",
-    "<% variable %>",
-    "[[ variable ]]"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tag protects forms from cross-site request forgery?",
-   "options": [
-    "{% csrf_token %}",
-    "{% secure %}",
-    "{% safe_form %}",
-    "{% token %}"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which file holds project configuration?",
-   "options": [
-    "settings.py",
-    "config.py",
-    "setup.py",
-    "project.py"
-   ],
-   "answer_index": 0
-  }
- ],
- "Deep Learning": [
-  {
-   "question": "What is an epoch?",
-   "options": [
-    "One full pass over the training data",
-    "One batch",
-    "One layer",
-    "One neuron"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which activation function is common in hidden layers?",
-   "options": [
-    "ReLU",
-    "Mean",
-    "Argmax only",
-    "Sorting"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does backpropagation compute?",
-   "options": [
-    "Gradients of the loss",
-    "Training data",
-    "Labels",
-    "Test accuracy"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which layer type suits image data?",
-   "options": [
-    "Convolutional",
-    "Embedding only",
-    "Dropout",
-    "Softmax"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does dropout do?",
-   "options": [
-    "Randomly disables neurons to reduce overfitting",
-    "Adds layers",
-    "Speeds up GPUs",
-    "Normalizes labels"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Softmax in the output layer gives...",
-   "options": [
-    "Class probabilities that sum to 1",
-    "Raw pixels",
-    "Gradients",
-    "Weights"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which optimizer is widely used?",
-   "options": [
-    "Adam",
-    "Quicksort",
-    "Apriori",
-    "K-means"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the learning rate?",
-   "options": [
-    "The step size for weight updates",
-    "The number of layers",
-    "The batch count",
-    "The dataset size"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which architecture is built for sequences and language?",
-   "options": [
-    "Transformer",
-    "Linear regression",
-    "K-means",
-    "PCA"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which libraries build neural networks?",
-   "options": [
-    "PyTorch and TensorFlow",
-    "Pandas and Excel",
-    "Flask and Django",
-    "Git and Docker"
-   ],
-   "answer_index": 0
-  }
- ],
- "Docker": [
-  {
-   "question": "What is a Docker image?",
-   "options": [
-    "A read-only template for containers",
-    "A running instance",
-    "A network",
-    "A volume"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command lists running containers?",
-   "options": [
-    "docker ps",
-    "docker list",
-    "docker run",
-    "docker show"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which file defines how to build an image?",
-   "options": [
-    "Dockerfile",
-    "docker.yml",
-    "compose.json",
-    "image.txt"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command builds an image?",
-   "options": [
-    "docker build",
-    "docker make",
-    "docker create-image",
-    "docker compile"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "How do you publish container port 80 on host port 8080?",
-   "options": [
-    "-p 8080:80",
-    "-p 80:8080",
-    "-e 8080",
-    "--host 8080"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What keeps data after a container is removed?",
-   "options": [
-    "Volumes",
-    "The writable layer",
-    "Environment variables",
-    "Tags"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tool runs multi-container apps from one YAML file?",
-   "options": [
-    "Docker Compose",
-    "Docker Hub",
-    "Dockerfile",
-    "Docker Scan"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which instruction sets the base image?",
-   "options": [
-    "FROM",
-    "BASE",
-    "IMAGE",
-    "USE"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command stops a container?",
-   "options": [
-    "docker stop",
-    "docker halt",
-    "docker end",
-    "docker quit"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "How do containers differ from virtual machines?",
-   "options": [
-    "They share the host kernel",
-    "They include a full OS each",
-    "They need a hypervisor",
-    "They cannot be isolated"
-   ],
-   "answer_index": 0
-  }
- ],
- "Linux": [
-  {
-   "question": "Which command lists files?",
-   "options": [
-    "ls",
-    "dir-list",
-    "show",
-    "list"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command changes directory?",
-   "options": [
-    "cd",
-    "chdir-to",
-    "go",
-    "mv"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command shows the current directory?",
-   "options": [
-    "pwd",
-    "where",
-    "cwd",
-    "path"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does chmod 755 file do?",
-   "options": [
-    "Sets permissions to rwxr-xr-x",
-    "Deletes the file",
-    "Changes the owner",
-    "Compresses it"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command searches for text in files?",
-   "options": [
-    "grep",
-    "find-text",
-    "search",
-    "lookfor"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which symbol sends one command's output to another command?",
-   "options": [
-    "|",
-    ">>",
-    "&&",
-    "#"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command shows running processes interactively?",
-   "options": [
-    "top",
-    "ps-live",
-    "procs",
-    "run"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command runs another command as administrator?",
-   "options": [
-    "sudo",
-    "admin",
-    "root-run",
-    "su-do"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command deletes a directory and its contents?",
-   "options": [
-    "rm -r",
-    "rmdir -f",
-    "del -r",
-    "erase"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command shows free disk space on filesystems?",
-   "options": [
-    "df",
-    "du-all",
-    "diskfree",
-    "fs"
-   ],
-   "answer_index": 0
-  }
- ],
- "AWS": [
-  {
-   "question": "Which service provides virtual servers?",
-   "options": [
-    "EC2",
-    "S3",
-    "IAM",
-    "Route 53"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service provides object storage?",
-   "options": [
-    "S3",
-    "EBS",
-    "RDS",
-    "VPC"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does IAM manage?",
-   "options": [
-    "Users, roles and permissions",
-    "Billing only",
-    "DNS",
-    "Servers"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service runs code without managing servers?",
-   "options": [
-    "Lambda",
-    "EC2",
-    "EBS",
-    "Glacier"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service is a managed relational database?",
-   "options": [
-    "RDS",
-    "S3",
-    "SQS",
-    "SNS"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a VPC?",
-   "options": [
-    "A private virtual network",
-    "A storage class",
-    "An encryption key",
-    "A billing plan"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service provides DNS?",
-   "options": [
-    "Route 53",
-    "CloudFront",
-    "CloudTrail",
-    "EFS"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which principle should IAM policies follow?",
-   "options": [
-    "Least privilege",
-    "Full access for all",
-    "Shared passwords",
-    "Constant root use"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service delivers content from edge locations?",
-   "options": [
-    "CloudFront",
-    "Lambda",
-    "RDS",
-    "Redshift"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which service records API activity in an account?",
-   "options": [
-    "CloudTrail",
-    "EBS",
-    "Route 53",
-    "SNS"
-   ],
-   "answer_index": 0
-  }
- ],
- "Kubernetes": [
-  {
-   "question": "What is the smallest deployable unit in Kubernetes?",
-   "options": [
-    "Pod",
-    "Node",
-    "Service",
-    "Namespace"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which object keeps a set number of Pod replicas running?",
-   "options": [
-    "Deployment",
-    "ConfigMap",
-    "Ingress",
-    "Secret"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command applies a manifest file?",
-   "options": [
-    "kubectl apply -f",
-    "kubectl run-file",
-    "kubectl push",
-    "kubectl load"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does a Service provide?",
-   "options": [
-    "A stable network endpoint for Pods",
-    "Storage",
-    "A node",
-    "A container image"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which object stores non-sensitive configuration?",
-   "options": [
-    "ConfigMap",
-    "Secret",
-    "PersistentVolume",
-    "Role"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which component schedules Pods onto nodes?",
-   "options": [
-    "kube-scheduler",
-    "kubelet",
-    "etcd",
-    "kube-proxy"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command lists Pods?",
-   "options": [
-    "kubectl get pods",
-    "kubectl list pods",
-    "kubectl show pods",
-    "kubectl pods"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What stores the cluster's state?",
-   "options": [
-    "etcd",
-    "kubelet",
-    "Docker",
-    "Ingress"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does Ingress manage?",
-   "options": [
-    "External HTTP routing to Services",
-    "Pod storage",
-    "Node scaling",
-    "Image builds"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tool packages Kubernetes apps as charts?",
-   "options": [
-    "Helm",
-    "Terraform",
-    "Ansible",
-    "Compose"
-   ],
-   "answer_index": 0
-  }
- ],
- "Terraform": [
-  {
-   "question": "Which command initializes a directory and downloads providers?",
-   "options": [
-    "terraform init",
-    "terraform start",
-    "terraform plan",
-    "terraform setup"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command previews changes?",
-   "options": [
-    "terraform plan",
-    "terraform preview",
-    "terraform show-all",
-    "terraform diff"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command creates the resources?",
-   "options": [
-    "terraform apply",
-    "terraform build",
-    "terraform deploy",
-    "terraform run"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What language are Terraform files written in?",
-   "options": [
-    "HCL",
-    "Only YAML",
-    "Only JSON",
-    "Python"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does the state file track?",
-   "options": [
-    "Resources Terraform manages",
-    "Source code",
-    "Git history",
-    "Logs"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which block configures a cloud provider?",
-   "options": [
-    "provider",
-    "resource",
-    "variable",
-    "output"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command removes managed resources?",
-   "options": [
-    "terraform destroy",
-    "terraform remove",
-    "terraform delete",
-    "terraform clean"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What are variables used for?",
-   "options": [
-    "Parameterizing configurations",
-    "Storing state",
-    "Installing providers",
-    "Running tests"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Why store state remotely?",
-   "options": [
-    "Team sharing and locking",
-    "Faster plans only",
-    "Less code",
-    "Skipping init"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What are modules?",
-   "options": [
-    "Reusable groups of resources",
-    "Providers",
-    "State backups",
-    "Git plugins"
-   ],
-   "answer_index": 0
-  }
- ],
- "Networking": [
-  {
-   "question": "How many layers does the OSI model have?",
-   "options": [
-    "7",
-    "4",
-    "5",
-    "9"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which protocol translates domain names to IP addresses?",
-   "options": [
-    "DNS",
-    "DHCP",
-    "ARP",
-    "FTP"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which protocol automatically assigns IP addresses?",
-   "options": [
-    "DHCP",
-    "DNS",
-    "SNMP",
-    "NTP"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which OSI layer do IP addresses belong to?",
-   "options": [
-    "Network",
-    "Data link",
-    "Transport",
-    "Application"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is the default port for HTTPS?",
-   "options": [
-    "443",
-    "80",
-    "22",
-    "25"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which protocol is connection-oriented and reliable?",
-   "options": [
-    "TCP",
-    "UDP",
-    "ICMP",
-    "ARP"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does a subnet mask define?",
-   "options": [
-    "The network and host parts of an IP address",
-    "Connection speed",
-    "Encryption",
-    "The MAC address"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which device forwards packets between networks?",
-   "options": [
-    "Router",
-    "Hub",
-    "Repeater",
-    "Patch panel"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which command tests reachability using ICMP?",
-   "options": [
-    "ping",
-    "tracert-ip",
-    "netsend",
-    "dig-ip"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which port does SSH use by default?",
-   "options": [
-    "22",
-    "23",
-    "21",
-    "3389"
-   ],
-   "answer_index": 0
-  }
- ],
- "Wireshark": [
-  {
-   "question": "What does Wireshark do?",
-   "options": [
-    "Captures and analyzes network packets",
-    "Scans for malware",
-    "Hosts websites",
-    "Encrypts disks"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What is a capture filter for?",
-   "options": [
-    "Limiting which packets are captured",
-    "Coloring packets",
-    "Exporting files",
-    "Decrypting traffic"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which display filter shows only HTTP traffic?",
-   "options": [
-    "http",
-    "show http",
-    "proto=web",
-    "filter http"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which file format does Wireshark commonly save captures in?",
-   "options": [
-    "pcap/pcapng",
-    "docx",
-    "mp4",
-    "iso"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which filter shows traffic from one source IP?",
-   "options": [
-    "ip.src == 10.0.0.5",
-    "from 10.0.0.5",
-    "src:10.0.0.5",
-    "ip=10.0.0.5"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "What does Follow TCP Stream do?",
-   "options": [
-    "Shows the full conversation between two hosts",
-    "Blocks a host",
-    "Resets a connection",
-    "Scans ports"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which TCP flag starts a connection?",
-   "options": [
-    "SYN",
-    "FIN",
-    "RST",
-    "PSH"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Why can't Wireshark read HTTPS contents by default?",
-   "options": [
-    "The traffic is encrypted",
-    "It lacks permission",
-    "HTTPS uses UDP",
-    "Packets are hidden"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which pane lists one row per captured packet?",
-   "options": [
-    "Packet List",
-    "Packet Bytes",
-    "Packet Details",
-    "Status bar"
-   ],
-   "answer_index": 0
-  },
-  {
-   "question": "Which tool is Wireshark's command-line sibling?",
-   "options": [
-    "tshark",
-    "nmap",
-    "curl",
-    "netstat"
-   ],
-   "answer_index": 0
-  }
- ]
+  "Python": [
+    {
+      "difficulty": "easy",
+      "question": "A student runs this code:\n```\nprices = [10, 20, 30]\ntotal = prices\ntotal.append(40)\nprint(len(prices))\n```\nWhat is printed?",
+      "options": [
+        "3",
+        "4",
+        "Error",
+        "None"
+      ],
+      "answer_index": 1,
+      "explanation": "total = prices does not copy the list. Both names point to the same list, so appending through total also changes prices."
+    },
+    {
+      "difficulty": "easy",
+      "question": "A program reads a number with age = input('Age: ') and then runs print(age + 1). The user types 20. What happens?",
+      "options": [
+        "It prints 21",
+        "It raises a TypeError because age is a string",
+        "It prints 201",
+        "It prints 20 1"
+      ],
+      "answer_index": 1,
+      "explanation": "input() always returns a string. Adding an int to a str raises TypeError. Use int(age) + 1."
+    },
+    {
+      "difficulty": "easy",
+      "question": "You have names = ['Asha', 'Ravi', 'Meena'] and want to print each name with its position starting from 1. Which loop does that?",
+      "options": [
+        "for i in range(names): print(i, names[i])",
+        "for i, n in names: print(i, n)",
+        "for i, n in enumerate(names, start=1): print(i, n)",
+        "for i in names: print(i, names[i])"
+      ],
+      "answer_index": 2,
+      "explanation": "enumerate(names, start=1) yields (position, item) pairs. The other loops raise TypeError or ValueError."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What does this code print?\n```\ndef add(a, b=2):\n    return a + b\n\nprint(add(5), add(5, 1))\n```",
+      "options": [
+        "7 7",
+        "5 6",
+        "7 6",
+        "Error, because b has no value in the first call"
+      ],
+      "answer_index": 2,
+      "explanation": "b defaults to 2 when it is not passed, so add(5) is 7. add(5, 1) overrides the default and gives 6."
+    },
+    {
+      "difficulty": "easy",
+      "question": "scores = {'Asha': 82, 'Ravi': 74}. Which expression returns 0 for 'Meena', who is not in the dictionary, without raising an error?",
+      "options": [
+        "scores['Meena']",
+        "scores.get('Meena')",
+        "scores.find('Meena', 0)",
+        "scores.get('Meena', 0)"
+      ],
+      "answer_index": 3,
+      "explanation": "dict.get(key, default) returns the default when the key is missing. scores['Meena'] raises KeyError and get without a default returns None."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this code print?\n```\nnums = [1, 2, 3, 4, 5, 6]\nprint([n * n for n in nums if n % 2 == 0])\n```",
+      "options": [
+        "[1, 9, 25]",
+        "[4, 16, 36]",
+        "[4, 8, 12]",
+        "[2, 4, 6]"
+      ],
+      "answer_index": 1,
+      "explanation": "The condition keeps only even numbers (2, 4, 6) and the expression squares each one, giving [4, 16, 36]."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A teammate wrote this helper and is surprised by the output:\n```\ndef add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item('a'))\nprint(add_item('b'))\n```\nWhat is printed?",
+      "options": [
+        "['a'] then ['b']",
+        "['a'] then ['a', 'b']",
+        "['a', 'b'] twice",
+        "An error on the second call"
+      ],
+      "answer_index": 1,
+      "explanation": "A default list is created once when the function is defined and reused on every call. The usual fix is items=None and then items = [] inside the function."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A script must always close a file, even if an exception happens while processing its contents. Which approach is best?",
+      "options": [
+        "Call f.close() on the last line of the script",
+        "Wrap the code in try/except and ignore the error",
+        "Use with open('data.csv') as f: and process the file inside the block",
+        "Delete the variable with del f when done"
+      ],
+      "answer_index": 2,
+      "explanation": "A with block closes the file automatically when the block ends, including when an exception is raised. A close() on the last line is skipped if an error happens earlier."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the output of this code?\n```\ntry:\n    value = int('12a')\nexcept ValueError:\n    print('bad number')\nelse:\n    print('ok')\nfinally:\n    print('done')\n```",
+      "options": [
+        "bad number, then done",
+        "ok, then done",
+        "bad number only",
+        "done only"
+      ],
+      "answer_index": 0,
+      "explanation": "int('12a') raises ValueError, so the except block runs and the else block is skipped. The finally block always runs."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You have names = ['A', 'B', 'C'] and marks = [90, 75, 60]. Which expression builds {'A': 90, 'B': 75, 'C': 60}?",
+      "options": [
+        "dict(names, marks)",
+        "{names: marks}",
+        "zip(names, marks)",
+        "dict(zip(names, marks))"
+      ],
+      "answer_index": 3,
+      "explanation": "zip pairs the items up and dict turns the pairs into key-value entries. zip alone returns a zip object, and a list cannot be a dictionary key."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A function is meant to return a sorted list but returns None:\n```\ndef sort_scores(scores):\n    return scores.sort()\n```\nWhat is the bug?",
+      "options": [
+        "list.sort() sorts in place and returns None; use sorted(scores)",
+        "sort() needs a key argument to return a value",
+        "scores must be converted to a tuple first",
+        "return cannot be used with a list method"
+      ],
+      "answer_index": 0,
+      "explanation": "sort() changes the list in place and returns None. sorted(scores) returns a new sorted list."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this print?\n```\na = [1, 2, 3]\nb = a[:]\nb.append(4)\nprint(a, b)\n```",
+      "options": [
+        "[1, 2, 3] [1, 2, 3, 4]",
+        "[1, 2, 3, 4] [1, 2, 3, 4]",
+        "[1, 2, 3] [4]",
+        "Error"
+      ],
+      "answer_index": 0,
+      "explanation": "a[:] makes a shallow copy, so b is a separate list and appending to b does not change a."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does this code print?\n```\nfuncs = [lambda: i for i in range(3)]\nprint([f() for f in funcs])\n```",
+      "options": [
+        "[0, 1, 2]",
+        "[2, 2, 2]",
+        "[3, 3, 3]",
+        "An error"
+      ],
+      "answer_index": 1,
+      "explanation": "Each lambda looks up i when it is called, not when it is created. By then the loop has finished and i is 2, so every call returns 2."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is printed?\n```\ndef count():\n    for i in range(3):\n        yield i\n\ng = count()\nprint(list(g), list(g))\n```",
+      "options": [
+        "[0, 1, 2] [0, 1, 2]",
+        "[0, 1, 2] []",
+        "[] []",
+        "[0, 1, 2] None"
+      ],
+      "answer_index": 1,
+      "explanation": "A generator can be consumed only once. The first list() exhausts it, so the second list() has nothing left and returns an empty list."
+    },
+    {
+      "difficulty": "hard",
+      "question": "You must count how often each word appears in a list of one million words, as efficiently as possible. Which approach is best?",
+      "options": [
+        "For every word, call words.count(word) on the whole list",
+        "Use collections.Counter(words)",
+        "Put the words in a set and take its length",
+        "Join the words into one string and split it again"
+      ],
+      "answer_index": 1,
+      "explanation": "Counter makes one pass over the data. Calling count() for each word scans the whole list every time, which is far slower. A set loses the counts."
+    }
+  ],
+  "SQL": [
+    {
+      "difficulty": "easy",
+      "question": "A table employees has 6 rows. Three employees have NULL in the bonus column. What does SELECT COUNT(bonus) FROM employees return?",
+      "options": [
+        "6",
+        "3",
+        "0",
+        "NULL"
+      ],
+      "answer_index": 1,
+      "explanation": "COUNT(column) counts only non-NULL values. COUNT(*) would return 6."
+    },
+    {
+      "difficulty": "easy",
+      "question": "You want each department's average salary, but only departments whose average is above 50000. Which query is correct?",
+      "options": [
+        "SELECT dept_id, AVG(salary) FROM employees WHERE AVG(salary) > 50000 GROUP BY dept_id;",
+        "SELECT dept_id, AVG(salary) FROM employees GROUP BY dept_id HAVING AVG(salary) > 50000;",
+        "SELECT dept_id, AVG(salary) FROM employees WHERE salary > 50000 GROUP BY dept_id;",
+        "SELECT dept_id, AVG(salary) FROM employees HAVING salary > 50000;"
+      ],
+      "answer_index": 1,
+      "explanation": "HAVING filters groups after aggregation. WHERE cannot use aggregate functions, and WHERE salary > 50000 filters individual rows before averaging, which gives different averages."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which query lists the three highest-paid employees in MySQL or PostgreSQL?",
+      "options": [
+        "SELECT name FROM employees ORDER BY salary LIMIT 3;",
+        "SELECT name FROM employees WHERE salary = MAX(salary);",
+        "SELECT name FROM employees ORDER BY salary DESC LIMIT 3;",
+        "SELECT TOP name FROM employees LIMIT 3;"
+      ],
+      "answer_index": 2,
+      "explanation": "ORDER BY salary DESC puts the highest salaries first and LIMIT 3 keeps three rows. Without DESC you get the lowest three."
+    },
+    {
+      "difficulty": "easy",
+      "question": "customers has 100 rows and orders has 300 rows. Every order has a valid customer_id and 20 customers have no orders. How many rows does this return?\n```\nSELECT c.id\nFROM customers c\nINNER JOIN orders o ON o.customer_id = c.id;\n```",
+      "options": [
+        "100",
+        "80",
+        "320",
+        "300"
+      ],
+      "answer_index": 3,
+      "explanation": "Each of the 300 orders matches exactly one customer, so there are 300 rows. An INNER JOIN drops the 20 customers with no orders. A LEFT JOIN would return 320."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which query returns each city only once from the customers table?",
+      "options": [
+        "SELECT UNIQUE city FROM customers;",
+        "SELECT city FROM customers REMOVE DUPLICATES;",
+        "SELECT DISTINCT city FROM customers;",
+        "SELECT city FROM customers WHERE DISTINCT;"
+      ],
+      "answer_index": 2,
+      "explanation": "SELECT DISTINCT removes duplicate rows from the result. The other forms are not valid standard SQL."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A report uses customers LEFT JOIN orders, then adds WHERE o.amount > 100. Customers with no orders disappear from the result. Why?",
+      "options": [
+        "LEFT JOIN only returns rows that match",
+        "The WHERE condition removes the NULL rows created by the LEFT JOIN, so the filter should move into the ON clause",
+        "amount must be cast to a number before it is compared",
+        "WHERE cannot be used after a join"
+      ],
+      "answer_index": 1,
+      "explanation": "For customers without orders, o.amount is NULL and NULL > 100 is not true, so those rows are filtered out. Putting the condition in the ON clause keeps them."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which query finds customers who have never placed an order?",
+      "options": [
+        "SELECT c.name FROM customers c INNER JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL;",
+        "SELECT name FROM customers WHERE id = NULL;",
+        "SELECT c.name FROM customers c, orders o WHERE c.id = o.customer_id;",
+        "SELECT c.name FROM customers c LEFT JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL;"
+      ],
+      "answer_index": 3,
+      "explanation": "The LEFT JOIN keeps every customer, and o.id is NULL only when no order matched. The INNER JOIN version returns nothing, and = NULL is never true."
+    },
+    {
+      "difficulty": "medium",
+      "question": "This query fails in most databases:\n```\nSELECT dept_id, COUNT(*) FROM employees;\n```\nWhat is the correct fix?",
+      "options": [
+        "Add GROUP BY dept_id",
+        "Replace COUNT(*) with COUNT(dept_id)",
+        "Add DISTINCT before dept_id",
+        "Add ORDER BY dept_id"
+      ],
+      "answer_index": 0,
+      "explanation": "Mixing a plain column with an aggregate requires GROUP BY on that column so the database knows how to form the groups."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which query shows each employee's salary rank within their own department, with the highest salary ranked 1?",
+      "options": [
+        "SELECT name, RANK() OVER (ORDER BY salary DESC) AS rnk FROM employees;",
+        "SELECT name, RANK() OVER (PARTITION BY dept_id ORDER BY salary ASC) AS rnk FROM employees;",
+        "SELECT name, RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rnk FROM employees;",
+        "SELECT name, RANK() FROM employees GROUP BY dept_id;"
+      ],
+      "answer_index": 2,
+      "explanation": "PARTITION BY dept_id restarts the ranking for each department and ORDER BY salary DESC gives rank 1 to the highest salary. The first option ranks across the whole company."
+    },
+    {
+      "difficulty": "medium",
+      "question": "SELECT * FROM orders WHERE customer_id = 42 is slow on a table of 5 million rows, and there is no index. What is the most appropriate first fix?",
+      "options": [
+        "Replace * with COUNT(*)",
+        "Add DISTINCT to the query",
+        "Create an index on orders(customer_id)",
+        "Turn the table into a view"
+      ],
+      "answer_index": 2,
+      "explanation": "Without an index the database scans every row. An index on the filtered column lets it jump straight to the matching rows."
+    },
+    {
+      "difficulty": "medium",
+      "question": "The salaries in a table are 40000, 50000, 60000 and 60000. What does this return?\n```\nSELECT salary FROM employees\nORDER BY salary DESC\nLIMIT 1 OFFSET 1;\n```",
+      "options": [
+        "60000",
+        "50000",
+        "40000",
+        "Two rows"
+      ],
+      "answer_index": 0,
+      "explanation": "Sorted descending the rows are 60000, 60000, 50000, 40000. OFFSET 1 skips only the first row, so the second 60000 is returned. For the second-highest distinct salary use DISTINCT or DENSE_RANK."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You must move 500 from account 1 to account 2 so that a failure between the two updates cannot lose money. Which is correct?",
+      "options": [
+        "Run the two UPDATE statements separately, because each statement is safe on its own",
+        "BEGIN; UPDATE accounts SET balance = balance - 500 WHERE id = 1; UPDATE accounts SET balance = balance + 500 WHERE id = 2; COMMIT;",
+        "Run the credit UPDATE first and the debit UPDATE later in a separate session",
+        "TRUNCATE the table and insert the new balances"
+      ],
+      "answer_index": 1,
+      "explanation": "A transaction makes both updates succeed together or not at all. If something fails before COMMIT, ROLLBACK undoes the first update."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A logins table has one row per login with columns (user_id, login_date). Which query returns users who logged in on at least 3 different days?",
+      "options": [
+        "SELECT user_id FROM logins GROUP BY user_id HAVING COUNT(*) >= 3;",
+        "SELECT user_id FROM logins WHERE COUNT(DISTINCT login_date) >= 3;",
+        "SELECT DISTINCT user_id FROM logins HAVING login_date >= 3;",
+        "SELECT user_id FROM logins GROUP BY user_id HAVING COUNT(DISTINCT login_date) >= 3;"
+      ],
+      "answer_index": 3,
+      "explanation": "COUNT(DISTINCT login_date) counts different days. COUNT(*) would also count several logins on the same day, and WHERE cannot use aggregates."
+    },
+    {
+      "difficulty": "hard",
+      "question": "This query returns no rows, even though some customers have no orders. The orders table contains one row where customer_id is NULL.\n```\nSELECT name FROM customers\nWHERE id NOT IN (SELECT customer_id FROM orders);\n```\nWhy?",
+      "options": [
+        "NOT IN only works with numbers",
+        "The subquery runs once per customer and times out",
+        "NULL is treated as zero, so every customer matches",
+        "NOT IN with a NULL in the list is never true for any row; use NOT EXISTS or filter out NULLs"
+      ],
+      "answer_index": 3,
+      "explanation": "id NOT IN (..., NULL) evaluates to unknown for every row that is not otherwise matched, so nothing is returned. NOT EXISTS or WHERE customer_id IS NOT NULL in the subquery avoids this."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Monthly revenue looks about three times too high for orders that contain three items. The query is:\n```\nSELECT SUM(o.amount)\nFROM orders o\nJOIN order_items i ON i.order_id = o.id;\n```\nWhat is the most likely cause?",
+      "options": [
+        "SUM treats NULL values as 3",
+        "GROUP BY must include item_id",
+        "The join repeats each order row once per item, so o.amount is added several times",
+        "DISTINCT is missing from the SELECT list"
+      ],
+      "answer_index": 2,
+      "explanation": "Joining a one-to-many table duplicates the order row for every item. Sum item totals from order_items, or aggregate the items first, instead of summing the order-level amount after the join."
+    }
+  ],
+  "Excel": [
+    {
+      "difficulty": "easy",
+      "question": "A sheet lists sales in B2:B10. You want the total of only the values greater than 5000. Which formula does that?",
+      "options": [
+        "=SUMIF(B2:B10,\">5000\")",
+        "=COUNTIF(B2:B10,\">5000\")",
+        "=SUM(B2:B10>5000)",
+        "=IF(B2:B10>5000,B2:B10)"
+      ],
+      "answer_index": 0,
+      "explanation": "SUMIF adds the cells that meet the condition. COUNTIF would only count them."
+    },
+    {
+      "difficulty": "easy",
+      "question": "You copy =A2*$D$1 from row 2 down to row 3. What does the formula in row 3 become?",
+      "options": [
+        "=A3*$D$2",
+        "=A3*$D$1",
+        "=A2*$D$1",
+        "=A3*D2"
+      ],
+      "answer_index": 1,
+      "explanation": "The $ signs lock D1, so only the relative reference A2 moves down to A3."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which formula looks up the ID in E2 in column A and returns the matching salary from column C using an exact match?",
+      "options": [
+        "=VLOOKUP(E2,A:C,2,FALSE)",
+        "=MATCH(E2,A:A,0)",
+        "=XLOOKUP(E2,A:A,C:C)",
+        "=HLOOKUP(E2,A:C,3,FALSE)"
+      ],
+      "answer_index": 2,
+      "explanation": "XLOOKUP matches in one column and returns from another. The VLOOKUP shown returns column B, MATCH returns a position, and HLOOKUP looks across rows."
+    },
+    {
+      "difficulty": "easy",
+      "question": "A cell shows ###### instead of a number. What is the most likely cause?",
+      "options": [
+        "A formula contains an error",
+        "The number is stored as text",
+        "A circular reference exists",
+        "The column is too narrow to display the value"
+      ],
+      "answer_index": 3,
+      "explanation": "Excel shows hash signs when a number or date does not fit in the column width. Widening the column fixes it."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which feature restricts a cell so that only values from a list, such as Yes or No, can be entered?",
+      "options": [
+        "Data Validation",
+        "Flash Fill",
+        "Goal Seek",
+        "Conditional Formatting"
+      ],
+      "answer_index": 0,
+      "explanation": "Data Validation controls what can be typed into a cell, for example with a drop-down list."
+    },
+    {
+      "difficulty": "medium",
+      "question": "VLOOKUP returns #N/A for an ID that visibly exists in the table. The IDs in the table are stored as text, but your lookup value is a number. What is the best fix?",
+      "options": [
+        "Change the last argument to TRUE",
+        "Make the data types match, for example convert the text IDs to numbers",
+        "Wrap the formula in IFERROR so the error is hidden",
+        "Sort the lookup table by ID"
+      ],
+      "answer_index": 1,
+      "explanation": "A text 101 and a number 101 are different to Excel. Hiding the error with IFERROR would leave the real problem in place."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Your pivot table still shows last month's numbers after new rows were added to the source data. What should you do?",
+      "options": [
+        "Retype the totals by hand",
+        "Convert the pivot table to values",
+        "Refresh the pivot table, and keep the source as an Excel Table so new rows are included",
+        "Sort the source data"
+      ],
+      "answer_index": 2,
+      "explanation": "A pivot table does not update by itself. Refreshing it, with the data stored in a Table, brings in new rows."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does =COUNTIFS(A2:A100,\"North\",C2:C100,\">1000\") return?",
+      "options": [
+        "The sum of column C for North rows",
+        "The number of North rows",
+        "The number of rows where the region is North or column C is above 1000",
+        "The number of rows where the region is North and column C is above 1000"
+      ],
+      "answer_index": 3,
+      "explanation": "COUNTIFS counts only the rows that meet all of its conditions at the same time."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Region totals are in B2:B9 and the grand total is in B10. Which formula in C2, copied down to C9, gives each region's share of the total?",
+      "options": [
+        "=B2/$B$10",
+        "=B2-$B$10",
+        "=B2/B10",
+        "=SUM(B2)/B2"
+      ],
+      "answer_index": 0,
+      "explanation": "$B$10 stays fixed when you copy down. =B2/B10 would move to B11, B12 and so on and give wrong results."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which formula returns High when D2 is above 80, Medium when it is 50 to 80, and Low otherwise?",
+      "options": [
+        "=IF(D2>80,\"High\",\"Medium\",\"Low\")",
+        "=IF(D2>80,\"High\",IF(D2>=50,\"Medium\",\"Low\"))",
+        "=IF(D2>=50,\"Medium\",IF(D2>80,\"High\",\"Low\"))",
+        "=IF(D2>80 AND D2>=50,\"Medium\",\"Low\")"
+      ],
+      "answer_index": 1,
+      "explanation": "Test the strictest condition first. In the second option every score of 50 or more returns Medium, so High is never reached."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Cells in column A contain names with extra spaces and mixed capitals, such as ' asha   KUMAR '. Which formula gives a clean 'Asha Kumar'?",
+      "options": [
+        "=TRIM(UPPER(A2))",
+        "=CLEAN(A2)",
+        "=PROPER(TRIM(A2))",
+        "=LOWER(A2)"
+      ],
+      "answer_index": 2,
+      "explanation": "TRIM removes extra spaces and PROPER capitalizes the first letter of each word."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You need a chart of monthly sales over 12 months that shows the trend over time. Which chart is the best choice?",
+      "options": [
+        "Pie chart",
+        "Doughnut chart",
+        "Radar chart",
+        "Line chart"
+      ],
+      "answer_index": 3,
+      "explanation": "A line chart shows change across an ordered time axis. Pie and doughnut charts show parts of a whole."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which formula returns the second-highest distinct value in B2:B20, even when the highest value appears more than once?",
+      "options": [
+        "=LARGE(B2:B20,COUNTIF(B2:B20,MAX(B2:B20))+1)",
+        "=SMALL(B2:B20,2)",
+        "=MAX(B2:B20)-1",
+        "=LARGE(B2:B20,2)"
+      ],
+      "answer_index": 0,
+      "explanation": "If the maximum appears twice, LARGE(...,2) returns the maximum again. Skipping past all copies of the maximum with COUNTIF reaches the next distinct value."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Excel reports a circular reference when you type =SUM(B2:B10) into cell B10. Why?",
+      "options": [
+        "SUM cannot be used in column B",
+        "The formula includes its own cell, B10, in the range",
+        "B10 is formatted as text",
+        "The range is too large"
+      ],
+      "answer_index": 1,
+      "explanation": "The formula would need its own result to calculate itself. Use =SUM(B2:B9) instead."
+    },
+    {
+      "difficulty": "hard",
+      "question": "You need to combine two tables on a shared key, and the result must update when the source data changes. Which approach is best?",
+      "options": [
+        "Copy and paste the columns as values",
+        "Use Text to Columns",
+        "Use Power Query to merge the queries, then refresh",
+        "Use Flash Fill"
+      ],
+      "answer_index": 2,
+      "explanation": "A Power Query merge is repeatable, so refreshing re-runs the join. Pasted values and Flash Fill do not update."
+    }
+  ],
+  "Statistics": [
+    {
+      "difficulty": "easy",
+      "question": "Exam scores are 40, 45, 50, 55 and 100. Which measure best represents a typical score?",
+      "options": [
+        "Median (50)",
+        "Mean (58)",
+        "Range",
+        "Standard deviation"
+      ],
+      "answer_index": 0,
+      "explanation": "The outlier 100 pulls the mean up to 58. The median stays at 50 and is not affected by extreme values."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Students rate a course from 1 (poor) to 5 (excellent). What type of variable is the rating?",
+      "options": [
+        "Continuous numerical",
+        "Ordinal categorical",
+        "Nominal categorical",
+        "Ratio"
+      ],
+      "answer_index": 1,
+      "explanation": "The ratings have a natural order, but the gaps between them are not necessarily equal, so the variable is ordinal."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which statement best describes standard deviation?",
+      "options": [
+        "The difference between the largest and smallest value",
+        "The most frequent value",
+        "How far values typically are from the mean",
+        "The middle value"
+      ],
+      "answer_index": 2,
+      "explanation": "Standard deviation measures the typical spread of values around the mean."
+    },
+    {
+      "difficulty": "easy",
+      "question": "A dataset has a mean of 50 and a median of 65. What is the most likely shape of the distribution?",
+      "options": [
+        "Right-skewed",
+        "Symmetric",
+        "Uniform",
+        "Left-skewed"
+      ],
+      "answer_index": 3,
+      "explanation": "A mean well below the median means a tail of low values is dragging the mean down, which is a left skew."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which chart is best for showing the distribution of one numeric variable, such as student heights?",
+      "options": [
+        "Histogram",
+        "Line chart",
+        "Pie chart",
+        "Stacked bar chart"
+      ],
+      "answer_index": 0,
+      "explanation": "A histogram groups numeric values into bins and shows how they are spread."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A fair coin is flipped 3 times. What is the probability of getting exactly 2 heads?",
+      "options": [
+        "1/4",
+        "3/8",
+        "2/3",
+        "1/2"
+      ],
+      "answer_index": 1,
+      "explanation": "There are 8 equally likely outcomes, and 3 of them (HHT, HTH, THH) have exactly 2 heads."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A hypothesis test gives p = 0.03 at a 5% significance level. What is the correct conclusion?",
+      "options": [
+        "Accept the null hypothesis",
+        "The null hypothesis has a 3% chance of being true",
+        "Reject the null hypothesis; the result is statistically significant at the 5% level",
+        "The effect is large and important"
+      ],
+      "answer_index": 2,
+      "explanation": "p below 0.05 means the data would be unlikely if the null were true. It is not the probability that the null is true, and it says nothing about the size of the effect."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A study finds that ice-cream sales and drowning incidents are strongly correlated. What is the best explanation?",
+      "options": [
+        "Ice cream causes drowning",
+        "The correlation must be a calculation error",
+        "Drowning increases ice-cream sales",
+        "A third variable, such as hot weather, increases both"
+      ],
+      "answer_index": 3,
+      "explanation": "Hot weather is a confounding variable. Correlation alone does not show that one thing causes the other."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Customer spend is normally distributed with a mean of 500 and a standard deviation of 50. Roughly which range contains about 95% of customers?",
+      "options": [
+        "400 to 600",
+        "475 to 525",
+        "350 to 650",
+        "450 to 550"
+      ],
+      "answer_index": 0,
+      "explanation": "About 95% of values fall within 2 standard deviations of the mean: 500 plus or minus 100."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You want to compare the average delivery time of two different warehouses using a separate sample from each. Which test is most appropriate?",
+      "options": [
+        "Chi-square test of independence",
+        "Two-sample t-test",
+        "Pearson correlation",
+        "Paired t-test"
+      ],
+      "answer_index": 1,
+      "explanation": "The samples are independent groups, so a two-sample t-test compares their means. A paired test needs matched observations."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A report says '60% of users prefer the new design', based on 5 users. What is the main weakness?",
+      "options": [
+        "Percentages cannot be used with small numbers",
+        "The median should be reported instead",
+        "With only 5 users the margin of error is huge, so the result is unreliable",
+        "The data must be paired"
+      ],
+      "answer_index": 2,
+      "explanation": "A tiny sample gives a very wide confidence interval, so the true preference could be very different."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which term describes the 25th percentile of a dataset?",
+      "options": [
+        "Third quartile (Q3)",
+        "Median",
+        "Interquartile range",
+        "First quartile (Q1)"
+      ],
+      "answer_index": 3,
+      "explanation": "Q1 is the value below which 25% of the data lies."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Salaries (in thousands) are 30, 32, 35, 36, 38, 40 and 120. Q1 is 32 and Q3 is 40. Using the 1.5 x IQR rule, is 120 an outlier?",
+      "options": [
+        "Yes, because it is above the upper fence of 52",
+        "Yes, because it is above the mean of about 47",
+        "No, because the rule uses standard deviation",
+        "No, because it is below 200"
+      ],
+      "answer_index": 0,
+      "explanation": "IQR = 8, so the upper fence is 40 + 1.5 x 8 = 52. Since 120 is above 52 it is an outlier."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Treatment A has a higher success rate than B in each of two hospitals, but B has the higher rate when the hospitals are combined. What explains this?",
+      "options": [
+        "A calculation mistake",
+        "Simpson's paradox: the groups have different sizes, so the combined rate hides the pattern in each group",
+        "The Central Limit Theorem",
+        "Random sampling error only"
+      ],
+      "answer_index": 1,
+      "explanation": "Unequal group sizes can reverse a trend when data is combined, which is Simpson's paradox. Always check the subgroups."
+    },
+    {
+      "difficulty": "hard",
+      "question": "In an A/B test with 1,000 users each, version A converts 100 users (10%) and version B converts 115 (11.5%). A teammate says B won. What should you check first?",
+      "options": [
+        "Nothing; 11.5% is higher, so B won",
+        "Whether B had more total revenue",
+        "Whether the difference is statistically significant, for example with a two-proportion test",
+        "Whether A had more users"
+      ],
+      "answer_index": 2,
+      "explanation": "A difference of this size can easily happen by chance. A significance test or confidence interval shows whether it is reliable."
+    }
+  ],
+  "Power BI": [
+    {
+      "difficulty": "easy",
+      "question": "Which Power BI tool do you use to clean and transform data, such as removing columns or changing data types, before it is loaded into the model?",
+      "options": [
+        "Power Query Editor",
+        "Report view",
+        "DAX formula bar",
+        "Q&A visual"
+      ],
+      "answer_index": 0,
+      "explanation": "Power Query Editor is where data is cleaned and shaped before loading."
+    },
+    {
+      "difficulty": "easy",
+      "question": "You want report viewers to filter every visual on a page by choosing a region. Which visual should you add?",
+      "options": [
+        "Card",
+        "Slicer",
+        "Table",
+        "Text box"
+      ],
+      "answer_index": 1,
+      "explanation": "A slicer gives viewers an on-page filter that applies to the other visuals."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Customers has a unique CustomerID and Sales has many rows per customer. Which relationship should connect them?",
+      "options": [
+        "Many-to-many",
+        "One-to-one",
+        "One-to-many, from Customers to Sales",
+        "No relationship is needed"
+      ],
+      "answer_index": 2,
+      "explanation": "One customer matches many sales rows, so the relationship is one-to-many."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What does a Card visual show?",
+      "options": [
+        "A full table of records",
+        "A list of filters",
+        "A map of locations",
+        "A single number such as total sales"
+      ],
+      "answer_index": 3,
+      "explanation": "A card displays one value, which is useful for key figures."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which file type is a Power BI Desktop report?",
+      "options": [
+        ".pbix",
+        ".csv",
+        ".docx",
+        ".sql"
+      ],
+      "answer_index": 0,
+      "explanation": "Power BI Desktop saves reports as .pbix files."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Each row in Sales has Quantity and UnitPrice. Which measure correctly calculates total revenue?",
+      "options": [
+        "Total Revenue = SUM(Sales[Quantity]) * SUM(Sales[UnitPrice])",
+        "Total Revenue = SUMX(Sales, Sales[Quantity] * Sales[UnitPrice])",
+        "Total Revenue = Sales[Quantity] * Sales[UnitPrice]",
+        "Total Revenue = COUNT(Sales[Quantity])"
+      ],
+      "answer_index": 1,
+      "explanation": "SUMX multiplies row by row and then adds the results. Multiplying two totals gives a wrong answer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the difference between a calculated column and a measure?",
+      "options": [
+        "A measure is stored per row; a calculated column is calculated only in visuals",
+        "They are the same thing with different names",
+        "A calculated column is computed per row at refresh and stored in the model; a measure is calculated at query time using the current filters",
+        "A calculated column can only be text"
+      ],
+      "answer_index": 2,
+      "explanation": "Measures react to filters and slicers, while calculated columns are fixed values stored in the table."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A Total Sales measure shows the same value for every region in a table. The regions come from a Regions table that has no relationship to Sales. Why?",
+      "options": [
+        "Region must be converted to a number",
+        "The measure uses the wrong aggregation",
+        "The visual is too small",
+        "There is no relationship between Regions and Sales, so the region filter cannot reach the Sales data"
+      ],
+      "answer_index": 3,
+      "explanation": "Filters flow along relationships. Without one, every region sees the full total."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which DAX function changes the filter context, for example to calculate sales for one year only?",
+      "options": [
+        "CALCULATE",
+        "FORMAT",
+        "RELATED",
+        "DISTINCTCOUNT"
+      ],
+      "answer_index": 0,
+      "explanation": "CALCULATE evaluates an expression with modified filters."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Why is a star schema recommended for Power BI models?",
+      "options": [
+        "It removes the need for relationships",
+        "It keeps relationships simple, improves performance and makes DAX easier: a fact table surrounded by dimension tables",
+        "It is required before you can publish",
+        "It stores everything in one flat table"
+      ],
+      "answer_index": 1,
+      "explanation": "A star schema is easy to filter and understand, and the engine compresses it well."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A dataset that reads a local Excel file fails to refresh in the Power BI Service. What is usually needed?",
+      "options": [
+        "Convert the file to PDF",
+        "Increase the size of the visuals",
+        "Install and configure an on-premises data gateway, or keep the file in OneDrive or SharePoint",
+        "Delete all relationships"
+      ],
+      "answer_index": 2,
+      "explanation": "The cloud service cannot reach files on your computer without a gateway or a cloud location."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Managers should see only their own region's data in the same shared report. Which feature does this?",
+      "options": [
+        "Drill-through",
+        "Bookmarks",
+        "Conditional formatting",
+        "Row-level security"
+      ],
+      "answer_index": 3,
+      "explanation": "Row-level security uses roles and filters to limit the rows each viewer can see."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which DAX measure gives the year-to-date total of Sales[Amount] when the model has a proper Date table?",
+      "options": [
+        "TOTALYTD(SUM(Sales[Amount]), 'Date'[Date])",
+        "YEAR(SUM(Sales[Amount]))",
+        "CALCULATE(SUM(Sales[Amount]), Sales[Amount] > 0)",
+        "DATEDIFF(SUM(Sales[Amount]), TODAY(), YEAR)"
+      ],
+      "answer_index": 0,
+      "explanation": "TOTALYTD accumulates the value from the start of the year up to the current date in context."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A report is slow. The model has one flat table with 30 text-heavy columns and 5 million rows. Which change helps most?",
+      "options": [
+        "Add more slicers to the page",
+        "Remove unused columns and split the flat table into a fact table and dimension tables",
+        "Switch every visual to a table",
+        "Increase the font size"
+      ],
+      "answer_index": 1,
+      "explanation": "Fewer columns and lower-cardinality dimensions shrink the model and speed up queries."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does DIVIDE([Profit], [Sales]) return when Sales is 0?",
+      "options": [
+        "An error",
+        "0",
+        "Blank",
+        "Infinity"
+      ],
+      "answer_index": 2,
+      "explanation": "DIVIDE returns BLANK by default instead of an error. You can pass a third argument to return a different value."
+    }
+  ],
+  "Machine Learning": [
+    {
+      "question": "Which task is supervised learning?",
+      "options": [
+        "Regression",
+        "Clustering",
+        "Dimensionality reduction",
+        "Association rules"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is overfitting?",
+      "options": [
+        "A model fits training data too closely and generalizes poorly",
+        "A model that is too simple",
+        "Having too little data only",
+        "Slow training"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which metric suits imbalanced classification better than accuracy?",
+      "options": [
+        "F1-score",
+        "Row count",
+        "Mean",
+        "Variance"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does a train/test split prevent?",
+      "options": [
+        "Judging the model on data it has already seen",
+        "Missing values",
+        "Outliers",
+        "Scaling issues"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which algorithm groups unlabeled data?",
+      "options": [
+        "K-means",
+        "Linear regression",
+        "Logistic regression",
+        "Naive Bayes"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does regularization do?",
+      "options": [
+        "Penalizes model complexity",
+        "Adds more features",
+        "Removes labels",
+        "Raises the learning rate"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does cross-validation give you?",
+      "options": [
+        "A more reliable performance estimate",
+        "Faster training",
+        "More data",
+        "Feature names"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Logistic regression is mainly used for...",
+      "options": [
+        "Classification",
+        "Clustering",
+        "Image generation",
+        "Sorting"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is a feature?",
+      "options": [
+        "An input variable",
+        "The target value",
+        "A loss value",
+        "A model file"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which scikit-learn method trains a model?",
+      "options": [
+        "fit()",
+        "train_all()",
+        "learn()",
+        "build()"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "HTML": [
+    {
+      "question": "Which tag creates a hyperlink?",
+      "options": [
+        "<a>",
+        "<link>",
+        "<href>",
+        "<url>"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tag holds the visible page content?",
+      "options": [
+        "<body>",
+        "<head>",
+        "<meta>",
+        "<title>"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which attribute gives an image alternative text?",
+      "options": [
+        "alt",
+        "title",
+        "src",
+        "text"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which element is the semantic choice for navigation links?",
+      "options": [
+        "<nav>",
+        "<div>",
+        "<span>",
+        "<section>"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which input type is for email addresses?",
+      "options": [
+        "type=\"email\"",
+        "type=\"mail\"",
+        "type=\"text-email\"",
+        "type=\"at\""
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tag makes the largest heading?",
+      "options": [
+        "<h1>",
+        "<h6>",
+        "<head>",
+        "<header>"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does <!DOCTYPE html> do?",
+      "options": [
+        "Declares the HTML5 document type",
+        "Adds a comment",
+        "Links a stylesheet",
+        "Starts a script"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tag makes an ordered list?",
+      "options": [
+        "<ol>",
+        "<ul>",
+        "<li>",
+        "<dl>"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which attribute makes a form field required?",
+      "options": [
+        "required",
+        "mandatory",
+        "must",
+        "validate"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tag defines a table row?",
+      "options": [
+        "<tr>",
+        "<td>",
+        "<th>",
+        "<row>"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "CSS": [
+    {
+      "question": "Which property changes text color?",
+      "options": [
+        "color",
+        "font-color",
+        "text-color",
+        "foreground"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which selector targets class box?",
+      "options": [
+        ".box",
+        "#box",
+        "box",
+        "*box"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which display value enables flexbox?",
+      "options": [
+        "flex",
+        "block-flex",
+        "flexbox",
+        "inline"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the box model order from inside to outside?",
+      "options": [
+        "Content, padding, border, margin",
+        "Margin, border, padding, content",
+        "Content, margin, border, padding",
+        "Padding, content, margin, border"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which unit is relative to the root font size?",
+      "options": [
+        "rem",
+        "px",
+        "pt",
+        "cm"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which property controls stacking order?",
+      "options": [
+        "z-index",
+        "order-z",
+        "layer",
+        "stack"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which rule applies styles at specific screen widths?",
+      "options": [
+        "@media",
+        "@screen-size",
+        "@responsive",
+        "@query"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which property adds space inside an element's border?",
+      "options": [
+        "padding",
+        "margin",
+        "gap",
+        "spacing"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which position value fixes an element relative to the viewport?",
+      "options": [
+        "fixed",
+        "relative",
+        "static",
+        "inherit"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which property defines CSS Grid columns?",
+      "options": [
+        "grid-template-columns",
+        "grid-cols",
+        "columns-grid",
+        "grid-column-set"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "JavaScript": [
+    {
+      "question": "What does typeof null return?",
+      "options": [
+        "object",
+        "null",
+        "undefined",
+        "number"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which keyword declares a block-scoped variable that can be reassigned?",
+      "options": [
+        "let",
+        "var",
+        "const",
+        "def"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the result of '5' + 3?",
+      "options": [
+        "53",
+        "8",
+        "Error",
+        "NaN"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which array method returns a new array by transforming each item?",
+      "options": [
+        "map()",
+        "forEach()",
+        "push()",
+        "splice()"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does === check?",
+      "options": [
+        "Value and type",
+        "Value only",
+        "Type only",
+        "Reference only"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does a Promise represent?",
+      "options": [
+        "A future result of async work",
+        "A loop",
+        "A class",
+        "A DOM node"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which keyword waits for a promise inside an async function?",
+      "options": [
+        "await",
+        "pause",
+        "wait",
+        "hold"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does JSON.parse do?",
+      "options": [
+        "Converts a JSON string to an object",
+        "Converts an object to a string",
+        "Sends data",
+        "Sorts keys"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is a closure?",
+      "options": [
+        "A function that remembers its outer scope",
+        "A closed file",
+        "A loop type",
+        "An error type"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which method attaches an event listener?",
+      "options": [
+        "addEventListener",
+        "onEvent",
+        "listen",
+        "attachClick"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Git": [
+    {
+      "question": "Which command copies a remote repository to your machine?",
+      "options": [
+        "git clone",
+        "git copy",
+        "git fork",
+        "git get"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command stages changes?",
+      "options": [
+        "git add",
+        "git stage-all",
+        "git commit",
+        "git push"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command records staged changes?",
+      "options": [
+        "git commit",
+        "git save",
+        "git store",
+        "git log"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command shows commit history?",
+      "options": [
+        "git log",
+        "git history",
+        "git show-all",
+        "git list"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command creates and switches to a new branch?",
+      "options": [
+        "git checkout -b name",
+        "git branch -d name",
+        "git new name",
+        "git merge name"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does git pull do?",
+      "options": [
+        "Fetches and merges remote changes",
+        "Uploads commits",
+        "Deletes a branch",
+        "Stages files"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is a merge conflict?",
+      "options": [
+        "Two changes to the same lines that Git cannot combine",
+        "A network error",
+        "A deleted repository",
+        "A wrong password"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which file lists files Git should ignore?",
+      "options": [
+        ".gitignore",
+        ".gitskip",
+        "ignore.txt",
+        ".gitconfig"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command uploads local commits to a remote?",
+      "options": [
+        "git push",
+        "git send",
+        "git upload",
+        "git sync"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command shelves uncommitted changes temporarily?",
+      "options": [
+        "git stash",
+        "git hide",
+        "git shelve",
+        "git reset --hard"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "React": [
+    {
+      "question": "What do hooks like useState let function components do?",
+      "options": [
+        "Hold state",
+        "Fetch data automatically",
+        "Compile JSX",
+        "Style elements"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is JSX?",
+      "options": [
+        "A JavaScript syntax extension that looks like HTML",
+        "A CSS framework",
+        "A database",
+        "A bundler"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "How is data passed from a parent to a child component?",
+      "options": [
+        "Props",
+        "Cookies",
+        "Imports",
+        "Globals"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which hook runs side effects after render?",
+      "options": [
+        "useEffect",
+        "useMemo",
+        "useRef",
+        "useId"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Why do list items need a key prop?",
+      "options": [
+        "It helps React track items between renders",
+        "It styles items",
+        "It sorts items",
+        "HTML requires it"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What happens when state is updated?",
+      "options": [
+        "The component re-renders",
+        "Props change",
+        "The page reloads",
+        "The server restarts"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "How must component names start?",
+      "options": [
+        "With a capital letter",
+        "In lowercase",
+        "With an underscore",
+        "With a number"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does useRef commonly store?",
+      "options": [
+        "A value that persists without causing a re-render",
+        "State that re-renders",
+        "Props",
+        "CSS"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which attribute handles clicks in JSX?",
+      "options": [
+        "onClick",
+        "onclick-handler",
+        "click",
+        "handleClick"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the virtual DOM?",
+      "options": [
+        "An in-memory copy React compares to update the real DOM",
+        "A browser plugin",
+        "A database",
+        "A server"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Django": [
+    {
+      "question": "Which file defines URL routes in an app?",
+      "options": [
+        "urls.py",
+        "routes.py",
+        "paths.py",
+        "links.py"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command creates a new project?",
+      "options": [
+        "django-admin startproject",
+        "django new",
+        "python makeproject",
+        "manage.py create"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which Django component defines database tables?",
+      "options": [
+        "Models",
+        "Views",
+        "Templates",
+        "Middleware"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command applies database changes?",
+      "options": [
+        "python manage.py migrate",
+        "python manage.py sync",
+        "python manage.py apply",
+        "python manage.py db"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does makemigrations do?",
+      "options": [
+        "Creates migration files from model changes",
+        "Runs the server",
+        "Creates users",
+        "Deletes tables"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which URL serves the built-in admin by default?",
+      "options": [
+        "/admin/",
+        "/dashboard/",
+        "/manage/",
+        "/root/"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the Django ORM?",
+      "options": [
+        "A layer that maps Python classes to database tables",
+        "A template engine",
+        "A web server",
+        "A CSS tool"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which template syntax outputs a variable?",
+      "options": [
+        "{{ variable }}",
+        "{% variable %}",
+        "<% variable %>",
+        "[[ variable ]]"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tag protects forms from cross-site request forgery?",
+      "options": [
+        "{% csrf_token %}",
+        "{% secure %}",
+        "{% safe_form %}",
+        "{% token %}"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which file holds project configuration?",
+      "options": [
+        "settings.py",
+        "config.py",
+        "setup.py",
+        "project.py"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Deep Learning": [
+    {
+      "question": "What is an epoch?",
+      "options": [
+        "One full pass over the training data",
+        "One batch",
+        "One layer",
+        "One neuron"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which activation function is common in hidden layers?",
+      "options": [
+        "ReLU",
+        "Mean",
+        "Argmax only",
+        "Sorting"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does backpropagation compute?",
+      "options": [
+        "Gradients of the loss",
+        "Training data",
+        "Labels",
+        "Test accuracy"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which layer type suits image data?",
+      "options": [
+        "Convolutional",
+        "Embedding only",
+        "Dropout",
+        "Softmax"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does dropout do?",
+      "options": [
+        "Randomly disables neurons to reduce overfitting",
+        "Adds layers",
+        "Speeds up GPUs",
+        "Normalizes labels"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Softmax in the output layer gives...",
+      "options": [
+        "Class probabilities that sum to 1",
+        "Raw pixels",
+        "Gradients",
+        "Weights"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which optimizer is widely used?",
+      "options": [
+        "Adam",
+        "Quicksort",
+        "Apriori",
+        "K-means"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the learning rate?",
+      "options": [
+        "The step size for weight updates",
+        "The number of layers",
+        "The batch count",
+        "The dataset size"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which architecture is built for sequences and language?",
+      "options": [
+        "Transformer",
+        "Linear regression",
+        "K-means",
+        "PCA"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which libraries build neural networks?",
+      "options": [
+        "PyTorch and TensorFlow",
+        "Pandas and Excel",
+        "Flask and Django",
+        "Git and Docker"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Docker": [
+    {
+      "question": "What is a Docker image?",
+      "options": [
+        "A read-only template for containers",
+        "A running instance",
+        "A network",
+        "A volume"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command lists running containers?",
+      "options": [
+        "docker ps",
+        "docker list",
+        "docker run",
+        "docker show"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which file defines how to build an image?",
+      "options": [
+        "Dockerfile",
+        "docker.yml",
+        "compose.json",
+        "image.txt"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command builds an image?",
+      "options": [
+        "docker build",
+        "docker make",
+        "docker create-image",
+        "docker compile"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "How do you publish container port 80 on host port 8080?",
+      "options": [
+        "-p 8080:80",
+        "-p 80:8080",
+        "-e 8080",
+        "--host 8080"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What keeps data after a container is removed?",
+      "options": [
+        "Volumes",
+        "The writable layer",
+        "Environment variables",
+        "Tags"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tool runs multi-container apps from one YAML file?",
+      "options": [
+        "Docker Compose",
+        "Docker Hub",
+        "Dockerfile",
+        "Docker Scan"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which instruction sets the base image?",
+      "options": [
+        "FROM",
+        "BASE",
+        "IMAGE",
+        "USE"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command stops a container?",
+      "options": [
+        "docker stop",
+        "docker halt",
+        "docker end",
+        "docker quit"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "How do containers differ from virtual machines?",
+      "options": [
+        "They share the host kernel",
+        "They include a full OS each",
+        "They need a hypervisor",
+        "They cannot be isolated"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Linux": [
+    {
+      "question": "Which command lists files?",
+      "options": [
+        "ls",
+        "dir-list",
+        "show",
+        "list"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command changes directory?",
+      "options": [
+        "cd",
+        "chdir-to",
+        "go",
+        "mv"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command shows the current directory?",
+      "options": [
+        "pwd",
+        "where",
+        "cwd",
+        "path"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does chmod 755 file do?",
+      "options": [
+        "Sets permissions to rwxr-xr-x",
+        "Deletes the file",
+        "Changes the owner",
+        "Compresses it"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command searches for text in files?",
+      "options": [
+        "grep",
+        "find-text",
+        "search",
+        "lookfor"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which symbol sends one command's output to another command?",
+      "options": [
+        "|",
+        ">>",
+        "&&",
+        "#"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command shows running processes interactively?",
+      "options": [
+        "top",
+        "ps-live",
+        "procs",
+        "run"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command runs another command as administrator?",
+      "options": [
+        "sudo",
+        "admin",
+        "root-run",
+        "su-do"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command deletes a directory and its contents?",
+      "options": [
+        "rm -r",
+        "rmdir -f",
+        "del -r",
+        "erase"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command shows free disk space on filesystems?",
+      "options": [
+        "df",
+        "du-all",
+        "diskfree",
+        "fs"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "AWS": [
+    {
+      "question": "Which service provides virtual servers?",
+      "options": [
+        "EC2",
+        "S3",
+        "IAM",
+        "Route 53"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service provides object storage?",
+      "options": [
+        "S3",
+        "EBS",
+        "RDS",
+        "VPC"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does IAM manage?",
+      "options": [
+        "Users, roles and permissions",
+        "Billing only",
+        "DNS",
+        "Servers"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service runs code without managing servers?",
+      "options": [
+        "Lambda",
+        "EC2",
+        "EBS",
+        "Glacier"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service is a managed relational database?",
+      "options": [
+        "RDS",
+        "S3",
+        "SQS",
+        "SNS"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is a VPC?",
+      "options": [
+        "A private virtual network",
+        "A storage class",
+        "An encryption key",
+        "A billing plan"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service provides DNS?",
+      "options": [
+        "Route 53",
+        "CloudFront",
+        "CloudTrail",
+        "EFS"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which principle should IAM policies follow?",
+      "options": [
+        "Least privilege",
+        "Full access for all",
+        "Shared passwords",
+        "Constant root use"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service delivers content from edge locations?",
+      "options": [
+        "CloudFront",
+        "Lambda",
+        "RDS",
+        "Redshift"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which service records API activity in an account?",
+      "options": [
+        "CloudTrail",
+        "EBS",
+        "Route 53",
+        "SNS"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Kubernetes": [
+    {
+      "question": "What is the smallest deployable unit in Kubernetes?",
+      "options": [
+        "Pod",
+        "Node",
+        "Service",
+        "Namespace"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which object keeps a set number of Pod replicas running?",
+      "options": [
+        "Deployment",
+        "ConfigMap",
+        "Ingress",
+        "Secret"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command applies a manifest file?",
+      "options": [
+        "kubectl apply -f",
+        "kubectl run-file",
+        "kubectl push",
+        "kubectl load"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does a Service provide?",
+      "options": [
+        "A stable network endpoint for Pods",
+        "Storage",
+        "A node",
+        "A container image"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which object stores non-sensitive configuration?",
+      "options": [
+        "ConfigMap",
+        "Secret",
+        "PersistentVolume",
+        "Role"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which component schedules Pods onto nodes?",
+      "options": [
+        "kube-scheduler",
+        "kubelet",
+        "etcd",
+        "kube-proxy"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command lists Pods?",
+      "options": [
+        "kubectl get pods",
+        "kubectl list pods",
+        "kubectl show pods",
+        "kubectl pods"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What stores the cluster's state?",
+      "options": [
+        "etcd",
+        "kubelet",
+        "Docker",
+        "Ingress"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does Ingress manage?",
+      "options": [
+        "External HTTP routing to Services",
+        "Pod storage",
+        "Node scaling",
+        "Image builds"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tool packages Kubernetes apps as charts?",
+      "options": [
+        "Helm",
+        "Terraform",
+        "Ansible",
+        "Compose"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Terraform": [
+    {
+      "question": "Which command initializes a directory and downloads providers?",
+      "options": [
+        "terraform init",
+        "terraform start",
+        "terraform plan",
+        "terraform setup"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command previews changes?",
+      "options": [
+        "terraform plan",
+        "terraform preview",
+        "terraform show-all",
+        "terraform diff"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command creates the resources?",
+      "options": [
+        "terraform apply",
+        "terraform build",
+        "terraform deploy",
+        "terraform run"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What language are Terraform files written in?",
+      "options": [
+        "HCL",
+        "Only YAML",
+        "Only JSON",
+        "Python"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does the state file track?",
+      "options": [
+        "Resources Terraform manages",
+        "Source code",
+        "Git history",
+        "Logs"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which block configures a cloud provider?",
+      "options": [
+        "provider",
+        "resource",
+        "variable",
+        "output"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command removes managed resources?",
+      "options": [
+        "terraform destroy",
+        "terraform remove",
+        "terraform delete",
+        "terraform clean"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What are variables used for?",
+      "options": [
+        "Parameterizing configurations",
+        "Storing state",
+        "Installing providers",
+        "Running tests"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Why store state remotely?",
+      "options": [
+        "Team sharing and locking",
+        "Faster plans only",
+        "Less code",
+        "Skipping init"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What are modules?",
+      "options": [
+        "Reusable groups of resources",
+        "Providers",
+        "State backups",
+        "Git plugins"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Networking": [
+    {
+      "question": "How many layers does the OSI model have?",
+      "options": [
+        "7",
+        "4",
+        "5",
+        "9"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which protocol translates domain names to IP addresses?",
+      "options": [
+        "DNS",
+        "DHCP",
+        "ARP",
+        "FTP"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which protocol automatically assigns IP addresses?",
+      "options": [
+        "DHCP",
+        "DNS",
+        "SNMP",
+        "NTP"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which OSI layer do IP addresses belong to?",
+      "options": [
+        "Network",
+        "Data link",
+        "Transport",
+        "Application"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is the default port for HTTPS?",
+      "options": [
+        "443",
+        "80",
+        "22",
+        "25"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which protocol is connection-oriented and reliable?",
+      "options": [
+        "TCP",
+        "UDP",
+        "ICMP",
+        "ARP"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does a subnet mask define?",
+      "options": [
+        "The network and host parts of an IP address",
+        "Connection speed",
+        "Encryption",
+        "The MAC address"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which device forwards packets between networks?",
+      "options": [
+        "Router",
+        "Hub",
+        "Repeater",
+        "Patch panel"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which command tests reachability using ICMP?",
+      "options": [
+        "ping",
+        "tracert-ip",
+        "netsend",
+        "dig-ip"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which port does SSH use by default?",
+      "options": [
+        "22",
+        "23",
+        "21",
+        "3389"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Wireshark": [
+    {
+      "question": "What does Wireshark do?",
+      "options": [
+        "Captures and analyzes network packets",
+        "Scans for malware",
+        "Hosts websites",
+        "Encrypts disks"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What is a capture filter for?",
+      "options": [
+        "Limiting which packets are captured",
+        "Coloring packets",
+        "Exporting files",
+        "Decrypting traffic"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which display filter shows only HTTP traffic?",
+      "options": [
+        "http",
+        "show http",
+        "proto=web",
+        "filter http"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which file format does Wireshark commonly save captures in?",
+      "options": [
+        "pcap/pcapng",
+        "docx",
+        "mp4",
+        "iso"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which filter shows traffic from one source IP?",
+      "options": [
+        "ip.src == 10.0.0.5",
+        "from 10.0.0.5",
+        "src:10.0.0.5",
+        "ip=10.0.0.5"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "What does Follow TCP Stream do?",
+      "options": [
+        "Shows the full conversation between two hosts",
+        "Blocks a host",
+        "Resets a connection",
+        "Scans ports"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which TCP flag starts a connection?",
+      "options": [
+        "SYN",
+        "FIN",
+        "RST",
+        "PSH"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Why can't Wireshark read HTTPS contents by default?",
+      "options": [
+        "The traffic is encrypted",
+        "It lacks permission",
+        "HTTPS uses UDP",
+        "Packets are hidden"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which pane lists one row per captured packet?",
+      "options": [
+        "Packet List",
+        "Packet Bytes",
+        "Packet Details",
+        "Status bar"
+      ],
+      "answer_index": 0
+    },
+    {
+      "question": "Which tool is Wireshark's command-line sibling?",
+      "options": [
+        "tshark",
+        "nmap",
+        "curl",
+        "netstat"
+      ],
+      "answer_index": 0
+    }
+  ],
+  "Pandas": [
+    {
+      "difficulty": "easy",
+      "question": "What does this code print?\n```\ndf = pd.DataFrame({'name': ['A', 'B', 'C'], 'score': [80, 90, 70]})\nprint(df['score'].mean())\n```",
+      "options": [
+        "80.0",
+        "240",
+        "90",
+        "3"
+      ],
+      "answer_index": 0,
+      "explanation": "The mean of 80, 90 and 70 is 240 / 3 = 80.0."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which expression selects only the rows of df where the score column is above 75?",
+      "options": [
+        "df['score'] > 75",
+        "df[df['score'] > 75]",
+        "df.loc['score' > 75]",
+        "df.filter('score' > 75)"
+      ],
+      "answer_index": 1,
+      "explanation": "df['score'] > 75 gives True or False values. Passing that mask to df[...] keeps the True rows."
+    },
+    {
+      "difficulty": "easy",
+      "question": "df.shape returns (120, 5). What does this mean?",
+      "options": [
+        "120 columns and 5 rows",
+        "120 unique values in 5 columns",
+        "120 rows and 5 columns",
+        "5 rows with 120 missing values"
+      ],
+      "answer_index": 2,
+      "explanation": "shape is (rows, columns)."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which call shows the number of missing values in each column?",
+      "options": [
+        "df.isna().count()",
+        "df.missing()",
+        "df.dropna().sum()",
+        "df.isna().sum()"
+      ],
+      "answer_index": 3,
+      "explanation": "isna() gives True for missing values and sum() adds them up per column. count() would count every cell."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What does df.head(3) return?",
+      "options": [
+        "The first 3 rows",
+        "3 random rows",
+        "The last 3 rows",
+        "The first 3 columns"
+      ],
+      "answer_index": 0,
+      "explanation": "head(n) returns the first n rows, which is useful for a quick look at the data."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this code print?\n```\ndf = pd.DataFrame({'city': ['X', 'Y', 'X', 'Y'], 'sales': [10, 20, 30, 40]})\nprint(df.groupby('city')['sales'].sum()['X'])\n```",
+      "options": [
+        "10",
+        "40",
+        "60",
+        "100"
+      ],
+      "answer_index": 1,
+      "explanation": "City X has sales of 10 and 30, which add up to 40."
+    },
+    {
+      "difficulty": "medium",
+      "question": "After filtering with df = df[df['score'] > 75], the index shows gaps such as 0, 2, 5. Which call makes the index 0, 1, 2 again?",
+      "options": [
+        "df.sort_index()",
+        "df.drop('index')",
+        "df.reset_index(drop=True)",
+        "df.reindex()"
+      ],
+      "answer_index": 2,
+      "explanation": "reset_index(drop=True) renumbers the rows and discards the old index instead of keeping it as a column."
+    },
+    {
+      "difficulty": "medium",
+      "question": "The price column contains strings like '$1,200'. Which line converts it to numbers?",
+      "options": [
+        "df['price'].astype(float)",
+        "df['price'].to_numeric()",
+        "int(df['price'])",
+        "df['price'].str.replace('[$,]', '', regex=True).astype(float)"
+      ],
+      "answer_index": 3,
+      "explanation": "The symbols must be removed first. astype(float) on '$1,200' raises a ValueError, and to_numeric is a pandas function, not a Series method."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this code print?\n```\na = pd.DataFrame({'id': [1, 2, 3], 'x': ['p', 'q', 'r']})\nb = pd.DataFrame({'id': [2, 3, 4], 'y': ['s', 't', 'u']})\nprint(len(a.merge(b, on='id', how='left')))\n```",
+      "options": [
+        "3",
+        "4",
+        "6",
+        "2"
+      ],
+      "answer_index": 0,
+      "explanation": "A left merge keeps every row of a (3 rows). Id 1 has no match in b and gets NaN."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the difference between .loc and .iloc?",
+      "options": [
+        "loc selects columns and iloc selects rows",
+        "loc selects by label and iloc selects by integer position",
+        "loc is for text and iloc is for numbers",
+        "They are identical"
+      ],
+      "answer_index": 1,
+      "explanation": "loc uses index and column labels, while iloc uses positions counted from 0."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You run df['salary'].fillna(df['salary'].mean()) but df still shows NaN values. Why?",
+      "options": [
+        "fillna only works on text columns",
+        "mean() cannot be used inside fillna",
+        "fillna returns a new Series, so the result must be assigned back",
+        "Missing values cannot be filled in pandas"
+      ],
+      "answer_index": 2,
+      "explanation": "Most pandas methods return a new object. Use df['salary'] = df['salary'].fillna(...)."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which expression returns the number of different values in the city column?",
+      "options": [
+        "df['city'].unique()",
+        "df['city'].count()",
+        "len(df['city'])",
+        "df['city'].nunique()"
+      ],
+      "answer_index": 3,
+      "explanation": "nunique() counts distinct values. unique() returns the values themselves, and count() and len() count all rows."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A teammate writes subset = df[df['score'] > 75] and then subset['grade'] = 'A', and gets a SettingWithCopyWarning. What is the safest fix?",
+      "options": [
+        "Create the subset with .copy() before adding the column",
+        "Ignore it; the warning is harmless",
+        "Set inplace=True on the filter",
+        "Use iloc on the original df instead"
+      ],
+      "answer_index": 0,
+      "explanation": "The filtered result may be a view of df. Calling .copy() makes it an independent DataFrame, so changes are explicit and safe."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A DataFrame has 2 million rows. Which way of computing a total column from price and qty is typically the fastest?",
+      "options": [
+        "Loop with iterrows() and append the results",
+        "df['total'] = df['price'] * df['qty']",
+        "df.apply(lambda r: r['price'] * r['qty'], axis=1)",
+        "Convert each row to a dict and calculate"
+      ],
+      "answer_index": 1,
+      "explanation": "Vectorized column operations run in optimized compiled code. Row-by-row loops and apply with axis=1 are much slower."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does this code print?\n```\ndf = pd.DataFrame({'region': ['N', 'N', 'S', 'S'], 'month': ['Jan', 'Feb', 'Jan', 'Feb'], 'sales': [1, 2, 3, 4]})\nprint(df.pivot_table(index='region', columns='month', values='sales', aggfunc='sum').loc['S', 'Feb'])\n```",
+      "options": [
+        "3",
+        "7",
+        "4",
+        "2"
+      ],
+      "answer_index": 2,
+      "explanation": "The pivot table has regions as rows and months as columns. The cell for region S in Feb is 4."
+    }
+  ],
+  "NumPy": [
+    {
+      "difficulty": "easy",
+      "question": "What does np.array([1, 2, 3]) * 2 give?",
+      "options": [
+        "array([2, 4, 6])",
+        "[1, 2, 3, 1, 2, 3]",
+        "array([1, 2, 3, 2])",
+        "An error"
+      ],
+      "answer_index": 0,
+      "explanation": "NumPy multiplies every element. A plain Python list times 2 would repeat the list instead."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the shape of np.zeros((3, 4))?",
+      "options": [
+        "(4, 3)",
+        "(3, 4)",
+        "12",
+        "(12,)"
+      ],
+      "answer_index": 1,
+      "explanation": "The shape is (rows, columns), which here is 3 rows and 4 columns."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What does np.arange(2, 10, 3) return?",
+      "options": [
+        "[2 5 8 10]",
+        "[3 6 9]",
+        "[2 5 8]",
+        "[2 3 4 5 6 7 8 9]"
+      ],
+      "answer_index": 2,
+      "explanation": "arange starts at 2, steps by 3 and stops before 10, giving 2, 5 and 8."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which call computes the mean of each column of a 2-D array a?",
+      "options": [
+        "a.mean(axis=1)",
+        "a.mean()",
+        "a.sum(axis=0)",
+        "a.mean(axis=0)"
+      ],
+      "answer_index": 3,
+      "explanation": "axis=0 works down the rows and gives one value per column. axis=1 would give one value per row."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What does this print?\n```\nimport numpy as np\nprint(np.array([1, 2.5, 3]).dtype)\n```",
+      "options": [
+        "float64",
+        "int64",
+        "object",
+        "str"
+      ],
+      "answer_index": 0,
+      "explanation": "One float in the list makes NumPy store every element as a float."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this code print?\n```\na = np.array([5, 12, 7, 20, 3])\nprint(a[a > 6])\n```",
+      "options": [
+        "[ 5 12  7 20]",
+        "[12  7 20]",
+        "[12 20]",
+        "[False  True  True  True False]"
+      ],
+      "answer_index": 1,
+      "explanation": "The condition creates a True or False mask, and indexing with it keeps the elements where it is True."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the shape of the result?\n```\na = np.ones((3, 4))\nb = np.array([1, 2, 3, 4])\nprint((a + b).shape)\n```",
+      "options": [
+        "(3,)",
+        "(4,)",
+        "(3, 4)",
+        "An error"
+      ],
+      "answer_index": 2,
+      "explanation": "Broadcasting stretches b across each of the 3 rows because the trailing dimension (4) matches."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Why is NumPy much faster than Python loops for large numeric arrays?",
+      "options": [
+        "NumPy converts Python loops to SQL",
+        "NumPy skips type checking and gives approximate answers",
+        "NumPy uses more memory, so it is faster",
+        "NumPy runs vectorized operations in compiled code on contiguous, typed memory"
+      ],
+      "answer_index": 3,
+      "explanation": "Vectorized operations avoid the overhead of Python's interpreter for each element."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What shape does np.arange(12).reshape(3, -1) produce?",
+      "options": [
+        "(3, 4)",
+        "(12, 3)",
+        "(4, 3)",
+        "An error"
+      ],
+      "answer_index": 0,
+      "explanation": "The -1 tells NumPy to work out that dimension: 12 elements in 3 rows means 4 columns."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does this code print?\n```\na = np.array([1, 2, 3, 4])\nb = a[1:3]\nb[0] = 99\nprint(a)\n```",
+      "options": [
+        "[1 2 3 4]",
+        "[ 1 99  3  4]",
+        "[ 1  2 99  4]",
+        "[99  2  3  4]"
+      ],
+      "answer_index": 1,
+      "explanation": "A basic slice is a view of the same memory, so changing b also changes a. Use .copy() for an independent array."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which expression computes the dot product of two 1-D arrays a and b?",
+      "options": [
+        "a * b",
+        "a + b",
+        "np.dot(a, b)",
+        "np.sum(a) * np.sum(b)"
+      ],
+      "answer_index": 2,
+      "explanation": "np.dot multiplies pairs and adds them up. a * b gives the element-wise products without adding."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does np.where(a > 10, 1, 0) return for a = np.array([5, 12, 7, 20])?",
+      "options": [
+        "[5 7]",
+        "[1 0 1 0]",
+        "[12 20]",
+        "[0 1 0 1]"
+      ],
+      "answer_index": 3,
+      "explanation": "For each element, np.where returns 1 where the condition is True and 0 where it is False."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Why does 0.1 + 0.2 == 0.3 evaluate to False, and what should you use to compare the values?",
+      "options": [
+        "Binary floating point cannot store 0.1 or 0.2 exactly; use np.isclose",
+        "Python has a bug; use round(x, 0)",
+        "The numbers are different types; use int()",
+        "== does not work on decimals; use ="
+      ],
+      "answer_index": 0,
+      "explanation": "Tiny rounding errors make the sum slightly different from 0.3. np.isclose compares within a tolerance."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does np.array([1, np.nan, 3]).mean() return, and what is the usual fix?",
+      "options": [
+        "2.0, because NaN is ignored by default",
+        "nan; use np.nanmean(a) to ignore missing values",
+        "An error because of the NaN",
+        "1.33, because NaN counts as 0"
+      ],
+      "answer_index": 1,
+      "explanation": "Any calculation that includes NaN returns NaN. The nan-versions of the functions skip missing values."
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does this code print?\n```\na = np.array([30, 10, 20])\nprint(np.argsort(a))\n```",
+      "options": [
+        "[10 20 30]",
+        "[0 2 1]",
+        "[1 2 0]",
+        "[2 0 1]"
+      ],
+      "answer_index": 2,
+      "explanation": "argsort returns the indices that would sort the array: 10 is at index 1, 20 at index 2 and 30 at index 0."
+    }
+  ],
+  "Tableau": [
+    {
+      "difficulty": "easy",
+      "question": "What is the difference between a dimension and a measure in Tableau?",
+      "options": [
+        "Dimensions are categories used to slice the data, such as Region; measures are numeric values that are aggregated, such as Sales",
+        "Dimensions are numbers to add up; measures are categories",
+        "They are the same, but measures are blue",
+        "Dimensions are filters; measures are charts"
+      ],
+      "answer_index": 0,
+      "explanation": "Dimensions describe the data and measures are what you calculate."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which mark type best shows a trend over time?",
+      "options": [
+        "Pie",
+        "Line",
+        "Map",
+        "Text"
+      ],
+      "answer_index": 1,
+      "explanation": "A line connects values across an ordered time axis."
+    },
+    {
+      "difficulty": "easy",
+      "question": "You drag Region to Columns and Sales to Rows. What does Tableau typically show?",
+      "options": [
+        "A scatter plot with one point per region",
+        "A map",
+        "A bar chart with one bar per region",
+        "A pie chart"
+      ],
+      "answer_index": 2,
+      "explanation": "A dimension with a measure defaults to bars, one per member."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which feature lets dashboard viewers limit the data by choosing values?",
+      "options": [
+        "Marks card",
+        "Tooltip",
+        "Data pane",
+        "Show Filter (a quick filter on the dashboard)"
+      ],
+      "answer_index": 3,
+      "explanation": "Showing a filter gives viewers a control, such as a list or a slider, on the dashboard."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What do blue and green pills indicate in Tableau?",
+      "options": [
+        "Blue pills are discrete (headers) and green pills are continuous (axes)",
+        "Blue pills are always measures and green pills are always dimensions",
+        "Blue pills are continuous and green pills are discrete",
+        "The colors have no meaning"
+      ],
+      "answer_index": 0,
+      "explanation": "Blue means discrete and green means continuous, and this affects how a field is drawn."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which calculated field correctly flags orders with sales above 1000 as 'Large' and all others as 'Small'?",
+      "options": [
+        "IF [Sales] > 1000 THEN 'Large' ELSE 'Small'",
+        "IF [Sales] > 1000 THEN 'Large' ELSE 'Small' END",
+        "IF [Sales] > 1000 { 'Large' } ELSE { 'Small' }",
+        "IF ([Sales] > 1000, 'Large', 'Small') THEN"
+      ],
+      "answer_index": 1,
+      "explanation": "Tableau's IF statement must end with END."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the difference between a live connection and an extract?",
+      "options": [
+        "They are identical",
+        "Live is a snapshot; an extract queries the source each time",
+        "Live queries the source each time; an extract is a snapshot stored by Tableau that is faster but needs refreshing",
+        "An extract cannot be refreshed"
+      ],
+      "answer_index": 2,
+      "explanation": "A live connection always shows current data, while an extract trades freshness for speed."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You need each region's total sales to ignore the Category filter on the view. What can you use?",
+      "options": [
+        "A table calculation",
+        "A dual axis",
+        "A parameter",
+        "A FIXED level of detail expression, such as {FIXED [Region] : SUM([Sales])}"
+      ],
+      "answer_index": 3,
+      "explanation": "FIXED expressions compute at the level you name and are not changed by regular dimension filters."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is a parameter in Tableau?",
+      "options": [
+        "A user-controlled value that calculations, filters or reference lines can use",
+        "A dashboard layout container",
+        "A column in the data source",
+        "A type of join"
+      ],
+      "answer_index": 0,
+      "explanation": "A parameter is a workbook variable that viewers can change, for example a threshold."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which join returns only the rows that have matching keys in both tables?",
+      "options": [
+        "Left join",
+        "Inner join",
+        "Union",
+        "Full outer join"
+      ],
+      "answer_index": 1,
+      "explanation": "An inner join keeps only matches. A left join keeps everything from the left table."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A dashboard with a live connection to a large database loads slowly and has many filters. Which change helps?",
+      "options": [
+        "Add more worksheets to the dashboard",
+        "Disable the data source",
+        "Use an extract and reduce the number of filters and sheets",
+        "Use more colors"
+      ],
+      "answer_index": 2,
+      "explanation": "Extracts are usually faster, and fewer filters and sheets mean fewer queries."
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does a dual-axis chart let you do?",
+      "options": [
+        "Create two parameters",
+        "Show two dashboards side by side",
+        "Join two tables",
+        "Show two measures with different scales in one view, such as sales as bars and profit margin as a line"
+      ],
+      "answer_index": 3,
+      "explanation": "Dual axes overlay two measures on separate scales in one chart."
+    },
+    {
+      "difficulty": "hard",
+      "question": "You want to group customers by the month of their first order. Which calculation do you need?",
+      "options": [
+        "{FIXED [Customer ID] : MIN([Order Date])}",
+        "WINDOW_AVG(SUM([Sales]))",
+        "A dual-axis chart",
+        "RUNNING_SUM(SUM([Sales]))"
+      ],
+      "answer_index": 0,
+      "explanation": "A FIXED expression finds each customer's first order date, and you can then use its month as a dimension."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A Top 10 customers filter returns different results once a Region filter is added. The Region filter should be applied first. What should you do?",
+      "options": [
+        "Make the filter continuous",
+        "Add the Region filter to context so it is applied before the Top 10 filter",
+        "Use a dual-axis chart",
+        "Convert the filter to a parameter"
+      ],
+      "answer_index": 1,
+      "explanation": "Context filters run before Top N filters, so the Top 10 is calculated within the chosen region."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A data blend shows Null for some rows of the secondary source. What is the most likely reason?",
+      "options": [
+        "Nulls mean the data source is corrupt",
+        "Blending always removes unmatched rows",
+        "Blending is a left join from the primary source; where the secondary source has no match for the linking field, Tableau shows Null",
+        "Blending needs a parameter"
+      ],
+      "answer_index": 2,
+      "explanation": "Blending keeps every primary row and fills Null where the secondary data has no matching value."
+    }
+  ],
+  "Data Cleaning": [
+    {
+      "difficulty": "easy",
+      "question": "An age column contains 25, 31, -4, 29 and 250. What should you do first?",
+      "options": [
+        "Check why the values are impossible and confirm with the source before correcting",
+        "Replace all of them with the mean without checking",
+        "Delete the whole column",
+        "Leave them in, because data should never be changed"
+      ],
+      "answer_index": 0,
+      "explanation": "Impossible values may be typing errors or a system fault. Find out which before you fix or remove them."
+    },
+    {
+      "difficulty": "easy",
+      "question": "A city column has 'Hyderabad', 'hyderabad ' and 'HYDERABAD'. Which step fixes this?",
+      "options": [
+        "Delete the column",
+        "Standardize the case and trim spaces",
+        "Convert it to a number",
+        "Sort the table"
+      ],
+      "answer_index": 1,
+      "explanation": "Standardizing case and trimming spaces makes the three versions identical."
+    },
+    {
+      "difficulty": "easy",
+      "question": "What problem do duplicate customer rows cause in a report of total customers?",
+      "options": [
+        "Undercounting",
+        "No effect",
+        "Overcounting",
+        "Missing values"
+      ],
+      "answer_index": 2,
+      "explanation": "Each duplicate is counted again, so the total is too high."
+    },
+    {
+      "difficulty": "easy",
+      "question": "A date column mixes DD/MM/YYYY and MM/DD/YYYY values from different sources. What is the biggest risk?",
+      "options": [
+        "Sorting becomes faster",
+        "The file will be too large",
+        "Dates cannot be stored",
+        "The day and month may be swapped, creating wrong dates without any error"
+      ],
+      "answer_index": 3,
+      "explanation": "A value like 01/02/2026 is valid either way, so wrong dates can slip through silently."
+    },
+    {
+      "difficulty": "easy",
+      "question": "In a survey, income is blank for 40% of respondents. What should you check first?",
+      "options": [
+        "Find out why it is missing, for example random or systematic, before deciding how to handle it",
+        "Fill every blank with 0",
+        "Delete the column immediately",
+        "Fill it with the highest value"
+      ],
+      "answer_index": 0,
+      "explanation": "The reason for missing data decides whether filling, removing or flagging is appropriate."
+    },
+    {
+      "difficulty": "medium",
+      "question": "When is filling missing numeric values with the column mean most questionable?",
+      "options": [
+        "When the column is perfectly normal",
+        "When the data is skewed or the values are missing for a systematic reason",
+        "When only one value is missing",
+        "When values are text"
+      ],
+      "answer_index": 1,
+      "explanation": "A mean can be misleading for skewed data, and it hides the pattern if the values are missing for a reason."
+    },
+    {
+      "difficulty": "medium",
+      "question": "One product table stores Product ID as the number 123 and another as the text '00123'. A join returns no matches. What should you do?",
+      "options": [
+        "Delete the 00123 rows",
+        "Use a full outer join",
+        "Convert both IDs to the same type and format, for example text with the leading zeros kept",
+        "Round the IDs"
+      ],
+      "answer_index": 2,
+      "explanation": "Keys must have the same type and format before they can match."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A dataset of 1,000 rows has 12 exact duplicate rows. What is the safest approach?",
+      "options": [
+        "Delete every row that repeats a value in any column",
+        "Ignore duplicates because they do not matter",
+        "Sort the table and hope",
+        "Check whether they are real repeat events, then remove true duplicates and document it"
+      ],
+      "answer_index": 3,
+      "explanation": "Identical rows might be genuine repeat transactions. Check, remove only the true duplicates and keep a record."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which approach to outliers is most defensible?",
+      "options": [
+        "Investigate them, then keep, cap or exclude them with a documented reason, checking results with and without",
+        "Always delete them",
+        "Replace them with zero",
+        "Ignore them in every case"
+      ],
+      "answer_index": 0,
+      "explanation": "Outliers can be errors or real events, so decide case by case and show the effect of your choice."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A gender column contains 'M', 'Male', 'male', 'F', 'Female', 'Other' and blanks. What cleaning is needed?",
+      "options": [
+        "Delete all rows with blanks",
+        "Standardize the labels into consistent categories and decide how to treat the blanks",
+        "Convert the column to numbers",
+        "Keep all variants"
+      ],
+      "answer_index": 1,
+      "explanation": "Variants of one category must be merged, and blanks need an explicit decision, such as 'Unknown'."
+    },
+    {
+      "difficulty": "medium",
+      "question": "After cleaning, which check best confirms you did not damage the data?",
+      "options": [
+        "Check that the file size is smaller",
+        "Delete the original file",
+        "Compare row counts, totals and distributions before and after, and keep a log of each change",
+        "Re-sort the data"
+      ],
+      "answer_index": 2,
+      "explanation": "Before and after comparisons catch accidental data loss, and a log makes the work repeatable."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Prices contain text like '$1,200' and 'N/A'. What is the correct order of steps?",
+      "options": [
+        "Convert to numeric first, then remove symbols",
+        "Convert the whole column to text",
+        "Delete rows with symbols",
+        "Remove symbols and commas, turn 'N/A' into missing, then convert to a numeric type"
+      ],
+      "answer_index": 3,
+      "explanation": "Conversion fails while symbols and text placeholders are still in the column."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A phone column has values like '9876543210', '+91 98765 43210' and '098765-43210'. Which approach is best?",
+      "options": [
+        "Normalize with a documented rule: remove non-digits, drop the country code and leading zero, then validate that 10 digits remain",
+        "Delete values that look different",
+        "Keep them all as they are",
+        "Convert to numbers and drop leading zeros without checking"
+      ],
+      "answer_index": 0,
+      "explanation": "A single documented rule makes the values consistent, and validation catches the ones that still do not fit."
+    },
+    {
+      "difficulty": "hard",
+      "question": "You used TRIM on a name column, but a join on name still misses rows. Some values contain an invisible non-breaking space. What is the fix?",
+      "options": [
+        "Run TRIM again",
+        "Replace the non-breaking space character (character code 160) with a normal space, then TRIM",
+        "Convert to uppercase",
+        "Delete the column"
+      ],
+      "answer_index": 1,
+      "explanation": "TRIM in many tools removes only the normal space (code 32), not code 160."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A sensor logs 0 when it is offline, and real readings are never exactly 0. The zeros are pulling the average temperature down. What should you do?",
+      "options": [
+        "Leave them in; averages should use all rows",
+        "Replace them with the maximum value",
+        "Treat the zeros as missing and exclude them from the calculation, after confirming with the sensor owner",
+        "Delete the entire column"
+      ],
+      "answer_index": 2,
+      "explanation": "The zeros are a placeholder for 'no reading', not a real measurement, so they should be treated as missing."
+    }
+  ],
+  "Data Storytelling": [
+    {
+      "difficulty": "easy",
+      "question": "What is the main goal of data storytelling?",
+      "options": [
+        "Turn data into a clear message that helps the audience understand and act",
+        "Show every chart you built",
+        "Make dashboards colorful",
+        "Show how complex the analysis was"
+      ],
+      "answer_index": 0,
+      "explanation": "A data story exists to help the audience understand an insight and decide what to do."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which chart is best for showing monthly revenue over two years?",
+      "options": [
+        "Pie chart",
+        "Line chart",
+        "Scatter plot",
+        "Treemap"
+      ],
+      "answer_index": 1,
+      "explanation": "A line chart shows how a value changes over time."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which slide title is the best story headline?",
+      "options": [
+        "Sales by Region",
+        "Regional Data Overview",
+        "Southern region sales fell 18% in Q3, driven by two lost accounts",
+        "Q3 Chart"
+      ],
+      "answer_index": 2,
+      "explanation": "A good headline states the finding, so the audience does not have to work it out from the chart."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which is the best use of color in a chart?",
+      "options": [
+        "Give every series a different bright color",
+        "Use a rainbow palette",
+        "Use red and green for all lines",
+        "Highlight the key series in one color and show the others in grey"
+      ],
+      "answer_index": 3,
+      "explanation": "Muting the rest and highlighting one series directs attention to the point of the chart."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Your audience is senior managers with 5 minutes. What should come first?",
+      "options": [
+        "The conclusion and recommendation, followed by the supporting evidence",
+        "The methods and data sources",
+        "A list of all your charts",
+        "Nothing; end with the conclusion only"
+      ],
+      "answer_index": 0,
+      "explanation": "Busy readers need the answer first, with the evidence to back it up."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A pie chart has 11 slices of similar size. What is the best fix?",
+      "options": [
+        "Add more colors",
+        "Replace it with a sorted bar chart, grouping tiny categories if needed",
+        "Add a 3D effect",
+        "Rotate the pie"
+      ],
+      "answer_index": 1,
+      "explanation": "People compare bar lengths far more accurately than slice angles."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A bar chart's y-axis starts at 95 instead of 0, so a 2% difference looks huge. What is wrong?",
+      "options": [
+        "The chart needs a legend",
+        "The bars are too wide",
+        "The axis is truncated, which exaggerates a small difference; bar charts should start at zero",
+        "Nothing is wrong"
+      ],
+      "answer_index": 2,
+      "explanation": "Bar length represents the value, so cutting the axis misleads the viewer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "You found that sales dropped after a price change, but you cannot prove the price change caused it. How should you present this?",
+      "options": [
+        "State that the price change caused the drop",
+        "Hide the result",
+        "Say prices do not matter",
+        "Present it as an association, name other possible causes, and suggest how to test it"
+      ],
+      "answer_index": 3,
+      "explanation": "Honest storytelling separates what the data shows from what you suspect."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which structure suits a data story?",
+      "options": [
+        "Context, the question or problem, evidence, and a recommended next step",
+        "Methods, tools, code, result",
+        "Charts, then more charts",
+        "Conclusion only, no evidence"
+      ],
+      "answer_index": 0,
+      "explanation": "This order gives the audience the background, the finding and what to do about it."
+    },
+    {
+      "difficulty": "medium",
+      "question": "A dashboard has 14 charts, 6 colors and no clear focus. What should you do?",
+      "options": [
+        "Add more charts so nothing is missed",
+        "Cut it down to the few metrics that support one message and use size and position to show importance",
+        "Use more colors",
+        "Make every chart the same size"
+      ],
+      "answer_index": 1,
+      "explanation": "A dashboard works when the reader knows where to look first."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which statement is an insight rather than just a description?",
+      "options": [
+        "Sales were 4.2 million in March",
+        "The table has 12 rows",
+        "Customers who used the mobile app reordered twice as often, so promoting the app could raise repeat sales",
+        "Sales are shown by month"
+      ],
+      "answer_index": 2,
+      "explanation": "An insight explains what the data means and what could be done about it."
+    },
+    {
+      "difficulty": "medium",
+      "question": "The same analysis is presented to the finance team and then to the marketing team. What should change?",
+      "options": [
+        "Nothing; one version suits everyone",
+        "Only the colors",
+        "Only the title",
+        "The language, the level of detail and which metrics you emphasize"
+      ],
+      "answer_index": 3,
+      "explanation": "Each audience cares about different questions, so the story should be framed for them."
+    },
+    {
+      "difficulty": "hard",
+      "question": "A board slide shows an average customer rating of 4.6 based on 12 responses. What should you add?",
+      "options": [
+        "The number of responses (n = 12), so the audience can judge how reliable the average is",
+        "Another color",
+        "A 3D effect",
+        "A larger font"
+      ],
+      "answer_index": 0,
+      "explanation": "An average from a tiny sample can be very uncertain, and the audience should know that."
+    },
+    {
+      "difficulty": "hard",
+      "question": "The data contradicts the CEO's belief that a campaign worked. How should you present it?",
+      "options": [
+        "Hide the chart",
+        "Present the evidence neutrally with the method and caveats, explain what it means and what would change the conclusion",
+        "Adjust the numbers until they agree",
+        "Blame the data team"
+      ],
+      "answer_index": 1,
+      "explanation": "Be transparent and respectful, and let the evidence and its limits speak."
+    },
+    {
+      "difficulty": "hard",
+      "question": "You must show profit falling while revenue rises, for the same months. Which approach reads most clearly?",
+      "options": [
+        "A pie chart for each month",
+        "A 3D column chart",
+        "Two clearly labeled lines on a shared time axis, or two aligned small charts, avoiding a confusing dual axis",
+        "A table with 24 numbers"
+      ],
+      "answer_index": 2,
+      "explanation": "A shared time axis lets the reader see both trends together, and clear labels prevent misreading."
+    }
+  ]
 }

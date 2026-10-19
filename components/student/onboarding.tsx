@@ -20,6 +20,7 @@ type Form = {
   branch: string
   year: string
   section: string
+  cgpa: string
   skills: string[]
   languages: string[]
   tools: string[]
@@ -32,7 +33,7 @@ type Form = {
   resume: string
 }
 
-const empty: Form = { branch: '', year: '', section: '', skills: [], languages: [], tools: [], certifications: [], linkedin: '', github: '', domain: '', mode: '', location: '', resume: '' }
+const empty: Form = { branch: '', year: '', section: '', cgpa: '', skills: [], languages: [], tools: [], certifications: [], linkedin: '', github: '', domain: '', mode: '', location: '', resume: '' }
 
 export function Onboarding({ navigate, firstLogin, name }: { navigate: (v: View) => void; firstLogin: boolean; name?: string }) {
   const { account, resume: savedResume, loading, updateStudentDetails, uploadResume } = useStudentAccount()
@@ -45,6 +46,7 @@ export function Onboarding({ navigate, firstLogin, name }: { navigate: (v: View)
       branch: account.branch === 'Unassigned' ? '' : account.branch,
       year: account.year > 0 ? String(account.year) : '',
       section: account.section === 'Unassigned' ? '' : account.section,
+      cgpa: account.cgpa == null ? '' : String(account.cgpa),
       skills: account.skills,
       languages: account.languages,
       tools: account.tools,
@@ -105,6 +107,7 @@ export function Onboarding({ navigate, firstLogin, name }: { navigate: (v: View)
         branch: f.branch,
         year: Number(f.year),
         section: f.section,
+        cgpa: f.cgpa === '' ? null : Number(f.cgpa),
         skills: f.skills,
         languages: f.languages,
         tools: f.tools,
@@ -142,7 +145,7 @@ export function Onboarding({ navigate, firstLogin, name }: { navigate: (v: View)
       <form onSubmit={save} className="grid gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <Panel title="Academic details">
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Field label="Branch" htmlFor="ob-branch">
                 <select id="ob-branch" className={selectClass} value={f.branch} onChange={(e) => set('branch', e.target.value)} required disabled={loading}>
                   <option value="">Select</option>
@@ -168,6 +171,9 @@ export function Onboarding({ navigate, firstLogin, name }: { navigate: (v: View)
                     <option key={s}>{s}</option>
                   ))}
                 </select>
+              </Field>
+              <Field label="CGPA" htmlFor="ob-cgpa" hint="Enter a value from 0 to 10.">
+                <Input id="ob-cgpa" type="number" min="0" max="10" step="0.01" inputMode="decimal" value={f.cgpa ?? ''} onChange={(e) => set('cgpa', e.target.value)} placeholder="e.g. 8.25" className="h-9" />
               </Field>
             </div>
           </Panel>

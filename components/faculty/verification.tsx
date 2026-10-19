@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CheckCircle2, MessageSquareWarning, XCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -25,15 +25,52 @@ export function VerificationCenter() {
   const [review, setReview] = useState<Item | null>(null)
   const [note, setNote] = useState('')
   const [confirmReject, setConfirmReject] = useState(false)
+  const [saving, setSaving] = useState(false)
 
-  const decide = (status: VerifyStatus) => {
+  useEffect(() => {
+    let active = true
+    void fetch('/api/faculty/verifications', { cache: 'no-store' })
+      .then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load verification records.')
+        return result as { verifications: typeof verificationQueue }
+      })
+      .then((result) => {
+        if (active) setItems(result.verifications)
+      })
+      .catch((error: unknown) => {
+        if (active) toast.error(error instanceof Error ? error.message : 'Unable to load verification records.')
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const decide = async (status: VerifyStatus) => {
     if (!review) return
-    setItems((prev) => prev.map((i) => (i.id === review.id ? { ...i, status } : i)))
-    const msg = status === 'Verified' ? 'Document verified' : status === 'Rejected' ? 'Document rejected' : 'More information requested'
-    toast[status === 'Verified' ? 'success' : status === 'Rejected' ? 'error' : 'warning'](msg, { description: `${review.student} has been notified.` })
-    setReview(null)
-    setNote('')
-    setConfirmReject(false)
+    setSaving(true)
+    try {
+      if (review.documentId) {
+        const decision = status === 'Verified' ? 'verified' : status === 'Rejected' ? 'rejected' : 'additional_proof_required'
+        const response = await fetch(`/api/faculty/verifications/${encodeURIComponent(review.documentId)}`, {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ decision, notes: note }),
+        })
+        const result = await response.json().catch(() => ({}))
+        if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to save verification decision.')
+      }
+      setItems((prev) => prev.map((i) => (i.id === review.id ? { ...i, status } : i)))
+      const msg = status === 'Verified' ? 'Document verified' : status === 'Rejected' ? 'Document rejected' : 'More information requested'
+      toast[status === 'Verified' ? 'success' : status === 'Rejected' ? 'error' : 'warning'](msg, { description: `${review.student} has been notified.` })
+      setReview(null)
+      setNote('')
+      setConfirmReject(false)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Unable to save verification decision.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const rows = items.filter((i) => i.type === tab)
@@ -98,29 +135,52 @@ export function VerificationCenter() {
           confirmReject ? (
             <>
               <p className="mr-auto self-center text-sm text-destructive">Reject this document? The student will be notified.</p>
-              <Button variant="outline" onClick={() => setConfirmReject(false)}>Cancel</Button>
-              <Button variant="destructive" onClick={() => decide('Rejected')}>Confirm reject</Button>
+              <Button variant="outline" disabled={saving} onClick={() => setConfirmReject(false)}>Cancel</Button>
+              <Button variant="destructive" disabled={saving} onClick={() => { void decide('Rejected') }}>Confirm reject</Button>
             </>
           ) : (
             <>
-              <Button variant="destructive" onClick={() => setConfirmReject(true)}><XCircle /> Reject</Button>
-              <Button variant="outline" disabled={!note.trim()} onClick={() => decide('Additional Proof Required')}><MessageSquareWarning /> Request More Information</Button>
-              <Button className="bg-success text-success-foreground hover:bg-success/90" onClick={() => decide('Verified')}><CheckCircle2 /> Verify</Button>
+              <Button variant="destructive" disabled={saving} onClick={() => setConfirmReject(true)}><XCircle /> Reject</Button>
+              <Button variant="outline" disabled={saving || !note.trim()} onClick={() => { void decide('Additional Proof Required') }}><MessageSquareWarning /> Request More Information</Button>
+              <Button className="bg-success text-success-foreground hover:bg-success/90" disabled={saving} onClick={() => { void decide('Verified') }}><CheckCircle2 /> {saving ? 'Saving…' : 'Verify'}</Button>
             </>
           )
         }
       >
         {review && (
           <div className="grid gap-5 md:grid-cols-[1.3fr_1fr]">
-            <DocPreview
-              title={review.file}
-              lines={[
-                ['Issued to', review.student],
-                ['Organisation', review.company],
-                ['Position', review.role],
-                ['Submitted', formatDate(review.submitted)],
-              ]}
-            />
+            {review.documentId ? (
+              review.file.toLowerCase().endsWith('.pdf') ? (
+                <iframe
+                  src={`/api/faculty/documents/${encodeURIComponent(review.documentId)}/download`}
+                  title={`Full document: ${review.file}`}
+                  className="h-[65vh] min-h-[520px] w-full rounded-lg border bg-background"
+                />
+              ) : (
+                <div className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-lg border bg-background p-6 text-center">
+                  <p className="text-sm font-medium">{review.file}</p>
+                  <p className="text-sm text-muted-foreground">DOCX files cannot be previewed directly in the browser.</p>
+                  <a
+                    href={`/api/faculty/documents/${encodeURIComponent(review.documentId)}/download`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                  >
+                    Open full document
+                  </a>
+                </div>
+              )
+            ) : (
+              <DocPreview
+                title={review.file}
+                lines={[
+                  ['Issued to', review.student],
+                  ['Organisation', review.company],
+                  ['Position', review.role],
+                  ['Submitted', formatDate(review.submitted)],
+                ]}
+              />
+            )}
             <div className="flex flex-col gap-4">
               <dl className="flex flex-col gap-2 text-sm">
                 {[['Type', review.type], ['Branch', review.branch], ['Current status', review.status]].map(([k, v]) => (

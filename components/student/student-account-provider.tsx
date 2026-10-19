@@ -13,6 +13,7 @@ export type StudentAccount = {
   branch: string
   year: number
   section: string
+  cgpa: number | null
   skills: string[]
   languages: string[]
   tools: string[]
@@ -70,6 +71,7 @@ type StudentAccountContextValue = {
     branch: string
     year: number
     section: string
+    cgpa: number | null
     skills: string[]
     languages: string[]
     tools: string[]
@@ -137,6 +139,7 @@ export function StudentAccountProvider({ profile, children }: { profile: AuthPro
     branch: string
     year: number
     section: string
+    cgpa: number | null
     skills: string[]
     languages: string[]
     tools: string[]

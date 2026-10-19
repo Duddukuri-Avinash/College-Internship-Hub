@@ -203,6 +203,7 @@ export function FacultyStudents({ navigate, quick }: { navigate: (v: View) => vo
 export function FacultyStudentDetail({ id, navigate }: { id: string; navigate: (v: View) => void }) {
   const { students, reminders, remind } = useFacultyStore()
   const s = students.find((x) => x.id === id)
+  const visibleDocuments = s?.documents.filter((document) => document.type.trim().toLowerCase() !== 'resume') ?? []
   const back = <Button variant="outline" onClick={() => navigate({ name: 'faculty-students' })}><ArrowLeft /> All students</Button>
 
   if (!s) {
@@ -298,12 +299,12 @@ export function FacultyStudentDetail({ id, navigate }: { id: string; navigate: (
               )}
             </Panel>
             <Panel title="Documents">
-              {s.documents.length === 0 ? (
+              {visibleDocuments.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No documents submitted.</p>
               ) : (
                 <ul className="flex flex-col gap-3">
-                  {s.documents.map((d) => (
-                    <li key={d.name} className="flex items-start gap-3">
+                  {visibleDocuments.map((d, documentIndex) => (
+                    <li key={`${d.name}-${d.type}-${d.date}-${documentIndex}`} className="flex items-start gap-3">
                       <FileText className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{d.name}</p>

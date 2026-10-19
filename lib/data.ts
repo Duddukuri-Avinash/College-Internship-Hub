@@ -115,6 +115,7 @@ export const faculty = {
 
 export const verificationQueue: {
   id: string
+  documentId?: string
   type: string
   student: string
   regNo: string
