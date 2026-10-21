@@ -48,7 +48,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
         <div className="hidden items-center gap-2 rounded-lg bg-sidebar-accent/60 p-3 text-xs lg:flex">
           <ShieldCheck className="size-4 shrink-0 text-success" aria-hidden="true" />
-          <span className="text-sidebar-foreground/85">Access is limited to {COLLEGE.short} students and faculty with a college email.</span>
+          <span className="text-sidebar-foreground/85">Access is limited to {COLLEGE.short} students and faculty with a registered personal email.</span>
         </div>
       </aside>
       <main className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6">

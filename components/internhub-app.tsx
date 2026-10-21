@@ -202,7 +202,7 @@ export function InternHubApp() {
           {view.name === 'onboarding' && <Onboarding navigate={(nextView) => { setFirstLogin(false); navigate(nextView) }} firstLogin={firstLogin} name={profile.full_name} />}
           {view.name === 'resume-analysis' && <ResumeAnalysis />}
           {view.name === 'roadmap' && <SkillRoadmap navigate={navigate} />}
-          {view.name === 'quiz' && <QuizPage skill={view.skill} navigate={navigate} />}
+          {view.name === 'quiz' && <QuizPage skill={view.skill} level={view.level} navigate={navigate} />}
           {view.name === 'submit-internship' && <SubmitInternship navigate={navigate} />}
           {view.name === 'settings' && <StudentSettings />}
           {view.name === 'faculty-dashboard' && <FacultyDashboard navigate={navigate} />}

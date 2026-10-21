@@ -10,7 +10,7 @@ import type { View } from '@/components/app-shell'
 import { cn } from '@/lib/utils'
 import { useStudentAccount } from '@/components/student/student-account-provider'
 
-export type Roadmap = { id: string; role: string; summary: string; steps: { skill: string; why: string }[]; keywords: string[] }
+export type Roadmap = { id: string; role: string; summary: string; steps: { skill: string; why: string }[]; keywords: string[]; marketRank?: number }
 const NON_TECHNICAL_SKILLS = new Set([
   'Negotiation', 'Typography', 'Surveying', 'Communication', 'Stakeholder Management',
   'Presentation Skills', 'Recruitment', 'Candidate Screening', 'Interview Coordination',
@@ -210,7 +210,24 @@ const additionalRoadmaps: Roadmap[] = [
   { id: 'pr', role: 'Public Relations / Communications Intern', summary: 'Shape messages, coordinate events, and build trusted public relationships.', keywords: ['public relations', 'communications'], steps: makeSteps(['Press Releases', 'Media Outreach', 'Writing', 'Event Coordination', 'Brand Messaging']) },
   { id: 'it-support', role: 'Technical Support / IT Support Intern', summary: 'Troubleshoot technology issues and support users effectively.', keywords: ['technical support', 'it support'], steps: makeSteps(['Troubleshooting', 'Windows', 'Linux', 'Networking', 'Ticketing Tools', 'Customer Communication']) },
 ]
-export const roadmaps: Roadmap[] = [...coreRoadmaps, ...additionalRoadmaps]
+// Ranked from the 2025-2030 demand signals for AI/data, software, cloud,
+// cybersecurity, product, design, and connected-device work. The skills below
+// are intentionally role-specific instead of one generic skills list.
+const marketRoleOrder = [
+  'ai', 'data-engineer', 'genai', 'security', 'cloud', 'devops', 'software-engineering',
+  'scientist', 'analyst', 'bi-developer', 'web', 'python', 'qa', 'computer-vision',
+  'nlp', 'uiux', 'product', 'embedded', 'robotics', 'electrical', 'mobile', 'data-engineer',
+  'blockchain', 'finance', 'digital-marketing', 'technical-writing',
+]
+const allRoadmaps = [...coreRoadmaps, ...additionalRoadmaps]
+export const roadmaps: Roadmap[] = marketRoleOrder
+  .filter((id, index, ids) => ids.indexOf(id) === index)
+  .map((id, index) => {
+    const roadmap = allRoadmaps.find((item) => item.id === id)
+    return roadmap ? { ...roadmap, marketRank: index + 1 } : null
+  })
+  .filter((roadmap): roadmap is Roadmap => roadmap !== null)
+export type QuizLevel = 'Beginner' | 'Intermediate' | 'Advanced'
 
 type Verification = { skill: string; method: 'quiz' | 'github'; detail: string | null }
 type GithubAnalysisSkill = { skill: string; detected: boolean; strength: 'strong' | 'weak' | null; evidence: string[] }
@@ -220,6 +237,7 @@ type Status = 'verified' | 'claimed' | 'current' | 'next' | 'upcoming'
 export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const { account, loading, resume, syncResumeSkills } = useStudentAccount()
   const [roleId, setRoleId] = useState(roadmaps[0].id)
+  const [level, setLevel] = useState<QuizLevel>('Beginner')
   const [verifications, setVerifications] = useState<Verification[]>([])
   const [startingQuizSkill, setStartingQuizSkill] = useState<string | null>(null)
   const [repoUrl, setRepoUrl] = useState('')
@@ -322,7 +340,7 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
     if (startingQuizSkill) return
     setStartingQuizSkill(skill)
     try {
-      navigate({ name: 'quiz', skill })
+      navigate({ name: 'quiz', skill, level })
     } finally {
       setStartingQuizSkill(null)
     }
@@ -387,7 +405,7 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
 
   return (
     <>
-      <PageHeader title="Skill Roadmap" description="Pick a role to see the skills to learn, in order, and the internships they open up." />
+      <PageHeader title="Skill Roadmap" description="Explore the top 25 market-demand roles and the role-specific skills to learn for each one." />
 
       {(loading || syncingResume) && <p className="text-sm text-muted-foreground">Reading your resume skills…</p>}
 
@@ -400,13 +418,26 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
           onChange={(event) => setRoleId(event.target.value)}
           aria-label="Choose a role for the skill roadmap"
         >
-          {roadmaps.map((r) => <option key={r.id} value={r.id}>{r.role}</option>)}
+          {roadmaps.map((r) => <option key={r.id} value={r.id}>#{r.marketRank} — {r.role}</option>)}
+        </select>
+        <label htmlFor="roadmap-level" className="mb-2 mt-4 block text-sm font-medium">Quiz level</label>
+        <select
+          id="roadmap-level"
+          className={selectClass}
+          value={level}
+          onChange={(event) => setLevel(event.target.value as QuizLevel)}
+          aria-label="Choose your quiz level"
+        >
+          <option value="Beginner">Beginner — fundamentals</option>
+          <option value="Intermediate">Intermediate — applied scenarios</option>
+          <option value="Advanced">Advanced — design and edge cases</option>
         </select>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-6 lg:col-span-1">
-          <Panel title={rm.role}>
+          <Panel title={`${rm.role} — recommended skills`}>
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-primary">Market-demand rank #{rm.marketRank}</p>
             <p className="text-sm text-muted-foreground">{rm.summary}</p>
             <div className="mt-4 flex items-baseline justify-between">
               <span className="text-3xl font-semibold tabular-nums">{pct}%</span>

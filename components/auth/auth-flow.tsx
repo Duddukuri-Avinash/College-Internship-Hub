@@ -20,8 +20,6 @@ import {
 
 export type AuthScreen = 'login' | 'register' | 'verify' | 'forgot' | 'reset' | 'faculty-register' | 'faculty-pending'
 
-const COLLEGE_DOMAIN = '@rvrjc.ac.in'
-
 export type RegisteredStudent = {
   name: string
   roll: string
@@ -147,7 +145,7 @@ function Register({
   setRegistered: (student: RegisteredStudent | null) => void
   onAuthenticated: (profile: AuthProfile, firstLogin: boolean) => void
 }) {
-  const [f, setF] = useState({ name: '', roll: '', phone: '', password: '', confirm: '' })
+  const [f, setF] = useState({ name: '', roll: '', email: '', phone: '', password: '', confirm: '' })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const set = (k: keyof typeof f) => (v: string) => setF((p) => ({ ...p, [k]: v }))
@@ -157,6 +155,7 @@ function Register({
     const e: Record<string, string> = {}
     if (f.name.trim().length < 3) e.name = 'Enter your full name as on college records.'
     if (!/^[A-Za-z]\d{2}[A-Za-z]{2,4}\d{3}$/.test(f.roll.trim())) e.roll = 'Use your college roll number format.'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = 'Enter a valid personal email address.'
     if (!/^(\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$/.test(f.phone.trim())) e.phone = 'Enter a valid 10-digit mobile number.'
     if (f.password.length < 8) e.password = 'Use at least 8 characters.'
     if (f.confirm !== f.password) e.confirm = 'Passwords do not match.'
@@ -171,8 +170,7 @@ function Register({
     setSubmitting(true)
     try {
       await registerStudent(f)
-      const email = `${f.roll.trim().toLowerCase()}${COLLEGE_DOMAIN}`
-      setRegistered({ name: f.name.trim(), roll: f.roll.trim().toUpperCase(), email, phone: f.phone.trim() })
+      setRegistered({ name: f.name.trim(), roll: f.roll.trim().toUpperCase(), email: f.email.trim().toLowerCase(), phone: f.phone.trim() })
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -204,8 +202,8 @@ function Register({
             <Input id="reg-phone" type="tel" value={f.phone} onChange={(e) => set('phone')(e.target.value)} placeholder="Enter your mobile number" autoComplete="tel" className="h-9" aria-invalid={!!errors.phone || undefined} />
           </Field>
         </div>
-        <Field label="College email" htmlFor="reg-email" hint="Generated from your roll number.">
-          <Input id="reg-email" type="email" value={`${f.roll.trim().toLowerCase()}${COLLEGE_DOMAIN}`} readOnly className="h-9" />
+        <Field label="Personal email" htmlFor="reg-email" error={errors.email} hint="Used for account access and notifications.">
+          <Input id="reg-email" type="email" value={f.email} onChange={(e) => set('email')(e.target.value)} placeholder="you@example.com" autoComplete="email" className="h-9" aria-invalid={!!errors.email || undefined} />
         </Field>
         <Field label="Password" htmlFor="reg-pw" error={errors.password}>
           <PasswordInput id="reg-pw" value={f.password} onChange={set('password')} autoComplete="new-password" invalid={!!errors.password} />
@@ -260,7 +258,7 @@ function Verify({ setScreen, registered }: { setScreen: (s: AuthScreen) => void;
         <span className="flex size-14 items-center justify-center rounded-2xl bg-accent text-primary">
           <MailCheck className="size-7" aria-hidden="true" />
         </span>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight">Verify your college email</h1>
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight">Verify your personal email</h1>
         <p className="mt-1 text-pretty text-sm text-muted-foreground">We sent a verification link to</p>
         <p className="mt-0.5 break-all text-sm font-medium">{registered.email}</p>
       </div>
@@ -308,7 +306,7 @@ function Forgot({ setScreen, persona }: { setScreen: (s: AuthScreen) => void; pe
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!id.trim()) {
-      setError(`Enter your ${idLabel} or college email.`)
+      setError(`Enter your ${idLabel} or email.`)
       return
     }
     setError('')
@@ -331,7 +329,7 @@ function Forgot({ setScreen, persona }: { setScreen: (s: AuthScreen) => void; pe
             <MailCheck className="size-7" aria-hidden="true" />
           </span>
           <h1 className="mt-4 text-2xl font-semibold tracking-tight">Check your email</h1>
-          <p className="mt-1 text-pretty text-sm text-muted-foreground">If an account exists for that {idLabel} or email, a reset link has been sent to the registered college email.</p>
+          <p className="mt-1 text-pretty text-sm text-muted-foreground">If an account exists for that {idLabel} or email, a reset link has been sent to the registered personal email.</p>
         </div>
         <button onClick={() => setScreen('login')} className="mt-4 flex w-full items-center justify-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="size-3.5" /> Back to login
@@ -342,9 +340,9 @@ function Forgot({ setScreen, persona }: { setScreen: (s: AuthScreen) => void; pe
 
   return (
     <Shell>
-      <Heading title="Forgot password" description={`Enter your ${idLabel} or college email and we will send a reset link.`} />
+      <Heading title="Forgot password" description={`Enter your ${idLabel} or personal email and we will send a reset link.`} />
       <form onSubmit={submit} className="flex flex-col gap-4" noValidate>
-        <Field label={persona === 'faculty' ? 'Employee ID or college email' : persona === 'admin' ? 'Admin ID or college email' : 'Roll number or college email'} htmlFor="fp-id" error={error}>
+        <Field label={persona === 'faculty' ? 'Employee ID or email' : persona === 'admin' ? 'Admin ID or email' : 'Roll number or email'} htmlFor="fp-id" error={error}>
           <Input id="fp-id" value={id} onChange={(e) => setId(e.target.value)} className="h-9" aria-invalid={!!error || undefined} />
         </Field>
         <Button type="submit" size="lg" className="h-9 w-full" disabled={pending}>

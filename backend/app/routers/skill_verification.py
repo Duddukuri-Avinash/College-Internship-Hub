@@ -50,6 +50,7 @@ def github_checks_pass(checks: list[dict[str, object]]) -> bool:
 
 class SkillInput(BaseModel):
     skill: str = Field(min_length=1, max_length=120)
+    level: str = Field(default="Beginner", min_length=7, max_length=12)
 
 
 class QuizSubmit(BaseModel):
@@ -66,6 +67,13 @@ def _check_skill(skill: str) -> str:
     value = skill.strip()
     if value not in SKILLS:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Unknown skill.")
+    return value
+
+
+def _check_level(level: str) -> str:
+    value = level.strip().capitalize()
+    if value not in {"Beginner", "Intermediate", "Advanced"}:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Level must be Beginner, Intermediate, or Advanced.")
     return value
 
 
@@ -120,41 +128,46 @@ def _public_questions(questions: list[dict[str, object]]) -> tuple[list[dict[str
     return public_questions, answer_key
 
 
-def _generate_questions(skill: str) -> list[dict[str, object]]:
-    if not settings.gemini_api_key:
+def _generate_questions(skill: str, level: str) -> list[dict[str, object]]:
+    if not settings.openai_api_key:
         raise HTTPException(status_code=503, detail="Quiz generation is not configured.")
     prompt = (
-        f'Write 15 multiple-choice questions testing practical knowledge of "{skill}". '
+        f'Write 15 multiple-choice questions testing practical knowledge of "{skill}" at a {level} level. '
+        f'For Beginner use fundamentals and simple examples; for Intermediate use applied scenarios; for Advanced use trade-offs, debugging, design, and edge cases. '
         'Return JSON only: [{"q":"...","o":["...","...","...","..."],"a":0}]. '
         "Each question must have exactly four distinct options and one correct index."
     )
     request = urllib.request.Request(
-        f"https://generativelanguage.googleapis.com/v1beta/models/{settings.gemini_model}:generateContent",
+        "https://api.openai.com/v1/chat/completions",
         data=json.dumps(
             {
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "responseMimeType": "application/json",
-                    "maxOutputTokens": 4000,
-                    "temperature": 0.7,
-                },
+                "model": settings.openai_model,
+                "messages": [
+                    {"role": "system", "content": "You create accurate, unambiguous assessment questions. Return only valid JSON."},
+                    {"role": "user", "content": prompt},
+                ],
+                "response_format": {"type": "json_object"},
+                "max_tokens": 4000,
+                "temperature": 0.7,
             }
         ).encode(),
         headers={
             "content-type": "application/json",
-            "x-goog-api-key": settings.gemini_api_key,
+            "authorization": f"Bearer {settings.openai_api_key}",
         },
         method="POST",
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             payload = json.loads(response.read())
-        parts = payload.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-        text = "".join(item.get("text", "") for item in parts)
-        questions = _valid_questions(json.loads(text[text.find("[") : text.rfind("]") + 1]))
+        text = payload.get("choices", [{}])[0].get("message", {}).get("content", "")
+        parsed = json.loads(text)
+        questions = _valid_questions(parsed.get("questions", parsed) if isinstance(parsed, dict) else parsed)
     except HTTPError as error:
         provider_error = error.read().decode("utf-8", "replace")
-        logger.error("QUIZ ERROR: Gemini API returned HTTP %s: %s", error.code, provider_error)
+        logger.error("QUIZ ERROR: OpenAI API returned HTTP %s: %s", error.code, provider_error)
+        if error.code == 429:
+            raise HTTPException(status_code=503, detail="OpenAI has no remaining API credits. Add billing credits, then try again.") from error
         raise HTTPException(status_code=502, detail="Unable to prepare the quiz.") from error
     except (OSError, ValueError, KeyError, TypeError) as error:
         logger.error("QUIZ ERROR: %s", error)
@@ -164,10 +177,13 @@ def _generate_questions(skill: str) -> list[dict[str, object]]:
     return questions
 
 
-def _question_bank(db: Session, skill: str) -> list[dict[str, object]]:
-    bank = db.scalar(select(SkillQuestionBank).where(SkillQuestionBank.skill == skill))
+def _question_bank(db: Session, skill: str, level: str) -> list[dict[str, object]]:
+    # Encoding the level in the internal key keeps existing installations compatible
+    # without changing the public skill name or requiring a destructive migration.
+    bank_key = f"{skill}::{level}"
+    bank = db.scalar(select(SkillQuestionBank).where(SkillQuestionBank.skill == bank_key))
     if bank is None:
-        bank = SkillQuestionBank(skill=skill, questions=_generate_questions(skill))
+        bank = SkillQuestionBank(skill=bank_key, questions=_generate_questions(skill, level), source="openai")
         db.add(bank)
         db.commit()
         db.refresh(bank)
@@ -203,11 +219,12 @@ def start_quiz(input: SkillInput, user: User = Depends(current_user), db: Sessio
     _rate_limit(user.id, "quiz-start")
     _student_id(user)
     skill = _check_skill(input.skill)
+    level = _check_level(input.level)
     cooldown = db.scalar(select(SkillQuizCooldown).where(SkillQuizCooldown.user_id == user.id, SkillQuizCooldown.skill == skill))
     if cooldown and cooldown_active(cooldown.failed_at):
         remaining = COOLDOWN - (datetime.utcnow() - cooldown.failed_at)
         raise HTTPException(status_code=429, detail=f"Retake available in {max(1, int(remaining.total_seconds() // 3600) + 1)} hour(s).")
-    questions = _question_bank(db, skill)
+    questions = _question_bank(db, skill, level)
     public_questions, answer_key = _public_questions(questions)
     attempt = SkillQuizAttempt(
         id=str(uuid4()),

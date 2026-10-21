@@ -9,7 +9,7 @@ import { Pill, fmtDate, type Tone } from '@/components/faculty/bits'
 import { Field } from '@/components/student/form-bits'
 import { ReasonModal, Table, Tabs } from '@/components/admin/admin-bits'
 import { useAdmin } from '@/components/admin/admin-store'
-import { COLLEGE_DOMAIN, FACULTY_ROLES, type ApprovalStatus, type FacultyApproval, type FacultyRole } from '@/lib/admin-data'
+import { FACULTY_ROLES, type ApprovalStatus, type FacultyApproval, type FacultyRole } from '@/lib/admin-data'
 
 const tone: Record<ApprovalStatus, Tone> = { Pending: 'warning', Approved: 'success', Rejected: 'danger', 'Correction requested': 'orange' }
 const TABS = ['Pending', 'Approved', 'Rejected', 'All'] as const
@@ -74,7 +74,7 @@ export function Approvals() {
 
       <Table
         empty={{ icon: <UserCheck />, title: 'No registrations here', description: tab === 'Pending' ? 'All faculty registrations have been reviewed.' : 'Nothing matches this filter yet.' }}
-        head={['Faculty', 'Employee ID', 'Department', 'Designation', 'College email', 'Submitted', 'Status', <span key="a" className="sr-only">Actions</span>]}
+        head={['Faculty', 'Employee ID', 'Department', 'Designation', 'Personal email', 'Submitted', 'Status', <span key="a" className="sr-only">Actions</span>]}
         rows={rows.map((a) => [
           <span key="n" className="font-medium">{a.name}</span>,
           <span key="e" className="font-mono text-xs">{a.empId}</span>,
@@ -82,7 +82,6 @@ export function Approvals() {
           a.designation,
           <span key="m" className="flex flex-col">
             <span>{a.email}</span>
-            {!a.email.endsWith(COLLEGE_DOMAIN) && <span className="text-xs text-destructive">Not a college domain</span>}
           </span>,
           <span key="d" className="whitespace-nowrap tabular-nums text-muted-foreground">{fmtDate(a.date)}</span>,
           <span key="s" className="flex flex-col gap-1">

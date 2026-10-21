@@ -17,8 +17,8 @@ const types: RequestType[] = ['Permission / NOC letter', 'Completion certificate
 const statusTone: Record<RequestStatus, Tone> = { New: 'primary', 'In progress': 'warning', Resolved: 'success' }
 
 const approvalText: Record<RequestType, string> = {
-  'Permission / NOC letter': 'Your NOC has been approved. The signed letter has been sent to your college email.',
-  'Completion certificate letter': 'Your completion letter has been issued and sent to your college email.',
+  'Permission / NOC letter': 'Your NOC has been approved. The signed letter has been sent to your personal email.',
+  'Completion certificate letter': 'Your completion letter has been issued and sent to your personal email.',
   'Re-verification request': 'Re-verification approved. Your submission is back in the verification queue.',
   'Query to faculty': 'Your query has been answered.',
 }

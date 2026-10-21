@@ -1,6 +1,5 @@
 'use client'
 
-export const COLLEGE_EMAIL_DOMAIN = '@rvrjc.ac.in'
 export type AuthRole = 'student' | 'faculty' | 'admin'
 
 export type AuthProfile = {
@@ -22,10 +21,6 @@ async function request(path: string, init?: RequestInit) {
   return result
 }
 
-export function isCollegeEmail(email: string) {
-  return email.trim().toLowerCase().endsWith(COLLEGE_EMAIL_DOMAIN)
-}
-
 export async function getSignedInProfile(): Promise<AuthProfile | null> {
   const response = await fetch('/api/auth/me')
   if (response.status === 401) return null
@@ -38,7 +33,7 @@ export async function signOut() {
   await request('/api/auth/logout', { method: 'POST' })
 }
 
-export async function registerStudent(input: { name: string; roll: string; phone: string; password: string }) {
+export async function registerStudent(input: { name: string; roll: string; email: string; phone: string; password: string }) {
   return request('/api/auth/register/student', {
     method: 'POST',
     body: JSON.stringify(input),

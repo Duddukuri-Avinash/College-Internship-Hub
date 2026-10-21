@@ -11,7 +11,7 @@ import { Pill } from '@/components/faculty/bits'
 import { Field } from '@/components/student/form-bits'
 import { Confirm, Drawer, FilterSelect, Pagination, SearchBox, Table, downloadFile } from '@/components/admin/admin-bits'
 import { useAdmin } from '@/components/admin/admin-store'
-import { BRANCHES, COLLEGE_DOMAIN, SECTIONS, YEARS, type AdminStudent } from '@/lib/admin-data'
+import { BRANCHES, SECTIONS, YEARS, type AdminStudent } from '@/lib/admin-data'
 import { branchName } from '@/lib/branches'
 
 const COLUMNS = ['Roll No', 'Branch', 'Year', 'Section', 'CGPA', 'Internship', 'Profile', 'Status'] as const
@@ -29,7 +29,7 @@ function validate(f: Form, existing: AdminStudent[], selfId?: string) {
   if (!(BRANCHES as readonly string[]).includes(f.branch)) e.branch = 'Unknown branch.'
   if (!['1', '2', '3', '4'].includes(f.year)) e.year = 'Year must be 1–4.'
   if (!(SECTIONS as readonly string[]).includes(f.section.toUpperCase())) e.section = 'Section must be A, B, or C.'
-  if (!f.email.trim().toLowerCase().endsWith(COLLEGE_DOMAIN)) e.email = `Must end with ${COLLEGE_DOMAIN}.`
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = 'Enter a valid personal email address.'
   if (!/^\d{10}$/.test(f.phone.replace(/\s/g, ''))) e.phone = 'Enter a 10-digit number.'
   return e
 }
@@ -208,7 +208,7 @@ function StudentForm({ open, student, onClose, onSave }: { open: boolean; studen
       open={open}
       onClose={onClose}
       title={student ? `Edit ${student.name}` : 'Add student'}
-      description={student ? undefined : 'The student receives a login invite at their college email.'}
+      description={student ? undefined : 'The student receives a login invite at their personal email.'}
       size="lg"
       footer={<><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={() => { const e = validate(f, students, student?.id); setErrors(e); if (!Object.keys(e).length) onSave(f) }}>{student ? 'Save changes' : 'Add student'}</Button></>}
     >
@@ -222,7 +222,7 @@ function StudentForm({ open, student, onClose, onSave }: { open: boolean; studen
           <Field label="Year" htmlFor="sf-year"><select id="sf-year" className={selectClass} value={f.year} onChange={set('year')}>{YEARS.map((y) => <option key={y} value={y}>{y}</option>)}</select></Field>
           <Field label="Section" htmlFor="sf-sec"><select id="sf-sec" className={selectClass} value={f.section} onChange={set('section')}>{SECTIONS.map((s) => <option key={s}>{s}</option>)}</select></Field>
         </div>
-        <Field label="College email" htmlFor="sf-email" error={errors.email}><Input id="sf-email" type="email" value={f.email} onChange={set('email')} placeholder={`name${COLLEGE_DOMAIN}`} aria-invalid={inv('email')} /></Field>
+        <Field label="Personal email" htmlFor="sf-email" error={errors.email}><Input id="sf-email" type="email" value={f.email} onChange={set('email')} placeholder="you@example.com" aria-invalid={inv('email')} /></Field>
         <Field label="Phone" htmlFor="sf-phone" error={errors.phone}><Input id="sf-phone" type="tel" inputMode="numeric" value={f.phone} onChange={set('phone')} placeholder="9876543210" aria-invalid={inv('phone')} /></Field>
       </div>
     </Modal>

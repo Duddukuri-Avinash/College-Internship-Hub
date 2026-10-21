@@ -194,6 +194,7 @@ export function SubmitInternship({ navigate }: { navigate: (v: View) => void }) 
               <Field label="Evidence type" htmlFor="sf-evtype">
                 <select id="sf-evtype" className={selectClass} value={f.evidenceType} onChange={(e) => set('evidenceType', e.target.value)}>
                   <option>Offer letter</option>
+                  <option>Completion certificate</option>
                   <option>Email from company</option>
                   <option>Official job posting screenshot</option>
                   <option>Application confirmation</option>

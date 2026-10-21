@@ -43,6 +43,7 @@ class LoginRequest(BaseModel):
 class StudentRegistration(BaseModel):
     name: str = Field(min_length=3, max_length=200)
     roll: str = Field(min_length=1, max_length=30)
+    email: EmailStr
     phone: str = Field(min_length=7, max_length=30)
     password: str = Field(min_length=8, max_length=128)
 
@@ -128,7 +129,7 @@ def login(input: LoginRequest, db: Session = Depends(get_db)) -> dict[str, objec
 @router.post("/register/student", status_code=status.HTTP_201_CREATED)
 def register_student(input: StudentRegistration, db: Session = Depends(get_db)) -> dict[str, object]:
     roll = input.roll.strip().upper()
-    email = f"{roll.lower()}@rvrjc.ac.in"
+    email = str(input.email).lower()
     if db.scalar(select(Student).where(Student.roll_number == roll)) or db.scalar(select(User).where(User.email == email)):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An account already exists for this roll number.")
     first_name, last_name = _name_parts(input.name)

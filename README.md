@@ -13,7 +13,15 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
 
 3. Install the backend dependencies in `backend` with Python 3.11+ and install Microsoft ODBC Driver 18 for SQL Server on the host.
 4. Copy `.env.example` to `.env` in `backend` and set `DATABASE_URL`, `JWT_SECRET_KEY`, `CORS_ORIGINS`, and `BACKEND_API_URL`. The SQLAlchemy URL must use `mssql+pyodbc` and an installed SQL Server ODBC driver.
-   For automated skill verification also set `GEMINI_API_KEY` and `GEMINI_MODEL` (default `gemini-2.5-flash`), plus `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_OAUTH_REDIRECT_URI`, `GITHUB_API_TOKEN` (optional fallback), and `FRONTEND_URL`. Register the GitHub OAuth callback URL exactly as configured.
+   For OpenAI-powered skill quizzes also set `OPENAI_API_KEY` and optionally `OPENAI_MODEL` (default `gpt-4o-mini`). Gemini is not used. Also set `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_OAUTH_REDIRECT_URI`, `GITHUB_API_TOKEN` (optional fallback), and `FRONTEND_URL`. Register the GitHub OAuth callback URL exactly as configured.
+
+   To connect OpenAI:
+
+   1. Create an API key in the OpenAI Platform dashboard.
+   2. Put it only in `backend/.env` as `OPENAI_API_KEY=...`; never expose it in `NEXT_PUBLIC_*` variables or browser code.
+   3. Set `OPENAI_MODEL=gpt-4o-mini` (or another model enabled for your account).
+   4. Restart the FastAPI backend. The first quiz for each skill and level creates an OpenAI-generated question bank; later attempts reuse the stored bank.
+   5. Select Beginner, Intermediate, or Advanced in Skill Roadmap before starting a quiz. The selected level is included in the generation prompt and cached separately.
 5. Create the SQL Server schema from the existing SQLAlchemy models:
 
    ```powershell

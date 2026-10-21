@@ -206,7 +206,7 @@ export function StudentProfile({ navigate }: { navigate: (v: View) => void }) {
 
           <Panel title="Personal Details">
             <dl className="flex flex-col gap-4">
-              <InfoRow icon={<Mail />} label="College email" value={account?.email ?? (loading ? 'Loading…' : 'Unavailable')} />
+              <InfoRow icon={<Mail />} label="Personal email" value={account?.email ?? (loading ? 'Loading…' : 'Unavailable')} />
               <InfoRow icon={<Phone />} label="Phone" value={account?.phone || 'Not provided'} />
               <InfoRow icon={<GraduationCap />} label="Faculty mentor" value="Not assigned" />
             </dl>

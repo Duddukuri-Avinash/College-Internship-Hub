@@ -12,7 +12,7 @@ type Question = { q: string; o: string[] }
 type Quiz = { id: string; questions: Question[]; expiresAt: string }
 type QuizResult = { score: number; total: number; passed: boolean; correctAnswers: number[] }
 
-export function QuizPage({ skill, navigate }: { skill: string; navigate: (view: View) => void }) {
+export function QuizPage({ skill, level, navigate }: { skill: string; level: 'Beginner' | 'Intermediate' | 'Advanced'; navigate: (view: View) => void }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [answers, setAnswers] = useState<number[]>([])
   const [result, setResult] = useState<QuizResult | null>(null)
@@ -25,7 +25,7 @@ export function QuizPage({ skill, navigate }: { skill: string; navigate: (view: 
     void fetch('/api/student/quiz/start', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ skill }),
+      body: JSON.stringify({ skill, level }),
     }).then(async (response) => {
       const payload = await response.json()
       if (!response.ok) throw new Error(payload.error ?? payload.detail ?? 'Unable to start the quiz.')
@@ -42,7 +42,7 @@ export function QuizPage({ skill, navigate }: { skill: string; navigate: (view: 
       if (active) setLoading(false)
     })
     return () => { active = false }
-  }, [navigate, skill])
+  }, [navigate, skill, level])
 
   useEffect(() => {
     if (!quiz || result) return
@@ -90,7 +90,7 @@ export function QuizPage({ skill, navigate }: { skill: string; navigate: (view: 
     <div className="mx-auto flex max-w-4xl flex-col gap-4">
       <Button variant="ghost" className="w-fit" onClick={() => navigate({ name: 'roadmap' })}><ArrowLeft /> Back to roadmap</Button>
       <div className="sticky top-0 z-10 flex items-center justify-between rounded-lg border border-border bg-background/95 px-4 py-3 shadow-sm backdrop-blur">
-        <h1 className="text-xl font-semibold">Quiz: {skill}</h1>
+        <h1 className="text-xl font-semibold">Quiz: {skill} <span className="text-sm font-normal text-muted-foreground">({level})</span></h1>
         <span className={cn('font-mono text-lg font-bold', secondsLeft < 60 && 'text-destructive')}>Time: {minutes}:{seconds}</span>
       </div>
       <Panel>

@@ -10,7 +10,7 @@ import { Pill } from '@/components/faculty/bits'
 import { Field } from '@/components/student/form-bits'
 import { Confirm, SearchBox, Table, Tabs } from '@/components/admin/admin-bits'
 import { useAdmin } from '@/components/admin/admin-store'
-import { BRANCHES, COLLEGE_DOMAIN, FACULTY_ROLES, type AdminFaculty, type FacultyRole } from '@/lib/admin-data'
+import { BRANCHES, FACULTY_ROLES, type AdminFaculty, type FacultyRole } from '@/lib/admin-data'
 import { branchName } from '@/lib/branches'
 
 const TABS = ['Directory', 'Workload'] as const
@@ -191,7 +191,7 @@ function FacultyForm({ open, member, onClose }: { open: boolean; member: AdminFa
     if (f.name.trim().length < 3) e.name = 'Enter the full name.'
     if (!/^RVR\d{4}$/.test(f.empId.trim().toUpperCase())) e.empId = 'Format: RVR1234.'
     else if (faculty.some((x) => x.empId === f.empId.trim().toUpperCase() && x.id !== member?.id)) e.empId = 'Employee ID already exists.'
-    if (!f.email.trim().toLowerCase().endsWith(COLLEGE_DOMAIN)) e.email = `Must end with ${COLLEGE_DOMAIN}.`
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = 'Enter a valid personal email address.'
     if (!roles.length) e.roles = 'Assign at least one role.'
     setErrors(e)
     if (Object.keys(e).length) return
@@ -216,7 +216,7 @@ function FacultyForm({ open, member, onClose }: { open: boolean; member: AdminFa
           <Field label="Employee ID" htmlFor="ff-emp" error={errors.empId}><Input id="ff-emp" value={f.empId} placeholder="RVR1234" onChange={(e) => setF({ ...f, empId: e.target.value })} aria-invalid={!!errors.empId || undefined} /></Field>
           <Field label="Department" htmlFor="ff-dept"><select id="ff-dept" className={selectClass} value={f.dept} onChange={(e) => setF({ ...f, dept: e.target.value })}>{BRANCHES.map((b) => <option key={b} value={b}>{branchName(b)}</option>)}</select></Field>
           <Field label="Designation" htmlFor="ff-des"><select id="ff-des" className={selectClass} value={f.designation} onChange={(e) => setF({ ...f, designation: e.target.value })}>{['Assistant Professor', 'Associate Professor', 'Professor', 'Head of Department'].map((d) => <option key={d}>{d}</option>)}</select></Field>
-          <Field label="College email" htmlFor="ff-email" error={errors.email} className="sm:col-span-2"><Input id="ff-email" type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} aria-invalid={!!errors.email || undefined} /></Field>
+          <Field label="Personal email" htmlFor="ff-email" error={errors.email} className="sm:col-span-2"><Input id="ff-email" type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="you@example.com" aria-invalid={!!errors.email || undefined} /></Field>
         </div>
         <fieldset>
           <legend className="mb-2 text-sm font-medium">Roles</legend>

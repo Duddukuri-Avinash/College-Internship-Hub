@@ -22,7 +22,6 @@ export type RegisteredFaculty = {
   approved: boolean
 }
 
-const COLLEGE_DOMAIN = '@rvrjc.ac.in'
 const EMP_ID = /^RVR\d{4}$/i
 const designations = ['Assistant Professor', 'Associate Professor', 'Professor', 'Head of Department', 'Internship Coordinator']
 
@@ -104,7 +103,7 @@ export function FacultyRegister({ setScreen, setFaculty }: { setScreen: (s: Auth
     if (!EMP_ID.test(f.employeeId.trim())) e.employeeId = 'Use your RVR employee ID followed by four digits.'
     if (!f.dept) e.dept = 'Select your department.'
     if (!f.designation) e.designation = 'Select your designation.'
-    if (!f.email.trim().toLowerCase().endsWith(COLLEGE_DOMAIN)) e.email = `Use your college email ending with ${COLLEGE_DOMAIN}.`
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = 'Enter a valid personal email address.'
     if (!/^(\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}$/.test(f.phone.trim())) e.phone = 'Enter a valid 10-digit mobile number.'
     if (f.password.length < 8) e.password = 'Use at least 8 characters.'
     if (f.confirm !== f.password) e.confirm = 'Passwords do not match.'
@@ -152,8 +151,8 @@ export function FacultyRegister({ setScreen, setFaculty }: { setScreen: (s: Auth
             </select>
           </Field>
         </div>
-        <Field label="College email" htmlFor="fr-email" error={errors.email}>
-          <Input id="fr-email" type="email" value={f.email} onChange={(e) => set('email')(e.target.value)} placeholder={`name${COLLEGE_DOMAIN}`} autoComplete="email" className="h-9" aria-invalid={inv('email')} />
+        <Field label="Personal email" htmlFor="fr-email" error={errors.email}>
+          <Input id="fr-email" type="email" value={f.email} onChange={(e) => set('email')(e.target.value)} placeholder="you@example.com" autoComplete="email" className="h-9" aria-invalid={inv('email')} />
         </Field>
         <Field label="Password" htmlFor="fr-pw" error={errors.password}>
           <PasswordInput id="fr-pw" value={f.password} onChange={set('password')} autoComplete="new-password" invalid={!!errors.password} />
@@ -205,7 +204,7 @@ export function FacultyPending({ setScreen, faculty }: { setScreen: (s: AuthScre
           <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{k}</dt><dd className="break-all text-right font-medium">{v}</dd></div>
         ))}
       </dl>
-      <p className="mt-4 text-center text-xs text-muted-foreground">Confirm your college email first. Faculty portal access is enabled only after admin approval.</p>
+      <p className="mt-4 text-center text-xs text-muted-foreground">Confirm your personal email first. Faculty portal access is enabled only after admin approval.</p>
       <Button size="lg" className="mt-6 h-9 w-full" onClick={() => setScreen('login')}>Back to sign in</Button>
       <button onClick={() => setScreen('login')} className="mt-6 flex w-full items-center justify-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-3.5" /> Back to login

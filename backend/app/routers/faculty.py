@@ -40,6 +40,25 @@ def _verification_type(document_type: str) -> str:
     }.get(document_type.strip().lower(), "Experience")
 
 
+@router.get("/profile")
+def faculty_profile(user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict[str, object]:
+    if user.role != UserRole.FACULTY or user.faculty is None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Faculty access required.")
+
+    faculty = db.scalar(select(Faculty).options(joinedload(Faculty.department)).where(Faculty.id == user.faculty.id))
+    if faculty is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Faculty profile was not found.")
+
+    return {
+        "name": f"{user.first_name} {user.last_name}".strip(),
+        "employeeId": faculty.employee_id,
+        "dept": faculty.department.code if faculty.department else "Unassigned",
+        "designation": faculty.designation,
+        "email": user.email,
+        "phone": "",
+    }
+
+
 @router.get("/students")
 def faculty_students(user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict[str, list[dict[str, object]]]:
     if user.role != UserRole.FACULTY or user.faculty is None:

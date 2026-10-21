@@ -72,7 +72,7 @@ export function StudentSettings() {
             <Field label="Roll number" htmlFor="st-roll">
               <Input id="st-roll" value={account?.rollNumber ?? (loading ? 'Loading…' : '')} disabled className="h-9" />
             </Field>
-            <Field label="College email" htmlFor="st-email" className="sm:col-span-2" hint="Verified. Contact the Training & Placement Cell to change it.">
+            <Field label="Personal email" htmlFor="st-email" className="sm:col-span-2" hint="Used for account access and notifications.">
               <Input id="st-email" value={account?.email ?? (loading ? 'Loading…' : '')} disabled className="h-9" />
             </Field>
             <Field label="Phone" htmlFor="st-phone" className="sm:col-span-2">

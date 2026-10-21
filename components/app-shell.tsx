@@ -48,7 +48,7 @@ export type View =
   | { name: 'onboarding' }
   | { name: 'resume-analysis' }
   | { name: 'roadmap' }
-  | { name: 'quiz'; skill: string }
+  | { name: 'quiz'; skill: string; level: 'Beginner' | 'Intermediate' | 'Advanced' }
   | { name: 'submit-internship' }
   | { name: 'settings' }
   | { name: 'faculty-dashboard' }

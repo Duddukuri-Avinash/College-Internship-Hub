@@ -72,9 +72,14 @@ export function MyInternships() {
         title="My Internships"
         description="Upload offer letters and certificates for faculty verification. Verified records appear on your academic profile."
         actions={
-          <Button onClick={() => setUpload({ kind: 'offer', company: 'New internship' })}>
-            <Plus /> Add internship
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => setUpload({ kind: 'certificate', company: 'Internship' })}>
+              <Upload /> Upload completion certificate
+            </Button>
+            <Button onClick={() => setUpload({ kind: 'offer', company: 'New internship' })}>
+              <Plus /> Add internship
+            </Button>
+          </div>
         }
       />
 

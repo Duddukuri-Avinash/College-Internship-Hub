@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,8 +14,34 @@ import { TODAY, facultyAccount } from '@/lib/faculty-data'
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const
 
 function AccountPanel() {
+  const [profile, setProfile] = useState(facultyAccount)
   const [phone, setPhone] = useState(facultyAccount.phone)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  useEffect(() => {
+    let active = true
+    void fetch('/api/faculty/profile', { cache: 'no-store' })
+      .then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load faculty details.')
+        return result as typeof facultyAccount
+      })
+      .then((result) => {
+        if (!active) return
+        setProfile(result)
+        setPhone(result.phone)
+      })
+      .catch((loadError: unknown) => {
+        if (active) toast.error(loadError instanceof Error ? loadError.message : 'Unable to load faculty details.')
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   const save = (e: FormEvent) => {
     e.preventDefault()
     const digits = phone.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '')
@@ -24,20 +50,20 @@ function AccountPanel() {
     toast.success('Account details saved')
   }
   const readOnly: [string, string][] = [
-    ['Full name', facultyAccount.name],
-    ['Employee ID', facultyAccount.employeeId],
-    ['Department', facultyAccount.dept],
-    ['Designation', facultyAccount.designation],
-    ['College email', facultyAccount.email],
+    ['Full name', profile.name],
+    ['Employee ID', profile.employeeId],
+    ['Department', profile.dept],
+    ['Designation', profile.designation],
+    ['Personal email', profile.email],
   ]
   return (
     <Panel title="Account details">
       <form onSubmit={save} noValidate>
         <div className="mb-4 flex items-center gap-3">
-          <span className="flex size-12 items-center justify-center rounded-full bg-accent font-semibold text-primary" aria-hidden="true">{initials(facultyAccount.name)}</span>
+          <span className="flex size-12 items-center justify-center rounded-full bg-accent font-semibold text-primary" aria-hidden="true">{initials(profile.name)}</span>
           <div>
-            <p className="font-medium">{facultyAccount.name}</p>
-            <p className="text-xs text-muted-foreground">{facultyAccount.designation}</p>
+            <p className="font-medium">{loading ? 'Loading faculty details…' : profile.name}</p>
+            <p className="text-xs text-muted-foreground">{profile.designation}</p>
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">

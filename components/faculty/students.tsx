@@ -56,7 +56,7 @@ export function FacultyStudents({ navigate, quick }: { navigate: (v: View) => vo
   const sendReminder = () => {
     if (!confirmIds) return
     remind(confirmIds)
-    toast.success(`Reminder sent to ${confirmIds.length} student${confirmIds.length === 1 ? '' : 's'}`, { description: 'Delivered by in-app notification and college email.' })
+    toast.success(`Reminder sent to ${confirmIds.length} student${confirmIds.length === 1 ? '' : 's'}`, { description: 'Delivered by in-app notification and personal email.' })
     setSelected((sel) => sel.filter((id) => !confirmIds.includes(id)))
     setConfirmIds(null)
   }

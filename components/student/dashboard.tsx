@@ -40,7 +40,7 @@ export function StudentDashboard({ navigate }: { navigate: (v: View) => void }) 
         ) : account ? (
           <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
             <div><dt className="text-muted-foreground">Roll number</dt><dd className="font-medium">{account.rollNumber}</dd></div>
-            <div><dt className="text-muted-foreground">College email</dt><dd className="break-all font-medium">{account.email}</dd></div>
+            <div><dt className="text-muted-foreground">Personal email</dt><dd className="break-all font-medium">{account.email}</dd></div>
             <div><dt className="text-muted-foreground">Phone</dt><dd className="font-medium">{account.phone || 'Not provided'}</dd></div>
             <div><dt className="text-muted-foreground">Branch / year / section</dt><dd className="font-medium">{account.branch === 'Unassigned' ? 'Not set' : account.branch} / {account.year} / {account.section === 'Unassigned' ? 'Not set' : account.section}</dd></div>
           </dl>

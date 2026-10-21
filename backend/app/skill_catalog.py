@@ -56,6 +56,17 @@ SKILLS = frozenset(
         "Email Etiquette", "Data Visualisation", "Reporting", "Git/GitHub",
         "Data Structures and Algorithms", "Security Fundamentals", "APIs", "Compute",
         "Storage", "JWT", "OAuth", "CMS", "Basic Coding",
+        "Scikit-learn", "Model Deployment", "Model APIs", "LLM Fundamentals", "Dart",
+        "UI Layouts", "Navigation", "State Management", "App Publishing", "Shell Scripting",
+        "SDLC", "STLC", "Test Cases", "Bug Reports", "Manual Testing", "API Testing", "Jira",
+        "TestNG", "Game Physics", "Mathematics", "Vectors", "2D/3D", "Animation Systems",
+        "Game Design", "Version Control", "Blockchain Fundamentals", "Cryptography", "Smart Contracts",
+        "Web3.js", "Ethers.js", "Hardhat", "Truffle", "Ethereum", "Polygon", "Advanced SQL",
+        "ETL/ELT", "Data Modelling", "Dataset Annotation", "Layout", "Print Design", "RICE",
+        "MoSCoW", "Analytics", "CapCut", "Writing", "Editing", "Taxation", "Zoho Books",
+        "Audit Procedures", "ERP", "Estimation and Costing", "Site Supervision", "Raspberry Pi",
+        "Oscilloscope", "Computer Networks", "Web Security", "Nmap", "Burp Suite", "Ethical Hacking",
+        "Incident Response", "SIEM",
     }
 )
 

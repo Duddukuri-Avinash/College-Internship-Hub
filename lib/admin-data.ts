@@ -2,7 +2,6 @@ import { branches as collegeBranches, branchName } from '@/lib/branches'
 import type { VerifyStatus } from '@/lib/data'
 
 export const ADMIN_TODAY = new Date().toISOString().slice(0, 10)
-export const COLLEGE_DOMAIN = '@rvrjc.ac.in'
 export const BRANCHES = collegeBranches.map(({ code }) => code)
 export const SECTIONS = ['A', 'B', 'C'] as const
 export const YEARS = [1, 2, 3, 4] as const
