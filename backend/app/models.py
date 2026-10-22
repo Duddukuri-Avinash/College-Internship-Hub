@@ -261,6 +261,18 @@ class SkillQuestionBank(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 
+class RoadmapSnapshot(Base):
+    __tablename__ = "roadmap_snapshots"
+    __table_args__ = (UniqueConstraint("market", "month", name="uq_roadmap_snapshot_market_month"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    market: Mapped[str] = mapped_column(String(80), nullable=False)
+    month: Mapped[str] = mapped_column(String(7), nullable=False)
+    roadmaps: Mapped[list[dict[str, object]]] = mapped_column(JSON, nullable=False)
+    sources: Mapped[list[dict[str, str]]] = mapped_column(JSON, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 class SkillQuizAttempt(Base):
     __tablename__ = "skill_quiz_attempts"
 
@@ -392,6 +404,7 @@ __all__ = [
     "InternshipMode",
     "InternshipSource",
     "Notification",
+    "RoadmapSnapshot",
     "Setting",
     "Student",
     "User",

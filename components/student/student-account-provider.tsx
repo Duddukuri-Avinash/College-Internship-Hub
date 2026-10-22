@@ -182,7 +182,13 @@ export function StudentAccountProvider({ profile, children }: { profile: AuthPro
   const syncResumeSkills = useCallback(async () => {
     if (!resume) return []
     const downloadResponse = await fetch(`/api/student/documents/${resume.id}/download`)
-    if (!downloadResponse.ok) throw new Error('Unable to download your resume.')
+    if (!downloadResponse.ok) {
+      const result = await downloadResponse.json().catch(() => null) as { error?: string; detail?: string } | null
+      if (downloadResponse.status === 401) {
+        throw new Error('Your session has expired. Sign in again to sync skills from your resume.')
+      }
+      throw new Error(result?.error ?? result?.detail ?? `Unable to download your resume (HTTP ${downloadResponse.status}).`)
+    }
     const detectedSkills = await extractResumeSkills(new File([await downloadResponse.blob()], resume.fileName, { type: resume.mimeType }))
     if (!detectedSkills.length) return []
 

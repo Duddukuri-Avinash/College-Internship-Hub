@@ -13,11 +13,9 @@ class Settings(BaseSettings):
     jwt_access_token_expire_minutes: int = 60
     max_upload_size_mb: int = 5
     allowed_upload_types: str = ".pdf,.doc,.docx,.png,.jpg,.jpeg"
-    openai_api_key: str | None = None
-    openai_model: str = "gpt-4o-mini"
-    # Deprecated compatibility fields: quiz generation no longer calls Gemini.
     gemini_api_key: str | None = None
-    gemini_model: str = "deprecated"
+    gemini_model: str = "gemini-3.8-flash"
+    roadmap_market: str = "India"
     github_client_id: str | None = None
     github_client_secret: str | None = None
     github_redirect_uri: str = "http://localhost:8000/api/github/callback"

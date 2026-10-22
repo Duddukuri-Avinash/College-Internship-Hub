@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight, Check, Code2, Sparkles, Target } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -26,18 +26,20 @@ const coreRoadmaps: Roadmap[] = [
     summary: 'Turn raw data into reliable analysis, dashboards, and insights that teams can act on.',
     keywords: ['data analyst', 'data analytics', 'power bi', 'tableau', 'pandas', 'sql', 'excel'],
     steps: [
-      { skill: 'Excel', why: 'Formulas and pivot tables for initial analysis' },
-      { skill: 'SQL', why: 'Query and combine business data' },
-      { skill: 'Statistics', why: 'Understand patterns and uncertainty' },
-      { skill: 'Python', why: 'Automate analysis and work with data' },
-      { skill: 'Pandas', why: 'Transform and analyse tabular data' },
-      { skill: 'NumPy', why: 'Perform numerical computing efficiently' },
-      { skill: 'Data Visualisation', why: 'Communicate patterns with effective charts' },
-      { skill: 'Power BI', why: 'Build interactive dashboards and reports' },
-      { skill: 'Tableau', why: 'Create visual analysis and business insights' },
-      { skill: 'Data Cleaning', why: 'Prepare reliable data for analysis' },
-      { skill: 'Data Storytelling', why: 'Explain findings and recommendations clearly' },
-      { skill: 'Reporting', why: 'Deliver concise, decision-ready analysis' },
+      { skill: 'SQL', why: 'Query, join, and aggregate data for analysis' },
+      { skill: 'Excel and Google Sheets', why: 'Use formulas, pivot tables, and modern spreadsheet tools' },
+      { skill: 'Power Query', why: 'Clean and reshape repeatable data imports' },
+      { skill: 'Statistics and Experimentation', why: 'Interpret uncertainty and evaluate A/B tests' },
+      { skill: 'Python', why: 'Automate analysis and build reproducible workflows' },
+      { skill: 'Pandas', why: 'Transform and analyse tabular datasets' },
+      { skill: 'Data Cleaning', why: 'Validate missing, duplicate, and inconsistent records' },
+      { skill: 'Data Visualisation', why: 'Choose clear charts for analytical questions' },
+      { skill: 'Power BI', why: 'Build interactive, shareable business dashboards' },
+      { skill: 'DAX', why: 'Create measures and calculations in Power BI' },
+      { skill: 'Tableau', why: 'Explore data and publish interactive visualisations' },
+      { skill: 'Data Quality and Validation', why: 'Check source data and prevent misleading conclusions' },
+      { skill: 'Git/GitHub', why: 'Version analysis code and collaborate on projects' },
+      { skill: 'Data Storytelling', why: 'Explain findings and recommendations with evidence' },
     ],
   },
   {
@@ -48,15 +50,19 @@ const coreRoadmaps: Roadmap[] = [
     steps: [
       { skill: 'Python', why: 'Primary language for data science' },
       { skill: 'SQL', why: 'Retrieve and combine analytical data' },
-      { skill: 'Statistics', why: 'Foundation for modelling' },
+      { skill: 'Probability and Statistics', why: 'Design experiments and reason about uncertainty' },
       { skill: 'Pandas', why: 'Feature preparation' },
       { skill: 'Matplotlib', why: 'Visualise analysis and model results' },
-      { skill: 'Seaborn', why: 'Create statistical visualisations' },
-      { skill: 'Machine Learning', why: 'Build classical predictive models' },
-      { skill: 'Scikit-learn', why: 'Train and evaluate machine-learning models' },
-      { skill: 'Feature Engineering', why: 'Create useful model inputs' },
-      { skill: 'Model Evaluation', why: 'Measure model quality and generalisation' },
-      { skill: 'Deep Learning', why: 'Build neural-network models' },
+      { skill: 'Seaborn', why: 'Explore relationships and distributions with statistical charts' },
+      { skill: 'Exploratory Data Analysis', why: 'Identify distributions, anomalies, and useful signals' },
+      { skill: 'Feature Engineering', why: 'Create robust inputs for predictive models' },
+      { skill: 'Scikit-learn', why: 'Train reproducible classical machine-learning pipelines' },
+      { skill: 'Gradient Boosting (XGBoost/LightGBM)', why: 'Model structured data with high-performing tree ensembles' },
+      { skill: 'Model Evaluation', why: 'Select appropriate metrics and validate generalisation' },
+      { skill: 'Experiment Design and A/B Testing', why: 'Measure whether interventions cause meaningful changes' },
+      { skill: 'Deep Learning with PyTorch', why: 'Build neural models for complex data' },
+      { skill: 'Model Explainability', why: 'Communicate feature impact and prediction limitations' },
+      { skill: 'MLflow', why: 'Track experiments and model versions' },
     ],
   },
   {
@@ -70,20 +76,18 @@ const coreRoadmaps: Roadmap[] = [
       { skill: 'JavaScript', why: 'Make pages interactive' },
       { skill: 'TypeScript', why: 'Add type safety to JavaScript applications' },
       { skill: 'Git/GitHub', why: 'Collaborate and manage source code' },
-      { skill: 'React', why: 'Component-based interfaces' },
-      { skill: 'Angular', why: 'Build structured front-end applications' },
-      { skill: 'Vue', why: 'Build component-based front-end applications' },
-      { skill: 'Node.js', why: 'Build server-side JavaScript applications' },
-      { skill: 'Express', why: 'Create web back ends with Node.js' },
-      { skill: 'Django', why: 'Build web back ends with Python' },
-      { skill: 'Spring Boot', why: 'Build enterprise Java back ends' },
-      { skill: 'SQL', why: 'Persist and query relational data' },
-      { skill: 'MongoDB', why: 'Store application data' },
-      { skill: 'REST APIs', why: 'Connect application services' },
-      { skill: 'GraphQL', why: 'Query APIs flexibly' },
-      { skill: 'JWT', why: 'Secure authenticated sessions' },
-      { skill: 'OAuth', why: 'Integrate delegated authentication' },
-      { skill: 'Deployment', why: 'Ship and host your app' },
+      { skill: 'React', why: 'Build maintainable component-driven interfaces' },
+      { skill: 'Next.js', why: 'Build full-stack React apps with routing and server rendering' },
+      { skill: 'Responsive Design', why: 'Deliver usable experiences across screen sizes' },
+      { skill: 'Web Accessibility', why: 'Build interfaces that work with assistive technology' },
+      { skill: 'Frontend Testing', why: 'Verify components and user flows automatically' },
+      { skill: 'Node.js', why: 'Run JavaScript services and tooling on the server' },
+      { skill: 'REST APIs', why: 'Connect web clients to backend services' },
+      { skill: 'SQL and PostgreSQL', why: 'Persist and query relational application data' },
+      { skill: 'MongoDB', why: 'Store document-oriented application data' },
+      { skill: 'Authentication and OAuth', why: 'Implement secure sign-in and delegated access' },
+      { skill: 'Web Performance', why: 'Improve loading speed and responsiveness' },
+      { skill: 'Deployment and CI/CD', why: 'Ship tested applications reliably' },
     ],
   },
   {
@@ -93,41 +97,50 @@ const coreRoadmaps: Roadmap[] = [
     keywords: ['python', 'backend', 'software'],
     steps: [
       { skill: 'Python', why: 'Language fundamentals' },
-      { skill: 'Data Structures and Algorithms', why: 'Solve problems efficiently' },
-      { skill: 'OOP', why: 'Structure maintainable programs' },
-      { skill: 'Git', why: 'Track and collaborate on code' },
-      { skill: 'Django', why: 'Build Python web applications' },
-      { skill: 'Flask', why: 'Build lightweight web APIs' },
-      { skill: 'FastAPI', why: 'Build modern Python APIs' },
-      { skill: 'Databases', why: 'Persist application data reliably' },
-      { skill: 'ORMs', why: 'Work with databases through application models' },
-      { skill: 'REST APIs', why: 'Design service interfaces' },
-      { skill: 'Testing', why: 'Keep code reliable' },
-      { skill: 'Debugging', why: 'Find and fix software defects' },
-      { skill: 'Automation Scripting', why: 'Automate repetitive workflows' },
+      { skill: 'Data Structures and Algorithms', why: 'Choose efficient structures and solve programming problems' },
+      { skill: 'Object-Oriented and Modular Design', why: 'Organise maintainable Python applications' },
+      { skill: 'Git/GitHub', why: 'Track changes and collaborate through code review' },
+      { skill: 'FastAPI', why: 'Build typed, asynchronous Python APIs' },
+      { skill: 'Pydantic', why: 'Validate structured data and API requests' },
+      { skill: 'Django', why: 'Build complete Python web applications' },
+      { skill: 'SQL and PostgreSQL', why: 'Model, query, and maintain relational data' },
+      { skill: 'SQLAlchemy', why: 'Work with databases through Python ORM patterns' },
+      { skill: 'REST API Design', why: 'Create consistent and versionable service interfaces' },
+      { skill: 'Pytest', why: 'Write reliable unit and integration tests' },
+      { skill: 'Type Hints', why: 'Make interfaces clearer and catch defects earlier' },
+      { skill: 'Async Python', why: 'Handle concurrent I/O efficiently' },
+      { skill: 'Logging and Observability', why: 'Diagnose failures in deployed services' },
+      { skill: 'Docker', why: 'Package Python applications consistently' },
     ],
   },
   {
     id: 'ai',
     role: 'AI / ML Engineer',
     summary: 'Build and deploy machine learning and generative AI features.',
-    keywords: ['machine learning', 'ai', 'tensorflow'],
+    keywords: ['machine learning', 'ai', 'pytorch', 'llm', 'rag', 'mlops'],
     steps: [
       { skill: 'Python', why: 'Core language for AI work' },
       { skill: 'Linear Algebra', why: 'Represent data and model transformations' },
-      { skill: 'Calculus', why: 'Understand optimisation and learning' },
-      { skill: 'Probability', why: 'Reason about uncertain predictions' },
-      { skill: 'Machine Learning', why: 'Models and evaluation' },
-      { skill: 'Deep Learning', why: 'Build neural-network models' },
-      { skill: 'TensorFlow', why: 'Train deep-learning models' },
-      { skill: 'PyTorch', why: 'Develop flexible deep-learning models' },
-      { skill: 'NLP', why: 'Work with language data' },
-      { skill: 'Computer Vision', why: 'Work with image and video data' },
-      { skill: 'Model Deployment', why: 'Serve models in applications' },
-      { skill: 'APIs', why: 'Expose models as usable services' },
-      { skill: 'Docker', why: 'Package model services consistently' },
-      { skill: 'MLOps', why: 'Operate and monitor machine-learning systems' },
-      { skill: 'LLMs', why: 'Build applications with language models' },
+      { skill: 'Probability and Statistics', why: 'Reason about uncertainty and evaluate model results' },
+      { skill: 'SQL', why: 'Retrieve and prepare data for model training and analysis' },
+      { skill: 'Machine Learning', why: 'Build predictive models for real-world problems' },
+      { skill: 'Model Evaluation', why: 'Choose metrics and check model quality and generalisation' },
+      { skill: 'PyTorch', why: 'Build and train deep-learning models' },
+      { skill: 'TensorFlow', why: 'Train and deploy deep-learning models' },
+      { skill: 'Hugging Face Transformers', why: 'Use and adapt pretrained language and vision models' },
+      { skill: 'Natural Language Processing', why: 'Process and model text and language data' },
+      { skill: 'Computer Vision', why: 'Build models for image and video data' },
+      { skill: 'LLM Application Development', why: 'Build software features powered by large language models' },
+      { skill: 'Prompt Engineering', why: 'Design and test instructions for reliable model outputs' },
+      { skill: 'Retrieval-Augmented Generation (RAG)', why: 'Ground language-model answers in trusted documents' },
+      { skill: 'Vector Databases', why: 'Store and retrieve semantically similar content' },
+      { skill: 'LLM Evaluation', why: 'Measure answer quality, relevance, and safety systematically' },
+      { skill: 'LLM Fine-tuning (LoRA/PEFT)', why: 'Adapt pretrained models efficiently for specific tasks' },
+      { skill: 'Model Serving with FastAPI', why: 'Expose models through production-ready APIs' },
+      { skill: 'Docker', why: 'Package model services consistently across environments' },
+      { skill: 'MLflow', why: 'Track experiments, model versions, and deployments' },
+      { skill: 'Monitoring and Observability', why: 'Detect model quality, latency, and reliability issues' },
+      { skill: 'Cloud Deployment', why: 'Run model workloads on scalable cloud infrastructure' },
     ],
   },
   {
@@ -138,18 +151,19 @@ const coreRoadmaps: Roadmap[] = [
     steps: [
       { skill: 'Linux', why: 'Operate systems from the command line' },
       { skill: 'Networking', why: 'Understand how services connect' },
-      { skill: 'AWS', why: 'Use a major cloud platform' },
-      { skill: 'Azure', why: 'Work with Microsoft cloud services' },
-      { skill: 'GCP', why: 'Work with Google cloud services' },
-      { skill: 'Compute', why: 'Run workloads in the cloud' },
-      { skill: 'Storage', why: 'Manage durable cloud data' },
-      { skill: 'IAM', why: 'Control identities and permissions' },
-      { skill: 'Bash', why: 'Automate infrastructure tasks' },
-      { skill: 'Python', why: 'Script cloud operations' },
-      { skill: 'Docker', why: 'Package applications' },
-      { skill: 'Kubernetes', why: 'Orchestrate containers' },
-      { skill: 'Terraform', why: 'Define infrastructure as code' },
-      { skill: 'CI/CD', why: 'Automate releases' },
+      { skill: 'AWS', why: 'Deploy and operate cloud workloads on a major platform' },
+      { skill: 'Azure or GCP', why: 'Understand cloud services beyond one provider' },
+      { skill: 'Linux', why: 'Operate and troubleshoot cloud-hosted systems' },
+      { skill: 'Networking and DNS', why: 'Connect services securely and diagnose connectivity' },
+      { skill: 'IAM and Least Privilege', why: 'Grant only necessary identities and permissions' },
+      { skill: 'Cloud Networking', why: 'Configure virtual networks, routing, and firewalls' },
+      { skill: 'Containers with Docker', why: 'Package and run workloads consistently' },
+      { skill: 'Kubernetes', why: 'Operate container workloads and deployments' },
+      { skill: 'Terraform', why: 'Provision repeatable infrastructure as code' },
+      { skill: 'CI/CD', why: 'Automate tested infrastructure and application releases' },
+      { skill: 'Cloud Monitoring and Logging', why: 'Observe health, latency, and resource usage' },
+      { skill: 'Backup and Disaster Recovery', why: 'Protect data and restore services after failures' },
+      { skill: 'Cloud Cost Management', why: 'Track usage and avoid unnecessary spend' },
     ],
   },
   {
@@ -158,57 +172,58 @@ const coreRoadmaps: Roadmap[] = [
     summary: 'Protect systems and data by finding and fixing weaknesses.',
     keywords: ['security', 'cyber'],
     steps: [
-      { skill: 'Networking', why: 'Understand traffic and protocols' },
-      { skill: 'Linux', why: 'Work in security tooling' },
-      { skill: 'Security Fundamentals', why: 'CIA triad and common threats' },
-      { skill: 'Python', why: 'Automate security analysis' },
-      { skill: 'Bash', why: 'Automate security operations' },
-      { skill: 'Web Security', why: 'Apply the OWASP Top 10' },
-      { skill: 'Wireshark', why: 'Inspect network traffic' },
-      { skill: 'Nmap', why: 'Discover hosts and services' },
-      { skill: 'Burp Suite', why: 'Test web application security' },
-      { skill: 'Ethical Hacking', why: 'Practise controlled offensive security' },
-      { skill: 'Incident Response', why: 'Contain and investigate incidents' },
-      { skill: 'SIEM', why: 'Monitor and correlate security events' },
+      { skill: 'Networking and Linux Fundamentals', why: 'Understand systems, protocols, and security telemetry' },
+      { skill: 'Security Fundamentals', why: 'Apply threat, risk, and control concepts' },
+      { skill: 'Identity and Access Management', why: 'Protect accounts with least privilege and MFA' },
+      { skill: 'Web Application Security', why: 'Apply OWASP guidance and secure coding practices' },
+      { skill: 'Vulnerability Management', why: 'Prioritise remediation based on risk and exposure' },
+      { skill: 'Python and Bash', why: 'Automate defensive analysis and routine response tasks' },
+      { skill: 'Wireshark', why: 'Analyse network traffic for suspicious behaviour' },
+      { skill: 'SIEM (Microsoft Sentinel/Splunk)', why: 'Correlate events and investigate security alerts' },
+      { skill: 'Endpoint Detection and Response', why: 'Investigate and contain endpoint threats' },
+      { skill: 'Cloud Security', why: 'Review cloud identities, configurations, and audit logs' },
+      { skill: 'Incident Response', why: 'Triage, contain, and document security incidents' },
+      { skill: 'Threat Modelling', why: 'Identify likely abuse cases before deployment' },
+      { skill: 'Security Frameworks (NIST/ISO 27001)', why: 'Map controls to recognised security standards' },
     ],
   },
 ]
 
 const makeSteps = (skills: string[]) => skills.map((skill) => ({ skill, why: `Build ${skill} capability for this role` }))
 const additionalRoadmaps: Roadmap[] = [
-  { id: 'software-engineering', role: 'Software Engineering / SDE Intern', summary: 'Build reliable software from fundamentals through testing.', keywords: ['software', 'sde', 'engineering'], steps: makeSteps(['Java', 'C++', 'Python', 'JavaScript', 'Data Structures and Algorithms', 'OOP', 'System Design', 'DBMS', 'SQL', 'Operating Systems', 'Computer Networks', 'Git/GitHub', 'Debugging', 'Unit Testing']) },
-  { id: 'mobile', role: 'Android / Mobile App Developer Intern', summary: 'Build and publish mobile applications across popular platforms.', keywords: ['android', 'mobile', 'app'], steps: makeSteps(['Kotlin', 'Java', 'Swift', 'Flutter', 'Dart', 'React Native', 'UI Layouts', 'Navigation', 'State Management', 'REST APIs', 'JSON', 'SQLite', 'Room', 'Firebase', 'Git', 'App Publishing']) },
-  { id: 'devops', role: 'DevOps Intern', summary: 'Automate delivery and operate reliable development infrastructure.', keywords: ['devops', 'ci/cd', 'cloud'], steps: makeSteps(['Linux', 'Shell Scripting', 'Git', 'CI/CD', 'Jenkins', 'GitHub Actions', 'Docker', 'Kubernetes', 'Terraform', 'Ansible', 'Prometheus', 'Grafana', 'AWS']) },
-  { id: 'qa', role: 'Software Testing / QA Intern', summary: 'Plan, automate, and report software quality throughout the lifecycle.', keywords: ['qa', 'testing', 'quality'], steps: makeSteps(['SDLC', 'STLC', 'Test Cases', 'Bug Reports', 'Manual Testing', 'API Testing', 'Postman', 'Selenium', 'Cypress', 'Playwright', 'Java', 'Python', 'SQL', 'Jira', 'TestNG', 'PyTest']) },
-  { id: 'game', role: 'Game Developer Intern', summary: 'Create interactive games with engines, physics, and real-time systems.', keywords: ['game', 'unity', 'unreal'], steps: makeSteps(['C#', 'Unity', 'C++', 'Unreal Engine', 'Game Physics', 'Mathematics', 'Vectors', '2D/3D', 'Animation Systems', 'Game Design', 'Version Control']) },
-  { id: 'blockchain', role: 'Blockchain Developer Intern', summary: 'Build decentralised applications and smart contracts.', keywords: ['blockchain', 'web3', 'solidity'], steps: makeSteps(['Blockchain Fundamentals', 'Cryptography', 'Solidity', 'Smart Contracts', 'Web3.js', 'Ethers.js', 'Hardhat', 'Truffle', 'JavaScript', 'Ethereum', 'Polygon']) },
-  { id: 'data-engineer', role: 'Data Engineer Intern', summary: 'Build data pipelines and platforms that make analytics possible.', keywords: ['data engineer', 'etl', 'spark'], steps: makeSteps(['Python', 'Advanced SQL', 'ETL/ELT', 'Data Warehousing', 'Apache Spark', 'Kafka', 'Airflow', 'BigQuery', 'Redshift', 'Azure Data Factory', 'Data Modelling', 'Git']) },
-  { id: 'bi-developer', role: 'Business Intelligence (BI) Developer Intern', summary: 'Turn enterprise data into governed dashboards and KPIs.', keywords: ['business intelligence', 'bi', 'dashboard'], steps: makeSteps(['Excel', 'SQL', 'Data Modelling', 'Power BI', 'Tableau', 'DAX', 'Dashboard Design', 'KPI Definition', 'Data Warehousing']) },
-  { id: 'genai', role: 'Generative AI / Prompt Engineering Intern', summary: 'Build useful applications with LLMs, retrieval, and evaluation.', keywords: ['generative ai', 'prompt', 'llm'], steps: makeSteps(['Python', 'LLM Fundamentals', 'Prompt Engineering', 'RAG', 'Vector Databases', 'LangChain', 'LlamaIndex', 'Model APIs', 'Fine-tuning', 'Output Evaluation']) },
-  { id: 'computer-vision', role: 'Computer Vision Intern', summary: 'Teach systems to understand images and video.', keywords: ['computer vision', 'opencv', 'image'], steps: makeSteps(['Python', 'OpenCV', 'Image Processing', 'CNNs', 'PyTorch', 'TensorFlow', 'Object Detection', 'Segmentation', 'Dataset Annotation', 'Model Deployment']) },
-  { id: 'nlp', role: 'NLP Intern', summary: 'Build systems that understand and generate human language.', keywords: ['nlp', 'natural language', 'transformers'], steps: makeSteps(['Python', 'Text Preprocessing', 'Embeddings', 'Transformers', 'Hugging Face', 'Text Classification', 'NER', 'Summarization', 'Evaluation Metrics', 'LLMs']) },
-  { id: 'uiux', role: 'UI/UX Design Intern', summary: 'Design usable, accessible, and consistent digital experiences.', keywords: ['ui', 'ux', 'design'], steps: makeSteps(['Design Principles', 'Typography', 'Color Theory', 'User Research', 'Personas', 'Wireframing', 'Figma', 'Adobe XD', 'Prototyping', 'Usability Testing', 'Design Systems', 'HTML', 'CSS']) },
-  { id: 'graphic-design', role: 'Graphic Design Intern', summary: 'Create visual identities and communication assets.', keywords: ['graphic design', 'visual design'], steps: makeSteps(['Photoshop', 'Illustrator', 'Canva', 'Layout', 'Branding', 'Typography', 'Social Media Creatives', 'Print Design']) },
-  { id: 'product', role: 'Product Management Intern', summary: 'Discover problems, prioritise opportunities, and guide product delivery.', keywords: ['product', 'management'], steps: makeSteps(['Product Thinking', 'User Research', 'Market Analysis', 'Competitor Analysis', 'Roadmaps', 'RICE', 'MoSCoW', 'SQL', 'Analytics', 'Jira', 'Notion', 'Communication', 'Stakeholder Management']) },
-  { id: 'video', role: 'Video Editing / Motion Graphics Intern', summary: 'Produce engaging video and motion content for digital audiences.', keywords: ['video', 'motion', 'editing'], steps: makeSteps(['Premiere Pro', 'After Effects', 'DaVinci Resolve', 'Storytelling', 'Color Grading', 'Sound Editing', 'Short-form Content']) },
-  { id: 'embedded', role: 'Embedded Systems / IoT Intern', summary: 'Connect hardware, sensors, and software in embedded products.', keywords: ['embedded', 'iot', 'arduino'], steps: makeSteps(['C', 'C++', 'Arduino', 'ESP32', 'STM32', 'Sensors', 'I2C', 'SPI', 'UART', 'MQTT', 'RTOS', 'PCB', 'Raspberry Pi', 'Oscilloscope']) },
-  { id: 'vlsi', role: 'VLSI / Electronics Design Intern', summary: 'Design, simulate, and validate digital electronic systems.', keywords: ['vlsi', 'electronics', 'fpga'], steps: makeSteps(['Digital Electronics', 'Verilog', 'VHDL', 'FPGA', 'Cadence', 'Xilinx', 'Circuit Analysis', 'SPICE']) },
-  { id: 'electrical', role: 'Electrical Engineering Intern', summary: 'Apply electrical systems knowledge to practical engineering projects.', keywords: ['electrical', 'power systems'], steps: makeSteps(['Circuit Theory', 'Power Systems', 'MATLAB', 'Simulink', 'AutoCAD Electrical', 'PLC', 'SCADA', 'Electrical Safety']) },
-  { id: 'mechanical', role: 'Mechanical Design Intern', summary: 'Design manufacturable mechanical components and assemblies.', keywords: ['mechanical', 'cad', 'design'], steps: makeSteps(['AutoCAD', 'SolidWorks', 'CATIA', 'Fusion 360', 'GD&T', 'Engineering Drawing', 'FEA', 'ANSYS', 'Manufacturing Processes']) },
-  { id: 'civil', role: 'Civil / Structural Engineering Intern', summary: 'Plan, model, and supervise safe civil and structural works.', keywords: ['civil', 'structural', 'construction'], steps: makeSteps(['AutoCAD', 'STAAD.Pro', 'Revit', 'Surveying', 'Estimation and Costing', 'Construction Materials', 'Site Supervision']) },
-  { id: 'robotics', role: 'Robotics / Automation Intern', summary: 'Build autonomous systems using software, sensors, and control.', keywords: ['robotics', 'automation', 'ros'], steps: makeSteps(['Python', 'C++', 'ROS', 'Sensors', 'Actuators', 'Control Systems', 'Computer Vision', 'Arduino', 'Raspberry Pi']) },
-  { id: 'business-development', role: 'Business Development Intern', summary: 'Find opportunities and grow relationships with customers and partners.', keywords: ['business development', 'sales'], steps: makeSteps(['Lead Generation', 'Cold Outreach', 'CRM', 'Negotiation', 'Market Research', 'Presentation', 'Communication']) },
-  { id: 'finance', role: 'Finance / Financial Analyst Intern', summary: 'Use financial data to support planning, valuation, and decisions.', keywords: ['finance', 'financial analyst'], steps: makeSteps(['Advanced Excel', 'Financial Modelling', 'Accounting', 'Financial Statements', 'DCF', 'Ratio Analysis', 'Tally', 'SQL', 'Power BI']) },
-  { id: 'audit', role: 'Accounting / Audit Intern', summary: 'Maintain accurate records and support compliant financial reporting.', keywords: ['accounting', 'audit'], steps: makeSteps(['Bookkeeping', 'GST', 'Taxation', 'Tally', 'Zoho Books', 'Excel', 'Audit Procedures', 'Reporting']) },
-  { id: 'hr', role: 'Human Resources (HR) Intern', summary: 'Support people operations from recruitment through onboarding.', keywords: ['human resources', 'hr', 'recruitment'], steps: makeSteps(['Recruitment', 'Screening', 'Interview Coordination', 'HR Policies', 'Onboarding', 'Payroll', 'HRIS', 'Communication', 'Confidentiality']) },
-  { id: 'operations', role: 'Operations / Supply Chain Intern', summary: 'Improve processes, inventory, suppliers, and logistics.', keywords: ['operations', 'supply chain', 'logistics'], steps: makeSteps(['Process Mapping', 'Inventory Management', 'Excel', 'Data Analysis', 'ERP', 'SAP', 'Vendor Coordination', 'Logistics']) },
-  { id: 'consulting', role: 'Consulting / Research Intern', summary: 'Structure ambiguous problems and turn research into recommendations.', keywords: ['consulting', 'research'], steps: makeSteps(['Structured Problem-solving', 'Market Research', 'Excel', 'PowerPoint', 'Data Interpretation', 'Report Writing']) },
-  { id: 'digital-marketing', role: 'Digital Marketing Intern', summary: 'Grow audiences through search, campaigns, content, and measurement.', keywords: ['digital marketing', 'seo', 'marketing'], steps: makeSteps(['SEO', 'SEM', 'Google Ads', 'Social Media Marketing', 'Email Marketing', 'Google Analytics', 'Content Planning', 'A/B Testing']) },
-  { id: 'social-media', role: 'Social Media Management Intern', summary: 'Plan content and build engaged communities across platforms.', keywords: ['social media', 'content'], steps: makeSteps(['Content Calendars', 'Platform Algorithms', 'Canva', 'CapCut', 'Copywriting', 'Engagement Analytics', 'Community Management']) },
-  { id: 'content-writing', role: 'Content Writing / Copywriting Intern', summary: 'Research and write clear content for different audiences and channels.', keywords: ['content writing', 'copywriting'], steps: makeSteps(['Writing', 'Editing', 'SEO Writing', 'Research', 'Tone Adaptation', 'WordPress', 'CMS']) },
-  { id: 'technical-writing', role: 'Technical Writing Intern', summary: 'Make technical products understandable through clear documentation.', keywords: ['technical writing', 'documentation'], steps: makeSteps(['Documentation', 'API Documentation', 'Markdown', 'Basic Coding', 'Git', 'Structured Writing']) },
-  { id: 'pr', role: 'Public Relations / Communications Intern', summary: 'Shape messages, coordinate events, and build trusted public relationships.', keywords: ['public relations', 'communications'], steps: makeSteps(['Press Releases', 'Media Outreach', 'Writing', 'Event Coordination', 'Brand Messaging']) },
-  { id: 'it-support', role: 'Technical Support / IT Support Intern', summary: 'Troubleshoot technology issues and support users effectively.', keywords: ['technical support', 'it support'], steps: makeSteps(['Troubleshooting', 'Windows', 'Linux', 'Networking', 'Ticketing Tools', 'Customer Communication']) },
+  { id: 'software-engineering', role: 'Software Engineering / SDE Intern', summary: 'Build reliable software from fundamentals through testing.', keywords: ['software', 'sde', 'engineering'], steps: makeSteps(['Java', 'Python', 'JavaScript/TypeScript', 'Data Structures and Algorithms', 'Object-Oriented Design', 'System Design Fundamentals', 'SQL and DBMS', 'Operating Systems', 'Computer Networks', 'REST APIs', 'Git/GitHub', 'Unit and Integration Testing', 'CI/CD', 'Debugging']) },
+  { id: 'mobile', role: 'Android / Mobile App Developer Intern', summary: 'Build and publish mobile applications across popular platforms.', keywords: ['android', 'mobile', 'app'], steps: makeSteps(['Kotlin', 'Jetpack Compose', 'Android Studio', 'App Architecture (MVVM)', 'Navigation and State Management', 'REST APIs and JSON', 'Room and SQLite', 'Firebase', 'Coroutines and Flow', 'Mobile UI Testing', 'Git/GitHub', 'App Signing and Publishing']) },
+  { id: 'devops', role: 'DevOps Intern', summary: 'Automate delivery and operate reliable development infrastructure.', keywords: ['devops', 'ci/cd', 'cloud'], steps: makeSteps(['Linux', 'Bash and Python Scripting', 'Git/GitHub', 'GitHub Actions or Jenkins', 'Docker', 'Kubernetes', 'Terraform', 'Ansible', 'Helm', 'Cloud Fundamentals (AWS/Azure/GCP)', 'Prometheus and Grafana', 'Log Aggregation', 'Secrets Management', 'SRE and Incident Response']) },
+  { id: 'qa', role: 'Software Testing / QA Intern', summary: 'Plan, automate, and report software quality throughout the lifecycle.', keywords: ['qa', 'testing', 'quality'], steps: makeSteps(['Test Planning and Risk-Based Testing', 'Test Cases and Bug Reports', 'Manual and Exploratory Testing', 'API Testing with Postman', 'Playwright', 'Cypress or Selenium', 'Pytest or Jest', 'SQL for Test Data', 'Accessibility Testing', 'Performance Testing Fundamentals', 'CI Test Pipelines', 'Jira']) },
+  { id: 'game', role: 'Game Developer Intern', summary: 'Create interactive games with engines, physics, and real-time systems.', keywords: ['game', 'unity', 'unreal'], steps: makeSteps(['C#', 'Unity', 'C++', 'Unreal Engine', 'Game Programming Patterns', '3D Mathematics and Linear Algebra', 'Physics and Collision Systems', 'Animation and State Machines', 'Shaders and Materials', 'Profiling and Optimisation', 'Git and Version Control']) },
+  { id: 'blockchain', role: 'Blockchain Developer Intern', summary: 'Build decentralised applications and smart contracts.', keywords: ['blockchain', 'web3', 'solidity'], steps: makeSteps(['Solidity', 'EVM and Ethereum Fundamentals', 'Smart Contract Security', 'Foundry or Hardhat', 'Unit and Fuzz Testing', 'Ethers.js or Viem', 'Wallet Integration', 'Web3.js', 'Layer 2 Networks', 'Decentralised Application Design', 'Git/GitHub']) },
+  { id: 'data-engineer', role: 'Data Engineer Intern', summary: 'Build data pipelines and platforms that make analytics possible.', keywords: ['data engineer', 'etl', 'spark'], steps: makeSteps(['Python', 'Advanced SQL', 'Data Modelling', 'ETL/ELT Pipelines', 'dbt', 'Apache Spark', 'Kafka and Streaming', 'Airflow or Dagster', 'Data Warehousing (BigQuery/Snowflake)', 'Data Quality Testing', 'Cloud Storage and IAM', 'Git and CI/CD']) },
+  { id: 'bi-developer', role: 'Business Intelligence (BI) Developer Intern', summary: 'Turn enterprise data into governed dashboards and KPIs.', keywords: ['business intelligence', 'bi', 'dashboard'], steps: makeSteps(['SQL', 'Dimensional Data Modelling', 'Power BI', 'DAX', 'Power Query', 'Tableau', 'Dashboard UX and Accessibility', 'KPI Design', 'Data Warehousing', 'Row-Level Security', 'Data Validation', 'Stakeholder Reporting']) },
+  { id: 'genai', role: 'Generative AI / Prompt Engineering Intern', summary: 'Build useful applications with LLMs, retrieval, and evaluation.', keywords: ['generative ai', 'prompt', 'llm'], steps: makeSteps(['Python', 'LLM APIs and Structured Outputs', 'Prompt Design and Versioning', 'Embeddings and Semantic Search', 'RAG Pipeline Design', 'Vector Databases', 'LangChain or LlamaIndex', 'Reranking and Hybrid Retrieval', 'LLM Evaluation and Observability', 'Guardrails and Prompt Injection Defense', 'Cost and Latency Optimisation', 'FastAPI and Docker']) },
+  { id: 'computer-vision', role: 'Computer Vision Intern', summary: 'Teach systems to understand images and video.', keywords: ['computer vision', 'opencv', 'image'], steps: makeSteps(['Python', 'OpenCV', 'Image Processing', 'PyTorch', 'CNNs and Vision Transformers', 'Object Detection', 'Image Segmentation', 'Dataset Curation and Annotation', 'Augmentation and Evaluation Metrics', 'ONNX and Model Optimisation', 'Edge Deployment', 'Experiment Tracking']) },
+  { id: 'nlp', role: 'NLP Intern', summary: 'Build systems that understand and generate human language.', keywords: ['nlp', 'natural language', 'transformers'], steps: makeSteps(['Python', 'Text Preprocessing and Tokenisation', 'Embeddings and Semantic Search', 'Transformers', 'Hugging Face', 'Text Classification', 'Named Entity Recognition', 'Information Extraction', 'LLM Evaluation', 'Retrieval-Augmented Generation', 'Dataset Quality and Bias Checks', 'Model Serving']) },
+  { id: 'uiux', role: 'UI/UX Design Intern', summary: 'Design usable, accessible, and consistent digital experiences.', keywords: ['ui', 'ux', 'design'], steps: makeSteps(['User-Centred Design', 'User Research and Interviews', 'Journey Mapping', 'Wireframing', 'Figma Components and Auto Layout', 'Interactive Prototyping', 'Usability Testing', 'Accessibility (WCAG)', 'Design Systems', 'Responsive UI Patterns', 'Design Handoff', 'HTML and CSS Fundamentals']) },
+  { id: 'graphic-design', role: 'Graphic Design Intern', summary: 'Create visual identities and communication assets.', keywords: ['graphic design', 'visual design'], steps: makeSteps(['Adobe Photoshop', 'Adobe Illustrator', 'Figma', 'Canva', 'Typography and Layout', 'Brand Identity Systems', 'Colour Management', 'Social Media Creative Formats', 'Print Production and Prepress', 'Image Licensing and Asset Management']) },
+  { id: 'product', role: 'Product Management Intern', summary: 'Discover problems, prioritise opportunities, and guide product delivery.', keywords: ['product', 'management'], steps: makeSteps(['User Interviews and Research Synthesis', 'Problem Framing and Opportunity Assessment', 'Product Requirements and User Stories', 'Prioritisation (RICE/MoSCoW)', 'Roadmapping and Backlog Management', 'Product Analytics and Funnels', 'SQL Fundamentals', 'A/B Testing and Experiment Design', 'Jira or Linear', 'Prototyping with Figma', 'Go-to-Market Fundamentals', 'AI Product Evaluation and Risk']) },
+  { id: 'video', role: 'Video Editing / Motion Graphics Intern', summary: 'Produce engaging video and motion content for digital audiences.', keywords: ['video', 'motion', 'editing'], steps: makeSteps(['Adobe Premiere Pro', 'DaVinci Resolve', 'After Effects', 'Editing Workflow and Story Structure', 'Colour Grading and Colour Management', 'Audio Editing and Mixing', 'Motion Graphics and Compositing', 'Captions and Accessibility', 'Short-Form Platform Formats', 'Export Codecs and Delivery Specs', 'Asset and Project Management']) },
+  { id: 'embedded', role: 'Embedded Systems / IoT Intern', summary: 'Connect hardware, sensors, and software in embedded products.', keywords: ['embedded', 'iot', 'arduino'], steps: makeSteps(['C and Modern C++', 'Microcontroller Architecture', 'ESP32 or STM32', 'RTOS and Task Scheduling', 'I2C, SPI, and UART', 'Sensor Integration and Calibration', 'MQTT and IoT Messaging', 'Embedded Debugging with JTAG/SWD', 'Power and Memory Optimisation', 'PCB Design Fundamentals', 'Secure Firmware Updates', 'Hardware-in-the-Loop Testing']) },
+  { id: 'vlsi', role: 'VLSI / Electronics Design Intern', summary: 'Design, simulate, and validate digital electronic systems.', keywords: ['vlsi', 'electronics', 'fpga'], steps: makeSteps(['Digital Logic Design', 'Verilog or SystemVerilog', 'RTL Design and Simulation', 'Verification and Testbenches', 'FPGA Prototyping (Xilinx/Intel)', 'Synthesis and Timing Analysis', 'Static Timing Analysis', 'Linux and EDA Toolflows', 'Cadence or Synopsys Tools', 'SPICE and Circuit Simulation', 'Git for Hardware Projects']) },
+  { id: 'electrical', role: 'Electrical Engineering Intern', summary: 'Apply electrical systems knowledge to practical engineering projects.', keywords: ['electrical', 'power systems'], steps: makeSteps(['Circuit Analysis and Simulation', 'Power Systems Fundamentals', 'MATLAB and Simulink', 'AutoCAD Electrical or EPLAN', 'PLC Programming', 'SCADA and HMI Systems', 'Power Electronics', 'Electrical Protection and Grounding', 'Energy Audits and Efficiency', 'Electrical Safety Standards', 'Instrumentation and Testing']) },
+  { id: 'mechanical', role: 'Mechanical Design Intern', summary: 'Design manufacturable mechanical components and assemblies.', keywords: ['mechanical', 'cad', 'design'], steps: makeSteps(['3D CAD (SolidWorks/Fusion 360)', 'Engineering Drawings and GD&T', 'Design for Manufacturing and Assembly', 'Finite Element Analysis', 'ANSYS or SolidWorks Simulation', 'Tolerance Stack-Up', 'Materials Selection', 'Rapid Prototyping and 3D Printing', 'Manufacturing Processes', 'Product Lifecycle Management', 'Design Validation and Testing']) },
+  { id: 'civil', role: 'Civil / Structural Engineering Intern', summary: 'Plan, model, and supervise safe civil and structural works.', keywords: ['civil', 'structural', 'construction'], steps: makeSteps(['AutoCAD and Civil 3D', 'Revit and BIM Coordination', 'Structural Analysis (STAAD.Pro/ETABS)', 'Surveying and Total Station', 'Construction Estimation and BOQ', 'Concrete and Construction Materials', 'Quantity Surveying', 'Project Scheduling (Primavera/MS Project)', 'Site Quality and Safety Checks', 'Geotechnical Fundamentals', 'Building Codes and Documentation']) },
+  { id: 'robotics', role: 'Robotics / Automation Intern', summary: 'Build autonomous systems using software, sensors, and control.', keywords: ['robotics', 'automation', 'ros'], steps: makeSteps(['Python and C++', 'ROS 2', 'Robot Kinematics and Dynamics', 'Control Systems', 'Sensors and Sensor Fusion', 'Computer Vision', 'Motion Planning and Navigation', 'Gazebo or Isaac Sim', 'Embedded Systems (Arduino/STM32)', 'Actuators and Motor Control', 'Real-Time Debugging', 'Autonomous System Testing']) },
+  { id: 'business-development', role: 'Business Development Intern', summary: 'Find opportunities and grow relationships with customers and partners.', keywords: ['business development', 'sales'], steps: makeSteps(['Ideal Customer Profile and Account Research', 'Lead Qualification and Pipeline Management', 'CRM (Salesforce/HubSpot)', 'Outbound Email and Outreach', 'Discovery Calls and Needs Analysis', 'Sales Enablement and Proposals', 'Market and Competitor Research', 'Forecasting and Funnel Analytics', 'Partnership Development', 'Negotiation and Contract Handoffs']) },
+  { id: 'finance', role: 'Finance / Financial Analyst Intern', summary: 'Use financial data to support planning, valuation, and decisions.', keywords: ['finance', 'financial analyst'], steps: makeSteps(['Advanced Excel and Google Sheets', 'Financial Statement Analysis', 'Financial Modelling and Forecasting', 'Accounting Principles', 'Budgeting and Variance Analysis', 'Valuation and DCF', 'Ratio and Sensitivity Analysis', 'Power BI or Tableau', 'SQL for Financial Data', 'Tally or ERP Fundamentals', 'Financial Data Reconciliation', 'Indian Tax and GST Fundamentals']) },
+  { id: 'audit', role: 'Accounting / Audit Intern', summary: 'Maintain accurate records and support compliant financial reporting.', keywords: ['accounting', 'audit'], steps: makeSteps(['Accounting Principles and Bookkeeping', 'Excel and Spreadsheet Controls', 'Tally Prime or Zoho Books', 'GST Returns and Reconciliation', 'Accounts Payable and Receivable', 'Bank and Ledger Reconciliation', 'Audit Evidence and Workpapers', 'Internal Controls and Risk', 'Financial Statement Preparation', 'Tax Documentation', 'ERP and Accounting Systems']) },
+  { id: 'hr', role: 'Human Resources (HR) Intern', summary: 'Support people operations from recruitment through onboarding.', keywords: ['human resources', 'hr', 'recruitment'], steps: makeSteps(['Applicant Tracking Systems', 'Recruitment Operations and Sourcing', 'Structured Interview Coordination', 'HRIS and People Data', 'Onboarding Workflows', 'Payroll and Attendance Systems', 'Excel and HR Reporting', 'Employment Documentation', 'HR Policy and Compliance Basics', 'Data Privacy and Confidentiality', 'Learning Management Systems']) },
+  { id: 'operations', role: 'Operations / Supply Chain Intern', summary: 'Improve processes, inventory, suppliers, and logistics.', keywords: ['operations', 'supply chain', 'logistics'], steps: makeSteps(['Process Mapping and SOPs', 'Advanced Excel and Google Sheets', 'Inventory Planning and Forecasting', 'ERP (SAP/Oracle)', 'Procurement and Purchase Orders', 'Supplier Performance Analysis', 'Logistics and Freight Fundamentals', 'Demand Planning', 'Power BI and Operations Dashboards', 'Lean and Root Cause Analysis', 'Warehouse Management Systems', 'Supply Chain Risk']) },
+  { id: 'consulting', role: 'Consulting / Research Intern', summary: 'Structure ambiguous problems and turn research into recommendations.', keywords: ['consulting', 'research'], steps: makeSteps(['Structured Problem Solving', 'Primary and Secondary Research', 'Market Sizing and Competitive Analysis', 'Excel Modelling and Data Analysis', 'SQL and BI Fundamentals', 'Hypothesis-Driven Analysis', 'PowerPoint Storylining', 'Source Evaluation and Fact Checking', 'Survey and Interview Design', 'Report Writing and Recommendations', 'AI-Assisted Research Verification']) },
+  { id: 'digital-marketing', role: 'Digital Marketing Intern', summary: 'Grow audiences through search, campaigns, content, and measurement.', keywords: ['digital marketing', 'seo', 'marketing'], steps: makeSteps(['Technical and On-Page SEO', 'Google Search Console', 'Google Ads and Campaign Measurement', 'GA4 and Conversion Tracking', 'Paid Social Campaigns', 'Email Automation and Segmentation', 'Landing Page Optimisation', 'A/B Testing', 'Content Strategy and SEO Briefs', 'Marketing Attribution and UTM Tagging', 'CRM and Marketing Automation', 'Privacy-Aware Analytics']) },
+  { id: 'social-media', role: 'Social Media Management Intern', summary: 'Plan content and build engaged communities across platforms.', keywords: ['social media', 'content'], steps: makeSteps(['Platform-Specific Content Strategy', 'Editorial Calendars and Scheduling', 'Short-Form Video (Reels/Shorts)', 'Canva and CapCut', 'Social Copywriting and Hooks', 'Community Moderation', 'Social Listening', 'Platform Analytics and Reporting', 'Creator Collaboration', 'Accessibility and Captions', 'Brand Safety and Disclosure']) },
+  { id: 'content-writing', role: 'Content Writing / Copywriting Intern', summary: 'Research and write clear content for different audiences and channels.', keywords: ['content writing', 'copywriting'], steps: makeSteps(['Audience and Intent Research', 'SEO Content Briefs', 'Clear Drafting and Editing', 'Fact Checking and Source Attribution', 'Brand Voice and Style Guides', 'Content Management Systems', 'Web Accessibility and Readability', 'Content Refresh and Performance Analysis', 'AI-Assisted Draft Review', 'Copyright and Plagiarism Awareness']) },
+  { id: 'technical-writing', role: 'Technical Writing Intern', summary: 'Make technical products understandable through clear documentation.', keywords: ['technical writing', 'documentation'], steps: makeSteps(['Markdown and Documentation-as-Code', 'API Documentation (OpenAPI)', 'Git and Pull Request Workflows', 'Developer Guides and Tutorials', 'Information Architecture', 'Diagrams (Mermaid)', 'Versioning and Release Notes', 'Docs Testing and Link Checking', 'Basic HTML and CSS', 'Technical Editing and Style Guides', 'Accessibility and Localization Readiness']) },
+  { id: 'pr', role: 'Public Relations / Communications Intern', summary: 'Shape messages, coordinate events, and build trusted public relationships.', keywords: ['public relations', 'communications'], steps: makeSteps(['Press Releases and Media Briefs', 'Media Database and Outreach', 'Message Development and Brand Voice', 'Media Monitoring and Coverage Reporting', 'Crisis Communications Fundamentals', 'Fact Checking and Approval Workflows', 'Event and Launch Coordination', 'Social Media Communications', 'Spokesperson Briefing Materials', 'Disclosure and Communications Compliance']) },
+  { id: 'it-support', role: 'Technical Support / IT Support Intern', summary: 'Troubleshoot technology issues and support users effectively.', keywords: ['technical support', 'it support'], steps: makeSteps(['Windows 11 and Linux Fundamentals', 'Networking and DNS Troubleshooting', 'Microsoft 365 or Google Workspace Administration', 'Identity, MFA, and Access Management', 'Endpoint Management (Intune/Jamf)', 'Ticketing and ITSM (ServiceNow/Jira)', 'PowerShell or Bash Scripting', 'Backup and Device Recovery', 'Security Awareness and Phishing Triage', 'Knowledge Base Documentation', 'Remote Support and Diagnostics']) },
 ]
 // Ranked from the 2025-2030 demand signals for AI/data, software, cloud,
 // cybersecurity, product, design, and connected-device work. The skills below
@@ -222,11 +237,9 @@ const marketRoleOrder = [
 const allRoadmaps = [...coreRoadmaps, ...additionalRoadmaps]
 export const roadmaps: Roadmap[] = marketRoleOrder
   .filter((id, index, ids) => ids.indexOf(id) === index)
-  .map((id, index) => {
-    const roadmap = allRoadmaps.find((item) => item.id === id)
-    return roadmap ? { ...roadmap, marketRank: index + 1 } : null
-  })
-  .filter((roadmap): roadmap is Roadmap => roadmap !== null)
+  .map((id) => allRoadmaps.find((item) => item.id === id))
+  .filter((roadmap): roadmap is Roadmap => roadmap !== undefined)
+  .map((roadmap, index) => ({ ...roadmap, marketRank: index + 1 }))
 export type QuizLevel = 'Beginner' | 'Intermediate' | 'Advanced'
 
 type Verification = { skill: string; method: 'quiz' | 'github'; detail: string | null }
@@ -237,6 +250,11 @@ type Status = 'verified' | 'claimed' | 'current' | 'next' | 'upcoming'
 export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const { account, loading, resume, syncResumeSkills } = useStudentAccount()
   const [roleId, setRoleId] = useState(roadmaps[0].id)
+  const [marketRoadmaps, setMarketRoadmaps] = useState<Roadmap[] | null>(null)
+  const [marketSources, setMarketSources] = useState<{ title: string; url: string }[]>([])
+  const [marketUpdatedAt, setMarketUpdatedAt] = useState<string | null>(null)
+  const [marketIsCurrent, setMarketIsCurrent] = useState(false)
+  const [marketLoaded, setMarketLoaded] = useState(false)
   const [level, setLevel] = useState<QuizLevel>('Beginner')
   const [verifications, setVerifications] = useState<Verification[]>([])
   const [startingQuizSkill, setStartingQuizSkill] = useState<string | null>(null)
@@ -249,8 +267,8 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const [analyzingGithub, setAnalyzingGithub] = useState(false)
   const [verifyingGithub, setVerifyingGithub] = useState(false)
   const [syncingResume, setSyncingResume] = useState(false)
-  const syncedResumeId = useRef<string | null>(null)
-  const rm = roadmaps.find((r) => r.id === roleId) ?? roadmaps[0]
+  const displayedRoadmaps = marketRoadmaps ?? roadmaps
+  const rm = displayedRoadmaps.find((r) => r.id === roleId) ?? displayedRoadmaps[0]
   const known = useMemo(() => {
     const skills = new Set([
       ...(account?.skills ?? []),
@@ -260,6 +278,28 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
     if ((account?.certifications ?? []).some((certification) => /aws/i.test(certification))) skills.add('aws')
     return skills
   }, [account])
+
+  useEffect(() => {
+    let active = true
+    void fetch('/api/student/roadmaps/monthly', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ roadmaps }),
+    }).then(async (response) => {
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load monthly market roadmaps.')
+      if (!active) return
+      setMarketRoadmaps(result.roadmaps as Roadmap[])
+      setMarketSources(result.sources ?? [])
+      setMarketUpdatedAt(result.updatedAt)
+      setMarketIsCurrent(Boolean(result.isCurrent))
+    }).catch((error: unknown) => {
+      if (active) toast.error(error instanceof Error ? error.message : 'Unable to refresh market roadmaps.')
+    }).finally(() => {
+      if (active) setMarketLoaded(true)
+    })
+    return () => { active = false }
+  }, [])
 
   useEffect(() => {
     const githubResult = new URLSearchParams(window.location.search).get('github')
@@ -281,17 +321,22 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
     ]).catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Unable to load skill verification status.'))
   }, [])
 
-  useEffect(() => {
-    if (!resume || syncedResumeId.current === resume.id) return
-    syncedResumeId.current = resume.id
+  async function syncSkillsFromResume() {
+    if (syncingResume) return
     setSyncingResume(true)
-    void syncResumeSkills()
-      .catch((error: unknown) => {
-        console.error('Unable to sync skills from resume:', error)
-        toast.error(error instanceof Error ? `Unable to read skills from your resume: ${error.message}` : 'Unable to read skills from your resume.')
-      })
-      .finally(() => setSyncingResume(false))
-  }, [resume, syncResumeSkills])
+    try {
+      const detectedSkills = await syncResumeSkills()
+      if (detectedSkills.length) {
+        toast.success(`Checked your resume for skills (${detectedSkills.length} detected).`)
+      } else {
+        toast('No additional skills were detected in your resume.')
+      }
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? `Unable to read skills from your resume: ${error.message}` : 'Unable to read skills from your resume.')
+    } finally {
+      setSyncingResume(false)
+    }
+  }
 
   const steps = useMemo(() => {
     const verified = new Map(verifications.map((item) => [item.skill.toLowerCase(), item.method]))
@@ -407,7 +452,12 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
     <>
       <PageHeader title="Skill Roadmap" description="Explore the top 25 market-demand roles and the role-specific skills to learn for each one." />
 
-      {(loading || syncingResume) && <p className="text-sm text-muted-foreground">Reading your resume skills…</p>}
+      {loading && <p className="text-sm text-muted-foreground">Loading your student details…</p>}
+      {resume && (
+        <Button variant="outline" className="mb-4" onClick={() => void syncSkillsFromResume()} disabled={loading || syncingResume}>
+          {syncingResume ? 'Reading resume skills…' : 'Sync skills from resume'}
+        </Button>
+      )}
 
       <div className="max-w-xl">
         <label htmlFor="roadmap-role" className="mb-2 block text-sm font-medium">Choose a role</label>
@@ -418,8 +468,18 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
           onChange={(event) => setRoleId(event.target.value)}
           aria-label="Choose a role for the skill roadmap"
         >
-          {roadmaps.map((r) => <option key={r.id} value={r.id}>#{r.marketRank} — {r.role}</option>)}
+          {displayedRoadmaps.map((r) => <option key={r.id} value={r.id}>#{r.marketRank} — {r.role}</option>)}
         </select>
+        <div className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+          {!marketLoaded
+            ? 'Loading monthly India market research; curated skills are shown meanwhile.'
+            : marketIsCurrent && marketUpdatedAt
+              ? `India market research updated ${new Date(marketUpdatedAt).toLocaleDateString()}.`
+              : marketUpdatedAt
+                ? `Showing saved India market research from ${new Date(marketUpdatedAt).toLocaleDateString()}; this month’s refresh is unavailable.`
+                : 'Market refresh unavailable; showing the curated roadmap.'}
+          {marketSources.length > 0 && <p className="mt-1">Sources: {marketSources.slice(0, 5).map((source, index) => <span key={source.url}>{index > 0 ? ' · ' : ''}<a className="underline underline-offset-2" href={source.url} target="_blank" rel="noreferrer">{source.title}</a></span>)}</p>}
+        </div>
         <label htmlFor="roadmap-level" className="mb-2 mt-4 block text-sm font-medium">Quiz level</label>
         <select
           id="roadmap-level"

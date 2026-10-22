@@ -13,14 +13,14 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
 
 3. Install the backend dependencies in `backend` with Python 3.11+ and install Microsoft ODBC Driver 18 for SQL Server on the host.
 4. Copy `.env.example` to `.env` in `backend` and set `DATABASE_URL`, `JWT_SECRET_KEY`, `CORS_ORIGINS`, and `BACKEND_API_URL`. The SQLAlchemy URL must use `mssql+pyodbc` and an installed SQL Server ODBC driver.
-   For OpenAI-powered skill quizzes also set `OPENAI_API_KEY` and optionally `OPENAI_MODEL` (default `gpt-4o-mini`). Gemini is not used. Also set `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_OAUTH_REDIRECT_URI`, `GITHUB_API_TOKEN` (optional fallback), and `FRONTEND_URL`. Register the GitHub OAuth callback URL exactly as configured.
+   For Gemini-powered skill quizzes also set `GEMINI_API_KEY` and optionally `GEMINI_MODEL` (default `gemini-3.8-flash`). Also set `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_OAUTH_REDIRECT_URI`, `GITHUB_API_TOKEN` (optional fallback), and `FRONTEND_URL`. Register the GitHub OAuth callback URL exactly as configured.
 
-   To connect OpenAI:
+   To connect Gemini:
 
-   1. Create an API key in the OpenAI Platform dashboard.
-   2. Put it only in `backend/.env` as `OPENAI_API_KEY=...`; never expose it in `NEXT_PUBLIC_*` variables or browser code.
-   3. Set `OPENAI_MODEL=gpt-4o-mini` (or another model enabled for your account).
-   4. Restart the FastAPI backend. The first quiz for each skill and level creates an OpenAI-generated question bank; later attempts reuse the stored bank.
+   1. Create an API key in Google AI Studio.
+   2. Put it only in `backend/.env` as `GEMINI_API_KEY=...`; never expose it in `NEXT_PUBLIC_*` variables or browser code.
+   3. Set `GEMINI_MODEL=gemini-3.8-flash` (or another Interactions API model enabled for your account).
+   4. Restart the FastAPI backend. The first quiz for each skill and level creates a Gemini-generated question bank; later attempts reuse the stored bank.
    5. Select Beginner, Intermediate, or Advanced in Skill Roadmap before starting a quiz. The selected level is included in the generation prompt and cached separately.
 5. Create the SQL Server schema from the existing SQLAlchemy models:
 
@@ -28,6 +28,8 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
    cd backend
    alembic upgrade head
    ```
+
+   This applies migration `006_monthly_roadmap_snapshots`. India market research refreshes on the first roadmap visit each month, re-ranks roles, preserves existing skills, and can add up to 10 emerging roles. Saved snapshots include Google Search citations. If Gemini quota is unavailable, the curated roadmap remains usable.
 
 6. Start the API and frontend in separate terminals:
 

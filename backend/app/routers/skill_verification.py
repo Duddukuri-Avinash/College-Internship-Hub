@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
-from app.models import GithubIdentity, SkillQuestionBank, SkillQuizAttempt, SkillQuizCooldown, User, Verification
+from app.models import GithubIdentity, RoadmapSnapshot, SkillQuestionBank, SkillQuizAttempt, SkillQuizCooldown, User, Verification
 from app.routers.auth import current_user
 from app.skill_catalog import KEYWORDS, SKILLS, TECHNICAL_SKILLS
 
@@ -63,9 +63,24 @@ class GithubVerify(BaseModel):
     repo_url: HttpUrl
 
 
-def _check_skill(skill: str) -> str:
+def _check_skill(skill: str, db: Session | None = None) -> str:
     value = skill.strip()
-    if value not in SKILLS:
+    roadmap_skills: set[str] = set()
+    if db is not None:
+        latest_snapshot = db.scalar(
+            select(RoadmapSnapshot)
+            .where(RoadmapSnapshot.market == settings.roadmap_market)
+            .order_by(RoadmapSnapshot.month.desc())
+            .limit(1)
+        )
+        if latest_snapshot:
+            roadmap_skills = {
+                str(step.get("skill", ""))
+                for roadmap in latest_snapshot.roadmaps
+                for step in roadmap.get("steps", [])
+                if isinstance(step, dict)
+            }
+    if value not in SKILLS and value not in roadmap_skills:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Unknown skill.")
     return value
 
@@ -129,7 +144,7 @@ def _public_questions(questions: list[dict[str, object]]) -> tuple[list[dict[str
 
 
 def _generate_questions(skill: str, level: str) -> list[dict[str, object]]:
-    if not settings.openai_api_key:
+    if not settings.gemini_api_key:
         raise HTTPException(status_code=503, detail="Quiz generation is not configured.")
     prompt = (
         f'Write 15 multiple-choice questions testing practical knowledge of "{skill}" at a {level} level. '
@@ -137,37 +152,68 @@ def _generate_questions(skill: str, level: str) -> list[dict[str, object]]:
         'Return JSON only: [{"q":"...","o":["...","...","...","..."],"a":0}]. '
         "Each question must have exactly four distinct options and one correct index."
     )
+    endpoint = "https://generativelanguage.googleapis.com/v1beta/interactions"
     request = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
+        endpoint,
         data=json.dumps(
             {
-                "model": settings.openai_model,
-                "messages": [
-                    {"role": "system", "content": "You create accurate, unambiguous assessment questions. Return only valid JSON."},
-                    {"role": "user", "content": prompt},
+                "model": settings.gemini_model,
+                "input": prompt,
+                "system_instruction": "You create accurate, unambiguous assessment questions. Return only valid JSON.",
+                "response_format": [
+                    {
+                        "type": "text",
+                        "mime_type": "application/json",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "questions": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "q": {"type": "string"},
+                                            "o": {"type": "array", "items": {"type": "string"}},
+                                            "a": {"type": "integer", "minimum": 0, "maximum": 3},
+                                        },
+                                        "required": ["q", "o", "a"],
+                                    },
+                                },
+                            },
+                            "required": ["questions"],
+                        },
+                    },
                 ],
-                "response_format": {"type": "json_object"},
-                "max_tokens": 4000,
-                "temperature": 0.7,
+                "store": False,
             }
         ).encode(),
         headers={
             "content-type": "application/json",
-            "authorization": f"Bearer {settings.openai_api_key}",
+            "x-goog-api-key": settings.gemini_api_key,
         },
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=60) as response:
             payload = json.loads(response.read())
-        text = payload.get("choices", [{}])[0].get("message", {}).get("content", "")
+        text = "".join(
+            part.get("text", "")
+            for step in payload.get("steps", [])
+            if step.get("type") == "model_output"
+            for part in step.get("content", [])
+            if part.get("type") == "text"
+        )
         parsed = json.loads(text)
         questions = _valid_questions(parsed.get("questions", parsed) if isinstance(parsed, dict) else parsed)
     except HTTPError as error:
         provider_error = error.read().decode("utf-8", "replace")
-        logger.error("QUIZ ERROR: OpenAI API returned HTTP %s: %s", error.code, provider_error)
+        logger.error("QUIZ ERROR: Gemini API returned HTTP %s: %s", error.code, provider_error)
         if error.code == 429:
-            raise HTTPException(status_code=503, detail="OpenAI has no remaining API credits. Add billing credits, then try again.") from error
+            raise HTTPException(status_code=503, detail="Gemini rate limit or quota exceeded. Check the Gemini API key and billing quota.") from error
+        if error.code == 404:
+            raise HTTPException(status_code=503, detail="The configured Gemini model is unavailable. Check GEMINI_MODEL.") from error
+        if error.code == 401 or error.code == 403:
+            raise HTTPException(status_code=503, detail="Gemini rejected the API key. Check GEMINI_API_KEY.") from error
         raise HTTPException(status_code=502, detail="Unable to prepare the quiz.") from error
     except (OSError, ValueError, KeyError, TypeError) as error:
         logger.error("QUIZ ERROR: %s", error)
@@ -183,7 +229,7 @@ def _question_bank(db: Session, skill: str, level: str) -> list[dict[str, object
     bank_key = f"{skill}::{level}"
     bank = db.scalar(select(SkillQuestionBank).where(SkillQuestionBank.skill == bank_key))
     if bank is None:
-        bank = SkillQuestionBank(skill=bank_key, questions=_generate_questions(skill, level), source="openai")
+        bank = SkillQuestionBank(skill=bank_key, questions=_generate_questions(skill, level), source="gemini")
         db.add(bank)
         db.commit()
         db.refresh(bank)
@@ -218,7 +264,7 @@ def get_verifications(user: User = Depends(current_user), db: Session = Depends(
 def start_quiz(input: SkillInput, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict[str, object]:
     _rate_limit(user.id, "quiz-start")
     _student_id(user)
-    skill = _check_skill(input.skill)
+    skill = _check_skill(input.skill, db)
     level = _check_level(input.level)
     cooldown = db.scalar(select(SkillQuizCooldown).where(SkillQuizCooldown.user_id == user.id, SkillQuizCooldown.skill == skill))
     if cooldown and cooldown_active(cooldown.failed_at):
