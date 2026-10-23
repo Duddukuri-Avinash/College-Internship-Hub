@@ -106,7 +106,7 @@ function publicQuestions(questions: Question[]): { questions: PublicQuestion[]; 
 async function generateQuestions(skill: string, level: string): Promise<Question[]> {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) throw new ApiError('Quiz generation is not configured.', 503)
-  const model = process.env.GEMINI_MODEL ?? 'gemini-3.8-flash'
+  const model = process.env.GEMINI_MODEL ?? 'gemini-3.1-flash-lite'
   const prompt = `Write 15 multiple-choice questions testing practical knowledge of "${skill}" at a ${level} level. For Beginner use fundamentals and simple examples; for Intermediate use applied scenarios; for Advanced use trade-offs, debugging, design, and edge cases. Return JSON only: {"questions":[{"q":"...","o":["...","...","...","..."],"a":0}]}. Each question must have exactly four distinct options and one correct index.`
   const schema = {
     type: 'object',

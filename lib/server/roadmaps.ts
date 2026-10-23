@@ -34,21 +34,34 @@ type GeneratedSet = { top_roles: GeneratedRole[] }
 
 const MARKET_ROADMAP_VERSION = 2
 const TOP_ROLE_COUNT = 25
+const FAILED_REFRESH_COOLDOWN_MS = 60_000
+const ROADMAP_CACHE_TTL_MS = 24 * 60 * 60 * 1000
+const RETRY_DELAYS_MS = [1_000, 2_000, 4_000]
 const failedRefreshes = new Map<string, number>()
 const failedRefreshMessages = new Map<string, string>()
 const refreshLocks = new Map<string, Promise<void>>()
+
+class GeminiRequestError extends Error {
+  constructor(
+    readonly status: number,
+    readonly model: string,
+    message: string,
+  ) {
+    super(message)
+    this.name = 'GeminiRequestError'
+  }
+}
 
 function refreshFailureMessage(error: unknown): string {
   if (error instanceof Error && error.message === 'ROADMAP_GEMINI_API_KEY is not configured for roadmap research.') {
     return 'Add ROADMAP_GEMINI_API_KEY to the project-root .env.local file and restart Next.js.'
   }
-  if (error instanceof Error && error.message.startsWith('Gemini roadmap research failed with HTTP ')) {
-    const status = Number(error.message.match(/HTTP (\d+)/)?.[1])
-    if (status === 400) return 'Google rejected the roadmap request. Check the roadmap model and request settings.'
-    if (status === 401 || status === 403) return 'Google rejected the roadmap key or its permissions. Check ROADMAP_GEMINI_API_KEY and API access.'
-    if (status === 404) return 'The configured roadmap Gemini model is unavailable. Check ROADMAP_GEMINI_MODEL.'
-    if (status === 429) return 'The roadmap Gemini key has reached its quota or rate limit.'
-    if (status >= 500) return 'Google Gemini is temporarily unavailable. Try again later.'
+  if (error instanceof GeminiRequestError) {
+    if (error.status === 400 || error.status === 401 || error.status === 403) return 'Gemini rejected the request: the key may be invalid or restricted, or the requested feature may not be allowed. Check ROADMAP_GEMINI_API_KEY and Google AI Studio access.'
+    if (error.status === 404) return `The roadmap Gemini model "${error.model}" was not found. Check GEMINI_MODEL and GEMINI_FALLBACK_MODEL.`
+    if (error.status === 429) return 'The roadmap Gemini key has reached its quota or rate limit.'
+    if (error.status === 503) return 'Gemini is temporarily busy. Try again later.'
+    if (error.status >= 500) return 'Gemini is temporarily unavailable. Try again later.'
   }
   if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
     return 'Market research timed out. Try again later.'
@@ -86,6 +99,12 @@ function isCurrentTopRoleSnapshot(value: Roadmap[]): boolean {
   return Array.isArray(value)
     && value.length === TOP_ROLE_COUNT
     && value.every((roadmap) => roadmap.marketResearchVersion === MARKET_ROADMAP_VERSION)
+}
+
+function isFreshTopRoleSnapshot(snapshot: SnapshotRow | undefined): snapshot is SnapshotRow {
+  if (!snapshot || !isCurrentTopRoleSnapshot(parseJson(snapshot.roadmaps))) return false
+  const age = Date.now() - new Date(snapshot.updated_at).getTime()
+  return Number.isFinite(age) && age >= 0 && age < ROADMAP_CACHE_TTL_MS
 }
 
 function cleanedSkill(value: unknown): GeneratedSkill | null {
@@ -161,7 +180,8 @@ function buildTopMarketRoadmaps(generated: GeneratedSet): Roadmap[] {
 async function generateMarketRoadmaps(market: string) {
   const apiKey = process.env.ROADMAP_GEMINI_API_KEY
   if (!apiKey) throw new Error('ROADMAP_GEMINI_API_KEY is not configured for roadmap research.')
-  const model = process.env.ROADMAP_GEMINI_MODEL ?? process.env.GEMINI_MODEL ?? 'gemini-3.8-flash'
+  const model = process.env.GEMINI_MODEL ?? 'gemini-3.1-flash-lite'
+  const fallbackModel = process.env.GEMINI_FALLBACK_MODEL ?? 'gemini-flash-lite-latest'
   const prompt = `Research current internship and entry-level hiring demand in ${market}. Using Google Search, identify exactly 25 distinct technical roles with strong current demand in real recent job postings. Rank them from 1 (highest observed demand) to 25. For every role, provide a concise summary, search keywords, and 5 to 20 role-specific technical skills explicitly requested in recent postings. Include only technical skills such as programming languages, frameworks, platforms, tools, technical methods, and domain technologies; do not include soft skills. Avoid duplicate or overly broad role titles. Use recent evidence, and do not claim the results are exhaustive. Return JSON only in the required schema.`
 
   const responseSchema = {
@@ -196,52 +216,92 @@ async function generateMarketRoadmaps(market: string) {
     required: ['top_roles'],
   }
 
-  const response = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      model,
-      input: prompt,
-      system_instruction: 'Research carefully and return valid JSON that matches the supplied schema. Ground findings in recent job listings from the requested market.',
-      tools: [{ type: 'google_search' }],
-      response_format: [{ type: 'text', mime_type: 'application/json', schema: responseSchema }],
-      generation_config: { temperature: 0.2, max_output_tokens: 12000 },
-      store: false,
-    }),
-    cache: 'no-store',
-    signal: AbortSignal.timeout(120_000),
-  })
-  if (!response.ok) throw new Error(`Gemini roadmap research failed with HTTP ${response.status}.`)
+  const generateWithModel = async (selectedModel: string, useGoogleSearch: boolean) => {
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': apiKey },
+      body: JSON.stringify({
+        model: selectedModel,
+        input: prompt,
+        system_instruction: 'Research carefully and return valid JSON that matches the supplied schema. Ground findings in recent job listings from the requested market.',
+        ...(useGoogleSearch ? { tools: [{ type: 'google_search' }] } : {}),
+        response_format: [{ type: 'text', mime_type: 'application/json', schema: responseSchema }],
+        generation_config: { temperature: 0.2, max_output_tokens: 12000 },
+        store: false,
+      }),
+      cache: 'no-store',
+      signal: AbortSignal.timeout(120_000),
+    })
+    if (!response.ok) {
+      const responseBody = await response.text()
+      let message = responseBody
+      try {
+        const errorBody = JSON.parse(responseBody) as { error?: { message?: string } }
+        message = errorBody.error?.message ?? responseBody
+      } catch {
+        // Keep the original response body when Gemini does not return JSON.
+      }
+      const errorMessage = message || response.statusText
+      console.error(`Roadmap Gemini request failed (HTTP ${response.status}, model ${selectedModel}): ${errorMessage}`)
+      throw new GeminiRequestError(response.status, selectedModel, errorMessage)
+    }
 
-  const payload = await response.json() as {
-    steps?: {
-      type?: string
-      content?: {
+    const payload = await response.json() as {
+      steps?: {
         type?: string
-        text?: string
-        annotations?: { url_citation?: { url?: string; uri?: string; title?: string }; url?: string; uri?: string; title?: string }[]
+        content?: {
+          type?: string
+          text?: string
+          annotations?: { url_citation?: { url?: string; uri?: string; title?: string }; url?: string; uri?: string; title?: string }[]
+        }[]
       }[]
-    }[]
-  }
-  const text: string[] = []
-  const sources = new Map<string, { title: string; url: string }>()
-  for (const step of payload.steps ?? []) {
-    if (step.type !== 'model_output') continue
-    for (const content of step.content ?? []) {
-      if (content.type !== 'text') continue
-      text.push(content.text ?? '')
-      for (const annotation of content.annotations ?? []) {
-        const citation = annotation.url_citation ?? annotation
-        const url = citation.url ?? citation.uri
-        if (url?.startsWith('https://') || url?.startsWith('http://')) {
-          sources.set(url, { title: citation.title || url, url })
+    }
+    const text: string[] = []
+    const sources = new Map<string, { title: string; url: string }>()
+    for (const step of payload.steps ?? []) {
+      if (step.type !== 'model_output') continue
+      for (const content of step.content ?? []) {
+        if (content.type !== 'text') continue
+        text.push(content.text ?? '')
+        for (const annotation of content.annotations ?? []) {
+          const citation = annotation.url_citation ?? annotation
+          const url = citation.url ?? citation.uri
+          if (url?.startsWith('https://') || url?.startsWith('http://')) {
+            sources.set(url, { title: citation.title || url, url })
+          }
         }
       }
     }
+    if (useGoogleSearch && !sources.size) throw new Error('Gemini returned no verifiable market sources.')
+    const generated = JSON.parse(text.join('')) as GeneratedSet
+    return { roadmaps: buildTopMarketRoadmaps(generated), sources: Array.from(sources.values()).slice(0, 30) }
   }
-  if (!sources.size) throw new Error('Gemini returned no verifiable market sources.')
-  const generated = JSON.parse(text.join('')) as GeneratedSet
-  return { roadmaps: buildTopMarketRoadmaps(generated), sources: Array.from(sources.values()).slice(0, 30) }
+
+  const generateWithSearchFallback = async (selectedModel: string) => {
+    try {
+      return await generateWithModel(selectedModel, true)
+    } catch (error) {
+      if (!(error instanceof GeminiRequestError) || ![400, 403].includes(error.status)) throw error
+      console.warn(`Roadmap Gemini Google Search tool was rejected for model ${selectedModel}; retrying without the tool.`)
+      return generateWithModel(selectedModel, false)
+    }
+  }
+
+  let primaryError: unknown
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
+    if (attempt > 0) {
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS_MS[attempt - 1]))
+    }
+    try {
+      return await generateWithSearchFallback(model)
+    } catch (error) {
+      primaryError = error
+      if (!(error instanceof GeminiRequestError) || ![429, 503].includes(error.status)) break
+    }
+  }
+  if (fallbackModel === model) throw primaryError
+
+  return generateWithSearchFallback(fallbackModel)
 }
 
 async function findSnapshot(market: string, month?: string): Promise<SnapshotRow | undefined> {
@@ -268,7 +328,7 @@ export async function refreshRoadmaps(user: CurrentUser, roadmaps: Roadmap[]) {
   const month = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`
   const market = process.env.ROADMAP_MARKET ?? 'India'
   const current = await findSnapshot(market, month)
-  if (current && isCurrentTopRoleSnapshot(parseJson(current.roadmaps))) return snapshotResponse(current, true)
+  if (isFreshTopRoleSnapshot(current)) return snapshotResponse(current, true)
 
   const fallbackRoadmaps = roadmaps
   const key = `${market}:${month}`
@@ -298,7 +358,7 @@ export async function refreshRoadmaps(user: CurrentUser, roadmaps: Roadmap[]) {
         failedRefreshes.delete(key)
         failedRefreshMessages.delete(key)
       } catch (error) {
-        failedRefreshes.set(key, Date.now() + 15 * 60 * 1000)
+        failedRefreshes.set(key, Date.now() + FAILED_REFRESH_COOLDOWN_MS)
         failedRefreshMessages.set(key, refreshFailureMessage(error))
         console.error(`Monthly roadmap refresh failed for ${market}:`, error)
       }
@@ -309,9 +369,11 @@ export async function refreshRoadmaps(user: CurrentUser, roadmaps: Roadmap[]) {
   refreshLocks.delete(key)
 
   const updated = await findSnapshot(market, month)
-  if (updated && isCurrentTopRoleSnapshot(parseJson(updated.roadmaps))) return snapshotResponse(updated, true)
+  if (isFreshTopRoleSnapshot(updated)) return snapshotResponse(updated, true)
   const refreshError = failedRefreshMessages.get(key)
   const latest = await findSnapshot(market)
-  if (latest) return { ...snapshotResponse(latest, false), refreshError }
+  if (latest && isCurrentTopRoleSnapshot(parseJson(latest.roadmaps))) {
+    return { ...snapshotResponse(latest, false), refreshError }
+  }
   return { roadmaps: fallbackRoadmaps, sources: [], market, month, updatedAt: null, isCurrent: false, refreshError }
 }

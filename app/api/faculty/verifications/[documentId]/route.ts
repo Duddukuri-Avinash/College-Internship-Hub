@@ -56,12 +56,12 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ d
     await transaction.begin()
     let verificationId: number
     try {
-      const verificationResult = await transaction
+      await transaction
         .request()
         .input('documentId', sql.Int, document.id)
         .input('decision', sql.VarChar(40), input.decision)
         .query('UPDATE documents SET status = @decision WHERE id = @documentId')
-      await transaction
+      const verificationResult = await transaction
         .request()
         .input('studentId', sql.Int, document.student_id)
         .input('documentId', sql.Int, document.id)
