@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:notifications": "node --test tests/notifications-policy.test.cjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -23,6 +24,7 @@
     "mssql": "^12.7.11",
     "next": "16.4.2",
     "next-themes": "^0.4.6",
+    "nodemailer": "^10.2.1",
     "pdfjs-dist": "^6.4.299",
     "react": "^19",
     "react-dom": "^19",
@@ -36,6 +38,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/mssql": "^12.3.0",
     "@types/node": "^24",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",

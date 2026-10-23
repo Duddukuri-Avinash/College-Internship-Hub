@@ -21,7 +21,7 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
    3. Set `GEMINI_MODEL=gemini-3.8-flash` (or another Interactions API model enabled for your account).
    4. Restart the Next.js server. The first quiz for each skill and level creates a Gemini-generated question bank; later attempts reuse the stored bank.
    5. Select Beginner, Intermediate, or Advanced in Skill Roadmap before starting a quiz. The selected level is included in the generation prompt and cached separately.
-4. Create or update the SQL Server schema using the existing migration history. The Python backend has been replaced, but the Alembic migrations remain the schema history for existing installations. Apply the latest migration (`006_monthly_roadmap_snapshots`) before using roadmaps:
+4. Create or update the SQL Server schema using the existing migration history. The Python backend has been replaced, but the Alembic migrations remain the schema history for existing installations. Apply the latest migration (`008_notifications`) to enable notifications:
 
    ```powershell
    cd backend
@@ -29,7 +29,9 @@ InternHub is a college internship ecosystem for R.V.R & J.C College of Engineeri
    alembic upgrade head
    ```
 
-   This migration setup is only needed to create or update the database schema; the application itself no longer requires Python or a separate API server. India market research refreshes on the first roadmap visit each month and replaces the curated roles with 25 ranked roles based on recent hiring demand, with role-specific technical skills. Saved snapshots include Google Search citations. If Gemini quota is unavailable, the saved or curated roadmap remains usable.
+   This migration setup is only needed to create or update the database schema; the application itself no longer requires Python or a separate API server. Migration `007_password_reset_tokens` enables password recovery emails, and `008_notifications` creates notification and preference tables.
+   For email, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` in `.env.local`. For Gmail, use an App Password rather than your regular account password. Restart Next.js after changing environment variables. Password recovery links expire after 30 minutes. Faculty and admin announcements create in-app notifications and send email according to each recipient's saved notification preferences. Scheduled admin emails are unavailable in local mode because there is no background scheduler.
+   India market research refreshes on the first roadmap visit each month and replaces the curated roles with 25 ranked roles based on recent hiring demand, with role-specific technical skills. Saved snapshots include Google Search citations. If Gemini quota is unavailable, the saved or curated roadmap remains usable.
 5. Start the application:
 
    ```powershell
@@ -49,6 +51,7 @@ Do not run old mock/demo SQL seed data. `supabase/seed.sql` is for local/develop
 ```powershell
 npx tsc --noEmit
 npm run build
+npm run test:notifications
 ```
 
-The browser never receives SQL Server or integration credentials. Next.js stores the short-lived JWT in an HttpOnly cookie. Password recovery email delivery still requires an SMTP provider; until one is configured, the UI reports that recovery is unavailable.
+The browser never receives SQL Server or integration credentials. Next.js stores the short-lived JWT and password-reset token in HttpOnly cookies.

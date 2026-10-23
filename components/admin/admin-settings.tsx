@@ -13,6 +13,7 @@ import { Field, Switch } from '@/components/student/form-bits'
 import { FilterSelect, Table, Tabs } from '@/components/admin/admin-bits'
 import { useAdmin, type PlatformSettings, type TemplateKey } from '@/components/admin/admin-store'
 import { templateSample, type Roadmap, type TicketStatus } from '@/lib/admin-data'
+import { NotificationPreferencesPanel } from '@/components/notifications/notification-preferences'
 
 const TABS = ['General', 'Verification & SLA', 'Files & privacy', 'Notifications', 'AI & Learning', 'Support inbox'] as const
 
@@ -154,6 +155,7 @@ function Templates() {
   const t = draft[key]
   const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_, k) => (k === 'college' ? settings.institution : templateSample[k] ?? `{${k}}`))
   return (
+    <>
     <div className="grid gap-6 lg:grid-cols-2">
       <Panel title="Email & notification templates">
         <div className="flex flex-col gap-4">
@@ -173,6 +175,8 @@ function Templates() {
         </div>
       </Panel>
     </div>
+    <div className="mt-6"><NotificationPreferencesPanel /></div>
+    </>
   )
 }
 

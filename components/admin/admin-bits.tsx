@@ -66,7 +66,7 @@ export function Pagination({ page, pages, total, onPage }: { page: number; pages
   )
 }
 
-export function Confirm({ open, onClose, title, description, confirmLabel, onConfirm, destructive = true, children }: { open: boolean; onClose: () => void; title: string; description?: string; confirmLabel: string; onConfirm: () => void; destructive?: boolean; children?: ReactNode }) {
+export function Confirm({ open, onClose, title, description, confirmLabel, onConfirm, destructive = true, children, confirmDisabled = false }: { open: boolean; onClose: () => void; title: string; description?: string; confirmLabel: string; onConfirm: () => void; destructive?: boolean; children?: ReactNode; confirmDisabled?: boolean }) {
   return (
     <Modal
       open={open}
@@ -76,7 +76,7 @@ export function Confirm({ open, onClose, title, description, confirmLabel, onCon
       footer={
         <>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button variant={destructive ? 'destructive' : 'default'} onClick={onConfirm}>{confirmLabel}</Button>
+          <Button variant={destructive ? 'destructive' : 'default'} onClick={onConfirm} disabled={confirmDisabled}>{confirmLabel}</Button>
         </>
       }
     >

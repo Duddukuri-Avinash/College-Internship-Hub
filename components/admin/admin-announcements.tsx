@@ -11,14 +11,14 @@ import { Pill } from '@/components/faculty/bits'
 import { Field } from '@/components/student/form-bits'
 import { Confirm, FilterSelect, Table } from '@/components/admin/admin-bits'
 import { useAdmin } from '@/components/admin/admin-store'
-import { BRANCHES, SECTIONS, YEARS, branchStudents, facultyPerBranch, type AdminAnnouncement } from '@/lib/admin-data'
+import { BRANCHES, SECTIONS, YEARS, type AdminAnnouncement } from '@/lib/admin-data'
 import { branchName } from '@/lib/branches'
 
 type Role = 'Students' | 'Faculty' | 'Everyone'
 const statusTone = { Sent: 'success', Scheduled: 'primary', Draft: 'neutral' } as const
 
 export function Announcements() {
-  const { announcements, setAnnouncements, years: academicYears, log } = useAdmin()
+  const { announcements, setAnnouncements, students, faculty, approvals, log } = useAdmin()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [link, setLink] = useState('')
@@ -26,18 +26,27 @@ export function Announcements() {
   const [branches, setBranches] = useState<(typeof BRANCHES)[number][]>([])
   const [years, setYears] = useState<(typeof YEARS)[number][]>([])
   const [section, setSection] = useState('All')
-  const [ay, setAy] = useState(academicYears.find((y) => y.current)?.label ?? '')
   const [when, setWhen] = useState<'now' | 'later'>('now')
   const [at, setAt] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [confirming, setConfirming] = useState(false)
+  const [sending, setSending] = useState(false)
   const [filter, setFilter] = useState('All')
 
-  const bList = branches.length ? branches : [...BRANCHES]
-  const studentCount = Math.round(bList.reduce((n, b) => n + (branchStudents[b] ?? 0), 0) * ((years.length || 4) / 4) * (section === 'All' ? 1 : 1 / 3))
-  const facultyCount = bList.reduce((n, b) => n + (facultyPerBranch[b] ?? 0), 0)
+  const matchesBranch = (branch: string) => branches.length === 0 || branches.includes(branch as (typeof BRANCHES)[number])
+  const studentCount = students.filter((student) =>
+    student.status === 'Active'
+      && matchesBranch(student.branch)
+      && (!years.length || years.includes(student.year as (typeof YEARS)[number]))
+      && (section === 'All' || student.section === section),
+  ).length
+  const facultyCount = faculty.filter((member) =>
+    member.status === 'Active'
+      && approvals.some((approval) => approval.empId === member.empId && approval.status === 'Approved')
+      && matchesBranch(member.dept),
+  ).length
   const recipients = role === 'Students' ? studentCount : role === 'Faculty' ? facultyCount : studentCount + facultyCount
-  const audience = [role, branches.length ? branches.join(', ') : 'All branches', role !== 'Faculty' && years.length ? `Years ${[...years].sort().join(', ')}` : null, role !== 'Faculty' && section !== 'All' ? `Section ${section}` : null, ay].filter(Boolean).join(' · ')
+  const audience = [role, branches.length ? branches.join(', ') : 'All branches', role !== 'Faculty' && years.length ? `Years ${[...years].sort().join(', ')}` : null, role !== 'Faculty' && section !== 'All' ? `Section ${section}` : null].filter(Boolean).join(' · ')
 
   function validate(draft = false) {
     const e: Record<string, string> = {}
@@ -49,15 +58,53 @@ export function Announcements() {
     return !Object.keys(e).length
   }
 
-  function save(status: AdminAnnouncement['status']) {
+  async function save(status: AdminAnnouncement['status']) {
+    if (status === 'Scheduled') {
+      toast.error('Scheduled emails are not available while the app runs locally. Select Send now.')
+      return
+    }
+    let delivered = 0
+    let inAppSaved = 0
+    let emailFailures = 0
+    if (status === 'Sent') {
+      setSending(true)
+      try {
+        const response = await fetch('/api/admin/announcements', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            title: title.trim(),
+            body: body.trim(),
+            ...(link ? { link } : {}),
+            role,
+            branches,
+            years,
+            section,
+          }),
+        })
+        const result = await response.json()
+        if (!response.ok) throw new Error(result.error ?? 'Announcement email could not be sent.')
+        delivered = result.emailsSent
+        inAppSaved = result.inAppSaved
+        emailFailures = result.emailsFailed
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Announcement email could not be sent.')
+        return
+      } finally {
+        setSending(false)
+      }
+    }
+
     const a: AdminAnnouncement = {
       id: `an${Date.now()}`, title: title.trim(), body: body.trim(), link: link || undefined, audience, recipients, status,
-      date: status === 'Scheduled' ? at.replace('T', ' ') : new Date().toISOString().slice(0, 16).replace('T', ' '),
-      ...(status === 'Sent' ? { delivered: Math.round(recipients * 0.99), opened: 0 } : {}),
+      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      ...(status === 'Sent' ? { recipients: delivered, delivered, opened: 0 } : {}),
     }
     setAnnouncements((l) => [a, ...l])
-    if (status !== 'Draft') log(status === 'Sent' ? 'Sent announcement' : 'Scheduled announcement', 'Announcement', a.title, undefined, { audience, recipients: String(recipients) })
-    toast.success(status === 'Sent' ? `Sent to ${recipients.toLocaleString('en-IN')} recipients` : status === 'Scheduled' ? `Scheduled for ${a.date}` : 'Draft saved')
+    if (status !== 'Draft') log('Sent announcement', 'Announcement', a.title, undefined, { audience, recipients: String(delivered) })
+    toast.success(status === 'Sent' ? 'Announcement sent' : 'Draft saved', status === 'Sent' ? {
+      description: `${inAppSaved} in-app notifications; ${delivered} emails${emailFailures ? `; ${emailFailures} email deliveries failed` : ''}.`,
+    } : undefined)
     setTitle(''); setBody(''); setLink(''); setAt(''); setWhen('now'); setConfirming(false)
   }
 
@@ -76,7 +123,6 @@ export function Announcements() {
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Role" htmlFor="aud"><select id="aud" className={selectClass} value={role} onChange={(e) => setRole(e.target.value as Role)}><option>Students</option><option>Faculty</option><option>Everyone</option></select></Field>
               <Field label="Section" htmlFor="asec"><select id="asec" className={selectClass} value={section} disabled={role === 'Faculty'} onChange={(e) => setSection(e.target.value)}><option>All</option>{SECTIONS.map((s) => <option key={s}>{s}</option>)}</select></Field>
-              <Field label="Academic year" htmlFor="aay"><select id="aay" className={selectClass} value={ay} onChange={(e) => setAy(e.target.value)}><option value="">Select academic year</option>{academicYears.filter((y) => !y.archived).map((y) => <option key={y.id}>{y.label}</option>)}</select></Field>
             </div>
             <fieldset>
               <legend className="mb-2 text-sm font-medium">Branches <span className="font-normal text-muted-foreground">(none = all)</span></legend>
@@ -91,7 +137,7 @@ export function Announcements() {
               <legend className="mb-2 text-sm font-medium">Delivery</legend>
               <div className="flex flex-wrap gap-4">
                 <label className="flex items-center gap-2 text-sm"><input type="radio" name="when" className="accent-primary" checked={when === 'now'} onChange={() => setWhen('now')} />Send now</label>
-                <label className="flex items-center gap-2 text-sm"><input type="radio" name="when" className="accent-primary" checked={when === 'later'} onChange={() => setWhen('later')} />Schedule for later</label>
+                <label className="flex items-center gap-2 text-sm text-muted-foreground" title="Scheduled sending needs a background scheduler, which is not running in local mode."><input type="radio" name="when" className="accent-primary" checked={when === 'later'} onChange={() => setWhen('later')} />Schedule for later (unavailable locally)</label>
               </div>
               {when === 'later' && (
                 <Field label="Send at" htmlFor="aat" error={errors.at} className="max-w-60"><Input id="aat" type="datetime-local" value={at} min={new Date().toISOString().slice(0, 16)} onChange={(e) => setAt(e.target.value)} aria-invalid={!!errors.at || undefined} /></Field>
@@ -135,9 +181,10 @@ export function Announcements() {
         onClose={() => setConfirming(false)}
         title={when === 'now' ? 'Send this announcement?' : 'Schedule this announcement?'}
         description={`${recipients.toLocaleString('en-IN')} recipients · ${audience}`}
-        confirmLabel={when === 'now' ? 'Send now' : 'Schedule'}
         destructive={false}
-        onConfirm={() => save(when === 'now' ? 'Sent' : 'Scheduled')}
+        onConfirm={() => { void save(when === 'now' ? 'Sent' : 'Scheduled') }}
+        confirmDisabled={sending}
+        confirmLabel={sending ? 'Sending…' : when === 'now' ? 'Send now' : 'Schedule'}
       >
         <div className="rounded-lg border bg-muted/40 p-3 text-sm"><p className="font-medium">{title}</p><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{body}</p></div>
       </Confirm>

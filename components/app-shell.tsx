@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   ArrowLeft,
   Bell,
@@ -33,6 +33,9 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { COLLEGE } from '@/lib/data'
+import { toast } from 'sonner'
+import { NotificationRow } from '@/components/notifications/notifications-page'
+import { useNotifications } from '@/components/notifications/notification-provider'
 
 export type Role = 'student' | 'faculty' | 'admin'
 
@@ -51,6 +54,7 @@ export type View =
   | { name: 'quiz'; skill: string; level: 'Beginner' | 'Intermediate' | 'Advanced' }
   | { name: 'submit-internship' }
   | { name: 'settings' }
+  | { name: 'notifications' }
   | { name: 'faculty-dashboard' }
   | { name: 'post-opportunity'; editId?: string }
   | { name: 'verification'; tab?: string }
@@ -111,14 +115,22 @@ function viewKey(v: View) {
 export function AppShell({ role, profile, view, onNavigate, onBack, canGoBack, onLogout, children }: { role: Role; profile: { id: string; full_name: string; email: string }; view: View; onNavigate: (v: View) => void; onBack: () => void; canGoBack: boolean; onLogout: () => void; children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
+  const { notifications, unreadCount, loading: notificationsLoading, error: notificationsError, markRead, markAllRead } = useNotifications()
   const name = profile.full_name || profile.email
   const initials = name.split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase() ?? '').join('')
   const key = viewKey(view)
 
-  useEffect(() => {
-    setHasUnreadNotifications(false)
-  }, [profile.id])
+  async function openNotification(id: string, link: string | null, isRead: boolean) {
+    try {
+      if (!isRead) await markRead(id)
+      setNotifOpen(false)
+      if (link && /^https?:\/\//i.test(link)) window.open(link, '_blank', 'noopener,noreferrer')
+      else if (!link || link === '/notifications') onNavigate({ name: 'notifications' })
+      else if (link.startsWith('/')) window.location.assign(link)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Could not open notification.')
+    }
+  }
 
   const sidebar = (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
@@ -199,23 +211,28 @@ export function AppShell({ role, profile, view, onNavigate, onBack, canGoBack, o
             <button
               onClick={() => setNotifOpen((o) => !o)}
               className="relative rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
-              aria-label="Notifications, 0 unread"
+              aria-label={`Notifications, ${unreadCount} unread`}
               aria-expanded={notifOpen}
             >
               <Bell className="size-5" />
-              {hasUnreadNotifications && <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-destructive" />}
+              {unreadCount > 0 && <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-destructive px-1 text-center text-[10px] leading-5 text-destructive-foreground">{unreadCount > 9 ? '9+' : unreadCount}</span>}
             </button>
             {notifOpen && (
-              <div className="absolute right-0 top-12 z-50 w-80 rounded-xl border bg-popover p-2 shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="flex items-center justify-between px-2 py-1.5">
+              <div className="absolute right-0 top-12 z-50 w-[min(22rem,calc(100vw-2rem))] rounded-xl border bg-popover p-2 shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="flex items-center justify-between gap-2 px-2 py-1.5">
                   <p className="text-sm font-semibold">Notifications</p>
-                  <button onClick={() => setNotifOpen(false)} aria-label="Close notifications" className="rounded p-1 hover:bg-muted">
-                    <X className="size-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {unreadCount > 0 && <button onClick={() => { void markAllRead().catch((error: unknown) => toast.error(error instanceof Error ? error.message : 'Could not mark notifications read.')) }} className="text-xs text-primary hover:underline">Mark all read</button>}
+                    <button onClick={() => setNotifOpen(false)} aria-label="Close notifications" className="rounded p-1 hover:bg-muted"><X className="size-3.5" /></button>
+                  </div>
                 </div>
-                <ul className="flex flex-col">
-                  <li className="rounded-lg px-2 py-4 text-center text-sm text-muted-foreground">No notifications yet.</li>
-                </ul>
+                {notificationsError && <p className="px-2 py-2 text-xs text-destructive" role="alert">{notificationsError}</p>}
+                {notificationsLoading ? <p className="px-2 py-4 text-center text-sm text-muted-foreground">Loading notifications…</p>
+                  : notifications.length === 0 ? <p className="px-2 py-4 text-center text-sm text-muted-foreground">No notifications yet.</p>
+                    : <ul className="flex max-h-96 flex-col gap-1 overflow-y-auto">{notifications.map((item) => (
+                      <NotificationRow key={item.id} notification={item} onOpen={(notification) => { void openNotification(notification.id, notification.link, notification.isRead) }} />
+                    ))}</ul>}
+                <button onClick={() => { setNotifOpen(false); onNavigate({ name: 'notifications' }) }} className="mt-2 w-full rounded-lg border-t px-2 py-2 text-sm font-medium text-primary hover:bg-muted">View all notifications</button>
               </div>
             )}
           </div>

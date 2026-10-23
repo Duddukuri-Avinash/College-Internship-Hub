@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { hashPassword } from '@/lib/server/auth'
 import { getPool, sql } from '@/lib/server/db'
 import { ApiError, apiErrorResponse, readJson } from '@/lib/server/http'
+import { notify } from '@/lib/server/notifications'
 
 const departments: Record<string, string> = {
   CSE: 'Computer Science and Engineering (CSE)',
@@ -102,6 +103,16 @@ export async function POST(request: Request) {
           VALUES (@userId, @departmentId, @employeeId, @designation, 0, 1, GETUTCDATE())
         `)
       await transaction.commit()
+
+      await notify({
+        role: 'admin',
+        type: 'account',
+        category: 'account',
+        title: 'Faculty account waiting for approval',
+        message: `${input.name} (${employeeId}) registered as faculty and is waiting for approval.`,
+        link: '/notifications',
+        dedupeKey: `faculty-registration:${employeeId}`,
+      })
 
       return NextResponse.json({
         profile: {

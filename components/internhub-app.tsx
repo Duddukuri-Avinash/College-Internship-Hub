@@ -31,6 +31,8 @@ import { FacultyAnnouncements } from '@/components/faculty/announcements'
 import { FacultySettings } from '@/components/faculty/settings'
 import { getSignedInProfile, signOut, type AuthProfile } from '@/lib/supabase/auth'
 import { StudentAccountProvider } from '@/components/student/student-account-provider'
+import { NotificationProvider } from '@/components/notifications/notification-provider'
+import { NotificationsPage } from '@/components/notifications/notifications-page'
 
 const home: Record<Role, View> = {
   student: { name: 'student-dashboard' },
@@ -39,6 +41,7 @@ const home: Record<Role, View> = {
 }
 
 function viewRole(view: View): Role {
+  if (view.name === 'notifications') return 'student'
   if (view.name.startsWith('faculty-') || view.name === 'faculty-dashboard' || view.name === 'verification' || view.name === 'post-opportunity') return 'faculty'
   if (view.name === 'admin') return 'admin'
   return 'student'
@@ -119,7 +122,7 @@ export function InternHubApp() {
   }
 
   const navigate = (nextView: View) => {
-    if (!profile || viewRole(nextView) !== profile.role) {
+    if (!profile || (nextView.name !== 'notifications' && viewRole(nextView) !== profile.role)) {
       toast.error('Your account does not have access to that portal.')
       if (profile) setView(home[profile.role])
       return
@@ -173,16 +176,17 @@ export function InternHubApp() {
     )
   }
 
-  if (viewRole(view) !== profile.role) {
+  if (view.name !== 'notifications' && viewRole(view) !== profile.role) {
     setView(home[profile.role])
     return null
   }
 
   return (
-    <FacultyStoreProvider enabled={profile.role === 'faculty'}>
-      <AdminStoreProvider enabled={profile.role === 'admin'}>
-        <StudentAccountProvider profile={profile}>
-          <AppShell
+    <NotificationProvider>
+      <FacultyStoreProvider enabled={profile.role === 'faculty'}>
+        <AdminStoreProvider enabled={profile.role === 'admin'}>
+          <StudentAccountProvider profile={profile}>
+            <AppShell
             role={profile.role}
             profile={profile}
             view={view}
@@ -205,6 +209,7 @@ export function InternHubApp() {
           {view.name === 'quiz' && <QuizPage skill={view.skill} level={view.level} navigate={navigate} />}
           {view.name === 'submit-internship' && <SubmitInternship navigate={navigate} />}
           {view.name === 'settings' && <StudentSettings />}
+          {view.name === 'notifications' && <NotificationsPage navigate={navigate} />}
           {view.name === 'faculty-dashboard' && <FacultyDashboard navigate={navigate} />}
           {view.name === 'verification' && <VerificationCenter />}
           {view.name === 'post-opportunity' && <PostOpportunity key={view.editId ?? 'new'} editId={view.editId} navigate={navigate} />}
@@ -216,9 +221,10 @@ export function InternHubApp() {
           {view.name === 'faculty-announcements' && <FacultyAnnouncements />}
           {view.name === 'faculty-settings' && <FacultySettings />}
           {view.name === 'admin' && <AdminPortal section={view.section} navigate={navigate} />}
-          </AppShell>
-        </StudentAccountProvider>
-      </AdminStoreProvider>
-    </FacultyStoreProvider>
+            </AppShell>
+          </StudentAccountProvider>
+        </AdminStoreProvider>
+      </FacultyStoreProvider>
+    </NotificationProvider>
   )
 }

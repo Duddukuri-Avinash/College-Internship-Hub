@@ -8,15 +8,9 @@ import { Input } from '@/components/ui/input'
 import { Modal, PageHeader, Panel, selectClass } from '@/components/shared'
 import { Field, Switch } from '@/components/student/form-bits'
 import { useStudentAccount } from '@/components/student/student-account-provider'
+import { NotificationPreferencesPanel } from '@/components/notifications/notification-preferences'
 
 type Toggles = Record<string, boolean>
-
-const notificationItems: { key: string; label: string; hint: string }[] = [
-  { key: 'newOpp', label: 'New college opportunities', hint: 'When faculty post an internship you are eligible for.' },
-  { key: 'deadlines', label: 'Deadline reminders', hint: 'A reminder before internship application deadlines.' },
-  { key: 'verification', label: 'Verification updates', hint: 'Status changes on offer letters, certificates and self-found submissions.' },
-  { key: 'digest', label: 'Weekly digest', hint: 'A Monday summary of matches and upcoming deadlines.' },
-]
 
 const privacyItems: { key: string; label: string; hint: string }[] = [
   { key: 'showCgpa', label: 'Show CGPA to faculty', hint: 'Faculty can still see it when checking eligibility.' },
@@ -43,8 +37,6 @@ export function StudentSettings() {
   const [savingPhone, setSavingPhone] = useState(false)
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' })
   const [pwError, setPwError] = useState('')
-  const [notif, setNotif] = useState<Toggles>({ newOpp: true, deadlines: true, verification: true, application: true, digest: false })
-  const [channels, setChannels] = useState<Toggles>({ inApp: true, email: true })
   const [privacy, setPrivacy] = useState<Toggles>({ showCgpa: true, showResume: true, seniorDirectory: true, aiGuidance: true })
   const [visibility, setVisibility] = useState('college')
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -126,23 +118,7 @@ export function StudentSettings() {
         </Panel>
 
         <div className="flex flex-col gap-6">
-          <Panel title="Notification preferences">
-            <ul className="flex flex-col divide-y">
-              {notificationItems.map((n) => (
-                <ToggleRow key={n.key} id={`n-${n.key}`} label={n.label} hint={n.hint} checked={notif[n.key]} onChange={(v) => setNotif((p) => ({ ...p, [n.key]: v }))} />
-              ))}
-            </ul>
-            <div className="mt-5 border-t pt-4">
-              <p className="mb-3 text-sm font-medium">Delivery channels</p>
-              <ul className="flex flex-col divide-y">
-                <ToggleRow id="ch-inapp" label="In-app notifications" hint="Shown under the bell icon." checked={channels.inApp} onChange={(v) => setChannels((p) => ({ ...p, inApp: v }))} />
-                <ToggleRow id="ch-email" label="Email" hint={`Sent to ${account?.email ?? ''}.`} checked={channels.email} onChange={(v) => setChannels((p) => ({ ...p, email: v }))} />
-              </ul>
-            </div>
-            <Button className="mt-5" onClick={() => toast.success('Notification preferences saved')}>
-              Save preferences
-            </Button>
-          </Panel>
+          <NotificationPreferencesPanel />
 
           <Panel title="Privacy controls">
             <Field label="Who can see my profile" htmlFor="st-vis">

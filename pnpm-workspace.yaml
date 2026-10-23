@@ -4,3 +4,4 @@ minimumReleaseAgeExclude:
   - '@next/*'
   - next
   - mssql@12.7.11
+  - nodemailer@10.2.1

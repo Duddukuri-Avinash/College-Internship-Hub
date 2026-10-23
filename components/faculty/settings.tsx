@@ -10,6 +10,7 @@ import { Field, Switch } from '@/components/student/form-bits'
 import { PasswordInput } from '@/components/auth/auth-bits'
 import { initials } from '@/components/faculty/bits'
 import { TODAY, facultyAccount } from '@/lib/faculty-data'
+import { NotificationPreferencesPanel } from '@/components/notifications/notification-preferences'
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const
 
@@ -121,28 +122,7 @@ function PasswordPanel() {
 }
 
 function NotificationsPanel() {
-  const [prefs, setPrefs] = useState({ submissions: true, sla: true, requests: true, email: false })
-  const rows: [keyof typeof prefs, string, string][] = [
-    ['submissions', 'New submissions', 'When a student uploads an offer letter, certificate or experience post.'],
-    ['sla', 'SLA reminders', 'When a submission is close to the 3-working-day review limit.'],
-    ['requests', 'Student requests', 'When a student sends an NOC, letter, re-verification or query.'],
-    ['email', 'Daily email digest', 'A summary of pending work at 8:00 AM.'],
-  ]
-  return (
-    <Panel title="Notification preferences">
-      <ul className="divide-y">
-        {rows.map(([key, label, hint]) => (
-          <li key={key} className="flex items-center justify-between gap-4 py-3 first:pt-0">
-            <div>
-              <p className="text-sm font-medium">{label}</p>
-              <p className="text-xs text-muted-foreground">{hint}</p>
-            </div>
-            <Switch label={label} checked={prefs[key]} onChange={(v) => { setPrefs((p) => ({ ...p, [key]: v })); toast.success(`${label} ${v ? 'on' : 'off'}`) }} />
-          </li>
-        ))}
-      </ul>
-    </Panel>
-  )
+  return <NotificationPreferencesPanel />
 }
 
 function AvailabilityPanel() {

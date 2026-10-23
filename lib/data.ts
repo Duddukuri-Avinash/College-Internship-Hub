@@ -72,8 +72,6 @@ export const experiences: {
   recommendation: string
   rating: number
 }[] = []
-export const notifications: { id: string; title: string; body: string; time: string; type: string }[] = []
-
 export const student = {
   name: '',
   initials: '',

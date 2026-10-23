@@ -4,13 +4,16 @@ import { ArrowRight, CalendarClock, FileCheck2, Search, Sparkles, Target, UserRo
 import { Button } from '@/components/ui/button'
 import { Panel, StatCard } from '@/components/shared'
 import { InternshipCard } from '@/components/student/internship-card'
-import { daysUntil, formatDate, internships, notifications, COLLEGE } from '@/lib/data'
+import { daysUntil, formatDate, internships, COLLEGE } from '@/lib/data'
 import type { View } from '@/components/app-shell'
 import { cn } from '@/lib/utils'
 import { getInternshipReadiness, getProfileCompletion, useStudentAccount } from '@/components/student/student-account-provider'
+import { useNotifications } from '@/components/notifications/notification-provider'
+import { relativeTime } from '@/components/notifications/notifications-page'
 
 export function StudentDashboard({ navigate }: { navigate: (v: View) => void }) {
   const { account, resume, loading } = useStudentAccount()
+  const { notifications, loading: notificationsLoading, error: notificationsError } = useNotifications()
   const profileCompletion = getProfileCompletion(account, resume)
   const readiness = getInternshipReadiness(account, resume)
   const recommended = [...internships].sort((a, b) => b.match - a.match).slice(0, 3)
@@ -104,18 +107,20 @@ export function StudentDashboard({ navigate }: { navigate: (v: View) => void }) 
 
           <Panel title="Recent notifications">
             <ul className="flex flex-col gap-3">
-              {notifications.map((n) => (
+              {notifications.slice(0, 5).map((n) => (
                 <li key={n.id} className="flex gap-3">
-                  <span className={cn('mt-1.5 size-2 shrink-0 rounded-full', n.type === 'warning' ? 'bg-warning' : n.type === 'success' ? 'bg-success' : 'bg-primary')} aria-hidden="true" />
+                  <span className={cn('mt-1.5 size-2 shrink-0 rounded-full', n.isRead ? 'bg-muted-foreground/50' : 'bg-primary')} aria-hidden="true" />
                   <div>
                     <p className="text-sm font-medium">{n.title}</p>
-                    <p className="text-xs text-muted-foreground">{n.body}</p>
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">{n.time}</p>
+                    <p className="text-xs text-muted-foreground">{n.message}</p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">{relativeTime(n.createdAt)}</p>
                   </div>
                 </li>
               ))}
             </ul>
-            {notifications.length === 0 && <p className="text-sm text-muted-foreground">No notifications yet.</p>}
+            {notificationsLoading && <p className="text-sm text-muted-foreground">Loading notifications…</p>}
+            {notificationsError && <p role="alert" className="text-sm text-destructive">{notificationsError}</p>}
+            {!notificationsLoading && notifications.length === 0 && !notificationsError && <p className="text-sm text-muted-foreground">No notifications yet.</p>}
           </Panel>
         </div>
       </div>

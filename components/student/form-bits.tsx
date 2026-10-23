@@ -78,7 +78,7 @@ export function TagInput({
 }
 
 /** Accessible on/off switch. */
-export function Switch({ checked, onChange, label, id }: { checked: boolean; onChange: (v: boolean) => void; label: string; id?: string }) {
+export function Switch({ checked, onChange, label, id, disabled = false }: { checked: boolean; onChange: (v: boolean) => void; label: string; id?: string; disabled?: boolean }) {
   return (
     <button
       id={id}
@@ -86,9 +86,11 @@ export function Switch({ checked, onChange, label, id }: { checked: boolean; onC
       role="switch"
       aria-checked={checked}
       aria-label={label}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
         'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+        disabled && 'cursor-not-allowed opacity-50',
         checked ? 'bg-primary' : 'bg-input',
       )}
     >

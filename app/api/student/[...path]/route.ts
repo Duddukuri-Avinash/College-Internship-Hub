@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { authenticate } from '@/lib/server/auth'
 import { getPool, sql } from '@/lib/server/db'
 import { ApiError, apiErrorResponse, readJson } from '@/lib/server/http'
+import { notify } from '@/lib/server/notifications'
 import { refreshRoadmaps } from '@/lib/server/roadmaps'
 import type { Roadmap } from '@/lib/server/roadmaps'
 import { getVerifications } from '@/lib/server/skill-verification'
@@ -224,6 +225,28 @@ async function uploadDocument(request: NextRequest, kind: string) {
         OUTPUT INSERTED.id
         VALUES (@studentId, @kind, @fileName, @fileName, @storageKey, @mimeType, @fileSize, 'pending', @uploadedBy, GETUTCDATE())
       `)
+    if (kind !== 'resume') {
+      const reviewers = await pool.request()
+        .input('studentId', sql.Int, studentId)
+        .query<{ id: number }>(`
+          SELECT DISTINCT u.id
+          FROM students s
+          INNER JOIN faculty f ON f.department_id = s.department_id
+          INNER JOIN users u ON u.id = f.user_id
+          WHERE s.id = @studentId AND f.is_active = 1 AND f.is_verified = 1 AND u.is_active = 1
+        `)
+      await notify({
+        role: 'admin',
+        userIds: reviewers.recordset.map((reviewer) => reviewer.id),
+        type: 'verification',
+        category: 'experiences',
+        title: 'New submission waiting for verification',
+        message: `A student submitted ${kind.replaceAll('_', ' ')} documentation for review.`,
+        link: '/notifications',
+        dedupeKey: `document-submitted:${result.recordset[0].id}`,
+        sendEmail: true,
+      })
+    }
     return NextResponse.json({
       document: {
         id: String(result.recordset[0].id),

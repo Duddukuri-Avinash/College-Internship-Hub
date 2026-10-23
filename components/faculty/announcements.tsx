@@ -10,29 +10,31 @@ import { Bar, Modal, PageHeader, Panel, selectClass } from '@/components/shared'
 import { Field } from '@/components/student/form-bits'
 import { useFacultyStore } from '@/components/faculty/faculty-store'
 import { EmptyState, Pill, fmtDate } from '@/components/faculty/bits'
-import { TODAY, facultyAccount, sectionSizes, sections } from '@/lib/faculty-data'
+import { TODAY, facultyAccount } from '@/lib/faculty-data'
 
 type AudienceType = 'all' | 'year' | 'section'
 type Errors = Partial<Record<'title' | 'body' | 'deadline', string>>
 
 export function FacultyAnnouncements() {
-  const { announcements, addAnnouncement } = useFacultyStore()
+  const { announcements, addAnnouncement, students } = useFacultyStore()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [audienceType, setAudienceType] = useState<AudienceType>('all')
   const [year, setYear] = useState('3')
-  const [section, setSection] = useState<string>(sections[0])
+  const [section, setSection] = useState('A')
   const [deadline, setDeadline] = useState('')
   const [errors, setErrors] = useState<Errors>({})
   const [confirming, setConfirming] = useState(false)
+  const [sending, setSending] = useState(false)
 
-  const recipients =
+  const years = [...new Set(students.map((student) => student.year))].sort((left, right) => left - right)
+  const sections = [...new Set(students.map((student) => student.section).filter(Boolean))].sort()
+  const recipients = students.filter((student) =>
     audienceType === 'all'
-      ? Object.values(sectionSizes).reduce((a, b) => a + b, 0)
-      : audienceType === 'year'
-        ? sections.filter((s) => s.startsWith(year)).reduce((n, s) => n + sectionSizes[s], 0)
-        : sectionSizes[section]
-  const audience = audienceType === 'all' ? 'All eligible students' : audienceType === 'year' ? `Year ${year} · All sections` : `Year ${section[0]} · Section ${section.slice(2)}`
+      || (audienceType === 'year' && student.year === Number(year))
+      || (audienceType === 'section' && student.section === section),
+  ).length
+  const audience = audienceType === 'all' ? 'All eligible students' : audienceType === 'year' ? `Year ${year} · All sections` : `Section ${section}`
 
   const validate = () => {
     const e: Errors = {}
@@ -49,14 +51,47 @@ export function FacultyAnnouncements() {
     if (validate()) setConfirming(true)
   }
 
-  const send = () => {
-    addAnnouncement({ id: `an${Date.now()}`, title: title.trim(), body: body.trim(), audience, deadline: deadline || undefined, sentOn: TODAY, delivered: recipients, read: 0 })
-    toast.success('Announcement sent', { description: `Delivered to ${recipients} students` })
-    setConfirming(false)
-    setTitle('')
-    setBody('')
-    setDeadline('')
-    setErrors({})
+  const send = async () => {
+    setSending(true)
+    try {
+      const response = await fetch('/api/faculty/announcements', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title.trim(),
+          body: body.trim(),
+          audienceType,
+          ...(audienceType === 'year' ? { year: Number(year) } : {}),
+          ...(audienceType === 'section' ? { section } : {}),
+          ...(deadline ? { deadline } : {}),
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error ?? 'Announcement email could not be sent.')
+
+      addAnnouncement({
+        id: `an${Date.now()}`,
+        title: title.trim(),
+        body: body.trim(),
+        audience,
+        deadline: deadline || undefined,
+        sentOn: TODAY,
+        delivered: result.emailsSent,
+        read: 0,
+      })
+      toast.success('Announcement sent', {
+        description: `${result.inAppSaved} in-app notifications; ${result.emailsSent} emails${result.emailsFailed ? `; ${result.emailsFailed} email deliveries failed` : ''}.`,
+      })
+      setConfirming(false)
+      setTitle('')
+      setBody('')
+      setDeadline('')
+      setErrors({})
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Announcement email could not be sent.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -85,13 +120,12 @@ export function FacultyAnnouncements() {
                 </div>
                 {audienceType === 'year' && (
                   <select aria-label="Year" value={year} onChange={(e) => setYear(e.target.value)} className={`${selectClass} mt-2 sm:w-48`}>
-                    <option value="3">Year 3</option>
-                    <option value="4">Year 4</option>
+                    {years.map((studentYear) => <option key={studentYear} value={studentYear}>Year {studentYear}</option>)}
                   </select>
                 )}
                 {audienceType === 'section' && (
                   <select aria-label="Section" value={section} onChange={(e) => setSection(e.target.value)} className={`${selectClass} mt-2 sm:w-48`}>
-                    {sections.map((s) => <option key={s} value={s}>Section {s}</option>)}
+                    {sections.map((studentSection) => <option key={studentSection} value={studentSection}>Section {studentSection}</option>)}
                   </select>
                 )}
               </fieldset>
@@ -165,11 +199,11 @@ export function FacultyAnnouncements() {
         open={confirming}
         onClose={() => setConfirming(false)}
         title="Send this announcement?"
-        description={`${recipients} students (${audience}) will receive an in-app and email notification.`}
+        description={`Students in ${audience} will receive this email. Actual recipients are checked before sending.`}
         footer={
           <>
             <Button variant="outline" onClick={() => setConfirming(false)}>Cancel</Button>
-            <Button onClick={send}><Send /> Send now</Button>
+            <Button onClick={() => { void send() }} disabled={sending}><Send /> {sending ? 'Sending…' : 'Send now'}</Button>
           </>
         }
       >
