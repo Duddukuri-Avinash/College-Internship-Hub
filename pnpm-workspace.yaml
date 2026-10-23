@@ -3,3 +3,4 @@ pmOnFail: ignore
 minimumReleaseAgeExclude:
   - '@next/*'
   - next
+  - mssql@12.7.11

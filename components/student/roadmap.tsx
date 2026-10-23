@@ -255,6 +255,7 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
   const [marketUpdatedAt, setMarketUpdatedAt] = useState<string | null>(null)
   const [marketIsCurrent, setMarketIsCurrent] = useState(false)
   const [marketLoaded, setMarketLoaded] = useState(false)
+  const [marketRefreshError, setMarketRefreshError] = useState<string | null>(null)
   const [level, setLevel] = useState<QuizLevel>('Beginner')
   const [verifications, setVerifications] = useState<Verification[]>([])
   const [startingQuizSkill, setStartingQuizSkill] = useState<string | null>(null)
@@ -289,10 +290,17 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
       const result = await response.json()
       if (!response.ok) throw new Error(result.error ?? result.detail ?? 'Unable to load monthly market roadmaps.')
       if (!active) return
-      setMarketRoadmaps(result.roadmaps as Roadmap[])
+      const generatedRoadmaps = result.roadmaps as Roadmap[]
+      setMarketRoadmaps(generatedRoadmaps)
+      setRoleId((current) =>
+        generatedRoadmaps.some((roadmap) => roadmap.id === current)
+          ? current
+          : generatedRoadmaps[0]?.id ?? current,
+      )
       setMarketSources(result.sources ?? [])
       setMarketUpdatedAt(result.updatedAt)
       setMarketIsCurrent(Boolean(result.isCurrent))
+      setMarketRefreshError(typeof result.refreshError === 'string' ? result.refreshError : null)
     }).catch((error: unknown) => {
       if (active) toast.error(error instanceof Error ? error.message : 'Unable to refresh market roadmaps.')
     }).finally(() => {
@@ -476,8 +484,8 @@ export function SkillRoadmap({ navigate }: { navigate: (v: View) => void }) {
             : marketIsCurrent && marketUpdatedAt
               ? `India market research updated ${new Date(marketUpdatedAt).toLocaleDateString()}.`
               : marketUpdatedAt
-                ? `Showing saved India market research from ${new Date(marketUpdatedAt).toLocaleDateString()}; this month’s refresh is unavailable.`
-                : 'Market refresh unavailable; showing the curated roadmap.'}
+                ? `Showing saved India market research from ${new Date(marketUpdatedAt).toLocaleDateString()}; this month’s refresh is unavailable. ${marketRefreshError ?? ''}`
+                : `Market refresh unavailable; showing the curated roadmap. ${marketRefreshError ?? ''}`}
           {marketSources.length > 0 && <p className="mt-1">Sources: {marketSources.slice(0, 5).map((source, index) => <span key={source.url}>{index > 0 ? ' · ' : ''}<a className="underline underline-offset-2" href={source.url} target="_blank" rel="noreferrer">{source.title}</a></span>)}</p>}
         </div>
         <label htmlFor="roadmap-level" className="mb-2 mt-4 block text-sm font-medium">Quiz level</label>

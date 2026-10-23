@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  serverExternalPackages: ['mssql', 'msnodesqlv8'],
   images: {
     unoptimized: true,
   },

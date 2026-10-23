@@ -1,25 +1,24 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-const backendUrl = process.env.BACKEND_API_URL ?? 'http://localhost:8000'
+import { authenticate } from '@/lib/server/auth'
+import { getPool, sql } from '@/lib/server/db'
+import { ApiError, apiErrorResponse } from '@/lib/server/http'
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ employeeId: string }> }) {
-  const token = request.cookies.get('internhub_access_token')?.value
-  if (!token) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 })
-  const { employeeId } = await params
-
+export async function POST(request: NextRequest, context: { params: Promise<{ employeeId: string }> }) {
   try {
-    const response = await fetch(`${backendUrl}/admin/faculty/${encodeURIComponent(employeeId)}/approve`, {
-      method: 'POST',
-      headers: { authorization: `Bearer ${token}` },
-      cache: 'no-store',
-    })
-    const result = await response.json().catch(() => ({}))
-    if (!response.ok) {
-      return NextResponse.json({ error: result.detail ?? result.error ?? 'Could not approve faculty registration.' }, { status: response.status })
-    }
-    return NextResponse.json(result, { status: response.status })
+    const user = await authenticate(request)
+    if (user.role !== 'admin') throw new ApiError('Administrator access required.', 403)
+
+    const { employeeId: rawEmployeeId } = await context.params
+    const employeeId = rawEmployeeId.trim().toUpperCase()
+    const pool = await getPool()
+    const result = await pool
+      .request()
+      .input('employeeId', sql.VarChar(50), employeeId)
+      .query('UPDATE faculty SET is_verified = 1 WHERE employee_id = @employeeId')
+    if (!result.rowsAffected[0]) throw new ApiError('Faculty registration not found.', 404)
+    return NextResponse.json({ status: 'approved' })
   } catch (error) {
-    console.error('Backend faculty approval request failed:', error)
-    return NextResponse.json({ error: 'Admin approval service is unavailable.' }, { status: 503 })
+    return apiErrorResponse(error, 'Next.js faculty approval failed')
   }
 }

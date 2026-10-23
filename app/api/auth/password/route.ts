@@ -1,15 +1,26 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { z } from 'zod'
 
-const backendUrl = process.env.BACKEND_API_URL ?? 'http://localhost:8000'
+import { authenticate, hashPassword } from '@/lib/server/auth'
+import { getPool, sql } from '@/lib/server/db'
+import { apiErrorResponse, readJson } from '@/lib/server/http'
+
+const passwordSchema = z.object({ password: z.string().min(8).max(128) })
 
 export async function POST(request: NextRequest) {
-  const token = request.cookies.get('internhub_access_token')?.value
-  if (!token) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 })
-  const response = await fetch(`${backendUrl}/auth/password`, {
-    method: 'POST',
-    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-    body: await request.text(),
-  })
-  const result = await response.json()
-  return NextResponse.json(response.ok ? result : { error: result.detail ?? 'Password update failed.' }, { status: response.status })
+  try {
+    const user = await authenticate(request)
+    const { password } = passwordSchema.parse(await readJson(request))
+    const passwordHash = await hashPassword(password)
+    const pool = await getPool()
+    await pool
+      .request()
+      .input('userId', sql.Int, user.id)
+      .input('passwordHash', sql.VarChar(255), passwordHash)
+      .query('UPDATE users SET password_hash = @passwordHash, is_first_login = 0, updated_at = GETUTCDATE() WHERE id = @userId')
+    return NextResponse.json({ status: 'updated' })
+  } catch (error) {
+    if (error instanceof z.ZodError) return NextResponse.json({ error: 'Password must be between 8 and 128 characters.' }, { status: 422 })
+    return apiErrorResponse(error, 'Next.js password update failed')
+  }
 }

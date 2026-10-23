@@ -1,0 +1,2676 @@
+{
+  "skills": {
+    "A/B Testing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "a/b testing"
+      ]
+    },
+    "ANSYS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ansys"
+      ]
+    },
+    "API Documentation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "api documentation"
+      ]
+    },
+    "APIs": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "apis"
+      ]
+    },
+    "AWS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [
+        "boto3",
+        "aws-sdk"
+      ],
+      "readme_keywords": [
+        "aws",
+        "amazon web services"
+      ]
+    },
+    "Accounting Basics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "accounting basics"
+      ]
+    },
+    "Actuators": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "actuators"
+      ]
+    },
+    "Adobe XD": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "adobe xd"
+      ]
+    },
+    "Advanced Excel": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "advanced excel"
+      ]
+    },
+    "Airflow": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "airflow"
+      ]
+    },
+    "Algorithms": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "algorithms"
+      ]
+    },
+    "Angular": {
+      "languages": [
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json",
+        "angular.json"
+      ],
+      "extensions": [
+        ".ts",
+        ".html"
+      ],
+      "dependency_names": [
+        "@angular/core"
+      ],
+      "readme_keywords": [
+        "angular"
+      ]
+    },
+    "Ansible": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ansible"
+      ]
+    },
+    "Apache Spark": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "apache spark"
+      ]
+    },
+    "Arduino": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "arduino"
+      ]
+    },
+    "Authentication": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "authentication"
+      ]
+    },
+    "AutoCAD": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "autocad"
+      ]
+    },
+    "Automation Scripting": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "automation scripting"
+      ]
+    },
+    "Azure": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [
+        "azure"
+      ],
+      "readme_keywords": [
+        "azure"
+      ]
+    },
+    "Azure Data Factory": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "azure data factory"
+      ]
+    },
+    "Bash": {
+      "languages": [
+        "Shell"
+      ],
+      "file_names": [],
+      "extensions": [
+        ".sh"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "bash",
+        "shell scripting"
+      ]
+    },
+    "Basic Coding": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "basic coding"
+      ]
+    },
+    "BigQuery": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "bigquery"
+      ]
+    },
+    "Bookkeeping": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "bookkeeping"
+      ]
+    },
+    "Brand Messaging": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "brand messaging"
+      ]
+    },
+    "Branding": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "branding"
+      ]
+    },
+    "C": {
+      "languages": [
+        "C"
+      ],
+      "file_names": [
+        "Makefile",
+        "CMakeLists.txt"
+      ],
+      "extensions": [
+        ".c",
+        ".h"
+      ],
+      "dependency_names": [
+        "gcc"
+      ],
+      "readme_keywords": [
+        "c programming"
+      ]
+    },
+    "C#": {
+      "languages": [
+        "C#"
+      ],
+      "file_names": [
+        "*.csproj",
+        "*.sln"
+      ],
+      "extensions": [
+        ".cs"
+      ],
+      "dependency_names": [
+        "dotnet"
+      ],
+      "readme_keywords": [
+        "c#",
+        ".net"
+      ]
+    },
+    "C++": {
+      "languages": [
+        "C++"
+      ],
+      "file_names": [
+        "CMakeLists.txt",
+        "Makefile"
+      ],
+      "extensions": [
+        ".cpp",
+        ".cc",
+        ".cxx",
+        ".hpp"
+      ],
+      "dependency_names": [
+        "boost"
+      ],
+      "readme_keywords": [
+        "c++",
+        "cpp"
+      ]
+    },
+    "CATIA": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "catia"
+      ]
+    },
+    "CI/CD": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ci/cd"
+      ]
+    },
+    "CMS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "cms"
+      ]
+    },
+    "CNNs": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "cnns"
+      ]
+    },
+    "CRM": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "crm"
+      ]
+    },
+    "CSS": {
+      "languages": [
+        "CSS"
+      ],
+      "file_names": [],
+      "extensions": [
+        ".css",
+        ".scss"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "css"
+      ]
+    },
+    "Calculus": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "calculus"
+      ]
+    },
+    "Canva": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "canva"
+      ]
+    },
+    "Circuit Analysis": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "circuit analysis"
+      ]
+    },
+    "Color Theory": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "color theory"
+      ]
+    },
+    "Community Management": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "community management"
+      ]
+    },
+    "Competitor Analysis": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "competitor analysis"
+      ]
+    },
+    "Compliance Awareness": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "compliance awareness"
+      ]
+    },
+    "Compute": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "compute"
+      ]
+    },
+    "Computer Vision": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "computer vision"
+      ]
+    },
+    "Construction Materials": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "construction materials"
+      ]
+    },
+    "Content Calendars": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "content calendars"
+      ]
+    },
+    "Content Creation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "content creation"
+      ]
+    },
+    "Content Planning": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "content planning"
+      ]
+    },
+    "Contract Basics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "contract basics"
+      ]
+    },
+    "Control Systems": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "control systems"
+      ]
+    },
+    "Copywriting": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "copywriting"
+      ]
+    },
+    "Customer Communication": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "customer communication"
+      ]
+    },
+    "Customer Onboarding": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "customer onboarding"
+      ]
+    },
+    "Cypress": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json",
+        "cypress.config.js"
+      ],
+      "extensions": [
+        ".js",
+        ".ts"
+      ],
+      "dependency_names": [
+        "cypress"
+      ],
+      "readme_keywords": [
+        "cypress"
+      ]
+    },
+    "DAX": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "dax"
+      ]
+    },
+    "DBMS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "dbms"
+      ]
+    },
+    "Dashboard Design": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "dashboard design"
+      ]
+    },
+    "Data Analysis": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data analysis"
+      ]
+    },
+    "Data Cleaning": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data cleaning"
+      ]
+    },
+    "Data Interpretation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data interpretation"
+      ]
+    },
+    "Data Modeling": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data modeling"
+      ]
+    },
+    "Data Storytelling": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data storytelling"
+      ]
+    },
+    "Data Structures": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data structures"
+      ]
+    },
+    "Data Structures and Algorithms": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data structures and algorithms"
+      ]
+    },
+    "Data Visualisation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data visualisation"
+      ]
+    },
+    "Data Warehousing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "data warehousing"
+      ]
+    },
+    "Databases": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "databases"
+      ]
+    },
+    "Debugging": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "debugging"
+      ]
+    },
+    "Deep Learning": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "deep learning"
+      ]
+    },
+    "Deployment": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "deployment"
+      ]
+    },
+    "Design Principles": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "design principles"
+      ]
+    },
+    "Design Systems": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "design systems"
+      ]
+    },
+    "Digital Electronics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "digital electronics"
+      ]
+    },
+    "Django": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml",
+        "manage.py"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "django"
+      ],
+      "readme_keywords": [
+        "django"
+      ]
+    },
+    "Docker": {
+      "languages": [],
+      "file_names": [
+        "Dockerfile",
+        "docker-compose.yml"
+      ],
+      "extensions": [],
+      "dependency_names": [
+        "docker"
+      ],
+      "readme_keywords": [
+        "docker"
+      ]
+    },
+    "Documentation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "documentation"
+      ]
+    },
+    "Doubt Solving": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "doubt solving"
+      ]
+    },
+    "ESP32": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "esp32"
+      ]
+    },
+    "ETL": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "etl"
+      ]
+    },
+    "Electrical Safety": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "electrical safety"
+      ]
+    },
+    "Email Marketing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "email marketing"
+      ]
+    },
+    "Embeddings": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "embeddings"
+      ]
+    },
+    "Engagement Analytics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "engagement analytics"
+      ]
+    },
+    "Engineering Drawing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "engineering drawing"
+      ]
+    },
+    "Evaluation Metrics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "evaluation metrics"
+      ]
+    },
+    "Event Coordination": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "event coordination"
+      ]
+    },
+    "Excel": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [
+        ".xlsx",
+        ".xlsm"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "excel",
+        "spreadsheet"
+      ]
+    },
+    "Explaining Concepts": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "explaining concepts"
+      ]
+    },
+    "Express": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json"
+      ],
+      "extensions": [
+        ".js",
+        ".ts"
+      ],
+      "dependency_names": [
+        "express"
+      ],
+      "readme_keywords": [
+        "express"
+      ]
+    },
+    "FEA": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "fea"
+      ]
+    },
+    "FPGA": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "fpga"
+      ]
+    },
+    "FastAPI": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "fastapi"
+      ],
+      "readme_keywords": [
+        "fastapi"
+      ]
+    },
+    "Feature Engineering": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "feature engineering"
+      ]
+    },
+    "Figma": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "figma"
+      ]
+    },
+    "Financial Modeling": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "financial modeling"
+      ]
+    },
+    "Financial Statements": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "financial statements"
+      ]
+    },
+    "Fine-tuning": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "fine-tuning"
+      ]
+    },
+    "Firebase": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "firebase"
+      ]
+    },
+    "Flask": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "flask"
+      ],
+      "readme_keywords": [
+        "flask"
+      ]
+    },
+    "Flutter": {
+      "languages": [
+        "Dart"
+      ],
+      "file_names": [
+        "pubspec.yaml"
+      ],
+      "extensions": [
+        ".dart"
+      ],
+      "dependency_names": [
+        "flutter"
+      ],
+      "readme_keywords": [
+        "flutter"
+      ]
+    },
+    "Fusion 360": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "fusion 360"
+      ]
+    },
+    "GCP": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [
+        "google-cloud"
+      ],
+      "readme_keywords": [
+        "gcp",
+        "google cloud"
+      ]
+    },
+    "GD&T": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "gd&t"
+      ]
+    },
+    "Git": {
+      "languages": [],
+      "file_names": [
+        ".gitignore",
+        "README.md"
+      ],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "git"
+      ]
+    },
+    "Git/GitHub": {
+      "languages": [],
+      "file_names": [
+        ".gitignore",
+        ".github"
+      ],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "github",
+        "git"
+      ]
+    },
+    "GitHub Actions": {
+      "languages": [],
+      "file_names": [
+        ".github/workflows"
+      ],
+      "extensions": [
+        ".yml",
+        ".yaml"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "github actions"
+      ]
+    },
+    "Google Ads": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "google ads"
+      ]
+    },
+    "Google Analytics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "google analytics"
+      ]
+    },
+    "Google Sheets": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "google sheets"
+      ]
+    },
+    "Grafana": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "grafana"
+      ]
+    },
+    "GraphQL": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "schema.graphql"
+      ],
+      "extensions": [
+        ".graphql"
+      ],
+      "dependency_names": [
+        "graphql"
+      ],
+      "readme_keywords": [
+        "graphql"
+      ]
+    },
+    "HRIS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "hris"
+      ]
+    },
+    "HTML": {
+      "languages": [
+        "HTML"
+      ],
+      "file_names": [],
+      "extensions": [
+        ".html"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "html"
+      ]
+    },
+    "Hugging Face": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "hugging face"
+      ]
+    },
+    "I2C": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "i2c"
+      ]
+    },
+    "IAM": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "iam"
+      ]
+    },
+    "Illustrator": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "illustrator"
+      ]
+    },
+    "Image Processing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "image processing"
+      ]
+    },
+    "Inventory Management": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "inventory management"
+      ]
+    },
+    "JSON": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "json"
+      ]
+    },
+    "JWT": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "jwt"
+      ]
+    },
+    "Java": {
+      "languages": [
+        "Java"
+      ],
+      "file_names": [
+        "pom.xml",
+        "build.gradle"
+      ],
+      "extensions": [
+        ".java"
+      ],
+      "dependency_names": [
+        "spring",
+        "spring-boot"
+      ],
+      "readme_keywords": [
+        "java"
+      ]
+    },
+    "JavaScript": {
+      "languages": [
+        "JavaScript"
+      ],
+      "file_names": [
+        "package.json"
+      ],
+      "extensions": [
+        ".js",
+        ".jsx"
+      ],
+      "dependency_names": [
+        "node"
+      ],
+      "readme_keywords": [
+        "javascript",
+        "node.js"
+      ]
+    },
+    "Jenkins": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "jenkins"
+      ]
+    },
+    "KPI Definition": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "kpi definition"
+      ]
+    },
+    "Kafka": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "kafka"
+      ]
+    },
+    "Kotlin": {
+      "languages": [
+        "Kotlin"
+      ],
+      "file_names": [
+        "build.gradle",
+        "build.gradle.kts"
+      ],
+      "extensions": [
+        ".kt",
+        ".kts"
+      ],
+      "dependency_names": [
+        "kotlin"
+      ],
+      "readme_keywords": [
+        "kotlin"
+      ]
+    },
+    "Kubernetes": {
+      "languages": [],
+      "file_names": [
+        "deployment.yaml",
+        "kubernetes"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "dependency_names": [
+        "kubernetes"
+      ],
+      "readme_keywords": [
+        "kubernetes",
+        "k8s"
+      ]
+    },
+    "LLM Evaluation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "llm evaluation"
+      ]
+    },
+    "LLMs": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "llms"
+      ]
+    },
+    "LMS Tools": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "lms tools"
+      ]
+    },
+    "LangChain": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "langchain"
+      ]
+    },
+    "Legal Drafting": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "legal drafting"
+      ]
+    },
+    "Legal Research": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "legal research"
+      ]
+    },
+    "Linear Algebra": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "linear algebra"
+      ]
+    },
+    "Linux": {
+      "languages": [],
+      "file_names": [
+        "Dockerfile",
+        "Makefile"
+      ],
+      "extensions": [
+        ".sh"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "linux"
+      ]
+    },
+    "LlamaIndex": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "llamaindex"
+      ]
+    },
+    "Logistics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "logistics"
+      ]
+    },
+    "MATLAB": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "matlab"
+      ]
+    },
+    "MLOps": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "mlops"
+      ]
+    },
+    "MQTT": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "mqtt"
+      ]
+    },
+    "Machine Learning": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "machine learning"
+      ]
+    },
+    "Manufacturing Processes": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "manufacturing processes"
+      ]
+    },
+    "Markdown": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "markdown"
+      ]
+    },
+    "Market Analysis": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "market analysis"
+      ]
+    },
+    "Matplotlib": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "matplotlib"
+      ]
+    },
+    "Media Outreach": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "media outreach"
+      ]
+    },
+    "Model Evaluation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "model evaluation"
+      ]
+    },
+    "MongoDB": {
+      "languages": [],
+      "file_names": [
+        "package.json",
+        "requirements.txt"
+      ],
+      "extensions": [],
+      "dependency_names": [
+        "pymongo",
+        "mongoose",
+        "mongodb"
+      ],
+      "readme_keywords": [
+        "mongodb"
+      ]
+    },
+    "NER": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ner"
+      ]
+    },
+    "NLP": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "nlp"
+      ]
+    },
+    "Networking": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "networking"
+      ]
+    },
+    "Node.js": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json"
+      ],
+      "extensions": [
+        ".js",
+        ".mjs",
+        ".ts"
+      ],
+      "dependency_names": [
+        "express",
+        "node"
+      ],
+      "readme_keywords": [
+        "node.js",
+        "node"
+      ]
+    },
+    "Notion": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "notion"
+      ]
+    },
+    "NumPy": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py",
+        ".ipynb"
+      ],
+      "dependency_names": [
+        "numpy"
+      ],
+      "readme_keywords": [
+        "numpy"
+      ]
+    },
+    "OAuth": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "oauth"
+      ]
+    },
+    "OOP": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "oop"
+      ]
+    },
+    "ORMs": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "orms"
+      ]
+    },
+    "OWASP Top 10": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "owasp top 10"
+      ]
+    },
+    "Object Detection": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "object detection"
+      ]
+    },
+    "OpenCV": {
+      "languages": [
+        "Python",
+        "C++"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py",
+        ".cpp"
+      ],
+      "dependency_names": [
+        "opencv-python",
+        "opencv"
+      ],
+      "readme_keywords": [
+        "opencv"
+      ]
+    },
+    "Operating Systems": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "operating systems"
+      ]
+    },
+    "PCB Design": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "pcb design"
+      ]
+    },
+    "PLC": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "plc"
+      ]
+    },
+    "Pandas": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py",
+        ".ipynb"
+      ],
+      "dependency_names": [
+        "pandas"
+      ],
+      "readme_keywords": [
+        "pandas"
+      ]
+    },
+    "Payroll Basics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "payroll basics"
+      ]
+    },
+    "Personas": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "personas"
+      ]
+    },
+    "Photoshop": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "photoshop"
+      ]
+    },
+    "Platform Algorithms": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "platform algorithms"
+      ]
+    },
+    "Playwright": {
+      "languages": [
+        "JavaScript",
+        "TypeScript",
+        "Python"
+      ],
+      "file_names": [
+        "package.json",
+        "requirements.txt"
+      ],
+      "extensions": [
+        ".js",
+        ".ts",
+        ".py"
+      ],
+      "dependency_names": [
+        "playwright"
+      ],
+      "readme_keywords": [
+        "playwright"
+      ]
+    },
+    "Postman": {
+      "languages": [],
+      "file_names": [
+        "postman_collection.json"
+      ],
+      "extensions": [
+        ".json"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "postman"
+      ]
+    },
+    "Power BI": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [
+        ".pbix"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "power bi"
+      ]
+    },
+    "PowerPoint": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "powerpoint"
+      ]
+    },
+    "Press Releases": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "press releases"
+      ]
+    },
+    "Prioritization": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "prioritization"
+      ]
+    },
+    "Probability": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "probability"
+      ]
+    },
+    "Problem Solving": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "problem solving"
+      ]
+    },
+    "Process Mapping": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "process mapping"
+      ]
+    },
+    "Product Analytics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "product analytics"
+      ]
+    },
+    "Product Knowledge": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "product knowledge"
+      ]
+    },
+    "Product Thinking": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "product thinking"
+      ]
+    },
+    "Prometheus": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "prometheus"
+      ]
+    },
+    "Prompt Engineering": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "prompt engineering"
+      ]
+    },
+    "Prototyping": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "prototyping"
+      ]
+    },
+    "PyTest": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "pytest.ini",
+        "pyproject.toml",
+        "requirements.txt"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "pytest"
+      ],
+      "readme_keywords": [
+        "pytest"
+      ]
+    },
+    "PyTorch": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "torch",
+        "pytorch"
+      ],
+      "readme_keywords": [
+        "pytorch"
+      ]
+    },
+    "Python": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml",
+        "setup.py"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "python"
+      ],
+      "readme_keywords": [
+        "python"
+      ]
+    },
+    "RAG": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "rag"
+      ]
+    },
+    "REST APIs": {
+      "languages": [
+        "JavaScript",
+        "TypeScript",
+        "Python",
+        "Java"
+      ],
+      "file_names": [
+        "openapi.yaml",
+        "openapi.json"
+      ],
+      "extensions": [],
+      "dependency_names": [
+        "fastapi",
+        "express"
+      ],
+      "readme_keywords": [
+        "rest api",
+        "restful"
+      ]
+    },
+    "ROS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ros"
+      ]
+    },
+    "RTOS": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "rtos"
+      ]
+    },
+    "Ratio Analysis": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ratio analysis"
+      ]
+    },
+    "React": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json"
+      ],
+      "extensions": [
+        ".jsx",
+        ".tsx"
+      ],
+      "dependency_names": [
+        "react",
+        "react-dom"
+      ],
+      "readme_keywords": [
+        "react"
+      ]
+    },
+    "React Native": {
+      "languages": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json"
+      ],
+      "extensions": [
+        ".tsx",
+        ".jsx"
+      ],
+      "dependency_names": [
+        "react-native"
+      ],
+      "readme_keywords": [
+        "react native"
+      ]
+    },
+    "Redshift": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "redshift"
+      ]
+    },
+    "Report Writing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "report writing"
+      ]
+    },
+    "Reporting": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "reporting"
+      ]
+    },
+    "Research": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "research"
+      ]
+    },
+    "Revit": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "revit"
+      ]
+    },
+    "Roadmapping": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "roadmapping"
+      ]
+    },
+    "SAP": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "sap"
+      ]
+    },
+    "SCADA": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "scada"
+      ]
+    },
+    "SEM": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "sem"
+      ]
+    },
+    "SEO": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "seo"
+      ]
+    },
+    "SEO Writing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "seo writing"
+      ]
+    },
+    "SPI": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "spi"
+      ]
+    },
+    "SQL": {
+      "languages": [
+        "SQL"
+      ],
+      "file_names": [
+        "schema.sql",
+        "queries.sql"
+      ],
+      "extensions": [
+        ".sql"
+      ],
+      "dependency_names": [
+        "sqlalchemy",
+        "psycopg",
+        "mysql"
+      ],
+      "readme_keywords": [
+        "sql",
+        "database"
+      ]
+    },
+    "SQLite": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "sqlite"
+      ]
+    },
+    "STM32": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "stm32"
+      ]
+    },
+    "Seaborn": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "seaborn"
+      ]
+    },
+    "Security Basics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "security basics"
+      ]
+    },
+    "Security Fundamentals": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "security fundamentals"
+      ]
+    },
+    "Segmentation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "segmentation"
+      ]
+    },
+    "Selenium": {
+      "languages": [
+        "Python",
+        "Java",
+        "JavaScript"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pom.xml",
+        "package.json"
+      ],
+      "extensions": [
+        ".py",
+        ".java",
+        ".js"
+      ],
+      "dependency_names": [
+        "selenium"
+      ],
+      "readme_keywords": [
+        "selenium"
+      ]
+    },
+    "Sensors": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "sensors"
+      ]
+    },
+    "Simulink": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "simulink"
+      ]
+    },
+    "Social Media Creatives": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "social media creatives"
+      ]
+    },
+    "Social Media Marketing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "social media marketing"
+      ]
+    },
+    "SolidWorks": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "solidworks"
+      ]
+    },
+    "Spring Boot": {
+      "languages": [
+        "Java"
+      ],
+      "file_names": [
+        "pom.xml",
+        "build.gradle"
+      ],
+      "extensions": [
+        ".java"
+      ],
+      "dependency_names": [
+        "spring-boot"
+      ],
+      "readme_keywords": [
+        "spring boot"
+      ]
+    },
+    "Statistics": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "statistics"
+      ]
+    },
+    "Storage": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "storage"
+      ]
+    },
+    "Storytelling": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "storytelling"
+      ]
+    },
+    "Structured Problem Solving": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "structured problem solving"
+      ]
+    },
+    "Structured Writing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "structured writing"
+      ]
+    },
+    "Subject Knowledge": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "subject knowledge"
+      ]
+    },
+    "Summarization": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "summarization"
+      ]
+    },
+    "Swift": {
+      "languages": [
+        "Swift"
+      ],
+      "file_names": [
+        "Package.swift"
+      ],
+      "extensions": [
+        ".swift"
+      ],
+      "dependency_names": [
+        "swift"
+      ],
+      "readme_keywords": [
+        "swift"
+      ]
+    },
+    "System Design": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "system design"
+      ]
+    },
+    "Tableau": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [
+        ".twb",
+        ".twbx"
+      ],
+      "dependency_names": [],
+      "readme_keywords": [
+        "tableau"
+      ]
+    },
+    "TensorFlow": {
+      "languages": [
+        "Python"
+      ],
+      "file_names": [
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "dependency_names": [
+        "tensorflow"
+      ],
+      "readme_keywords": [
+        "tensorflow"
+      ]
+    },
+    "Terraform": {
+      "languages": [
+        "HCL"
+      ],
+      "file_names": [],
+      "extensions": [
+        ".tf"
+      ],
+      "dependency_names": [
+        "terraform"
+      ],
+      "readme_keywords": [
+        "terraform"
+      ]
+    },
+    "Testing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "testing"
+      ]
+    },
+    "Text Classification": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "text classification"
+      ]
+    },
+    "Ticketing Tools": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "ticketing tools"
+      ]
+    },
+    "Transformers": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "transformers"
+      ]
+    },
+    "Troubleshooting": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "troubleshooting"
+      ]
+    },
+    "TypeScript": {
+      "languages": [
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json",
+        "tsconfig.json"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx"
+      ],
+      "dependency_names": [
+        "typescript"
+      ],
+      "readme_keywords": [
+        "typescript"
+      ]
+    },
+    "UART": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "uart"
+      ]
+    },
+    "Unit Testing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "unit testing"
+      ]
+    },
+    "Usability Testing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "usability testing"
+      ]
+    },
+    "User Research": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "user research"
+      ]
+    },
+    "VHDL": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "vhdl"
+      ]
+    },
+    "Valuation": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "valuation"
+      ]
+    },
+    "Vector Databases": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "vector databases"
+      ]
+    },
+    "Verilog": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "verilog"
+      ]
+    },
+    "Vue": {
+      "languages": [
+        "Vue",
+        "JavaScript",
+        "TypeScript"
+      ],
+      "file_names": [
+        "package.json",
+        "vite.config.js"
+      ],
+      "extensions": [
+        ".vue"
+      ],
+      "dependency_names": [
+        "vue"
+      ],
+      "readme_keywords": [
+        "vue"
+      ]
+    },
+    "Windows": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "windows"
+      ]
+    },
+    "Wireframing": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "wireframing"
+      ]
+    },
+    "Wireshark": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "wireshark"
+      ]
+    },
+    "WordPress": {
+      "languages": [],
+      "file_names": [],
+      "extensions": [],
+      "dependency_names": [],
+      "readme_keywords": [
+        "wordpress"
+      ]
+    }
+  }
+}
